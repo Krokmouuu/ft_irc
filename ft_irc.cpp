@@ -42,42 +42,47 @@ int ft_parsing(char **argv)
     }
     return 0;
 }
-
+typedef struct s_user
+{
+	char nom[30];
+	int age;
+}t_user;
 void start_server(char **argv)
 {
         IRC server(argv[1], argv[2]);
-        while (1)
-        {
-            printf("ok");
-            //? Initialisation de la socket
-            int socketServer = socket(AF_INET, SOCK_STREAM, 0); //? Socket = IPV4, FLUX, don't care
 
-            //? Creating struct for the server
-            struct sockaddr_in addrServer;
+	while(1)
+	{
+		printf("ok");
+		//? Initialisation de la socket
+		int socketServer = socket(AF_INET, SOCK_STREAM, 0); //? Socket = IPV4, FLUX, don't care
 
-            printf("ok");
-            addrServer.sin_addr.s_addr = inet_addr("192.168.1.41"); //? Address
-            addrServer.sin_family = AF_INET; //? IPV4
-            addrServer.sin_port = htons(30000); //? Using port not used (more than 10000 is pretty safe)
+		//? Creating struct for the server
+		struct sockaddr_in addrServer;
 
-            printf("ok1");
-            //? Connection to server
-            bind(socketServer, (const struct sockaddr *)&addrServer, sizeof(addrServer)); //? Server, arg type sockaddr for conversion and size
-            listen(socketServer, 20); //? Server, numbers of clients
+		printf("ok");
+		addrServer.sin_addr.s_addr = inet_addr("127.0.0.1"); //? Address
+		addrServer.sin_family = AF_INET; //? IPV4
+		addrServer.sin_port = htons(30000); //? Using port not used (more than 10000 is pretty safe)
 
-            printf("ok2");
-            //? Accept if a user join the server
-            struct sockaddr_in addrClient;
-            socklen_t csize = sizeof(addrClient);
-            int socketClient = accept(socketServer, (struct sockaddr *)&addrClient, &csize);
-                
-            // t_user user;
-            // send(socketClient, &user, sizeof(t_user), 0);
+		printf("ok1");
+		//? Connection to server
+		bind(socketServer, (const struct sockaddr *)&addrServer, sizeof(addrServer)); //? Server, arg type sockaddr for conversion and size
+		listen(socketServer, 20); //? Server, numbers of clients
 
-            printf("ok3");
-            close(socketClient);
-            close(socketServer); 
-        }
+		printf("ok2");
+		//? Accept if a user join the server
+		struct sockaddr_in addrClient;
+		socklen_t csize = sizeof(addrClient);
+		int socketClient = accept(socketServer, (struct sockaddr *)&addrClient, &csize);
+			
+		t_user user;
+		send(socketClient, &user, sizeof(t_user), 0);
+
+		printf("ok3");
+		close(socketClient);
+		close(socketServer); 
+	}
 }
 
 int main(int argc, char **argv)
