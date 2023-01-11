@@ -7,12 +7,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <stdio.h>
 
-typedef struct User
+typedef struct s_user
 {
 	char nom[30];
 	int age;
-}User;
+}t_user;
 
 
 int main(void)
@@ -23,11 +24,16 @@ int main(void)
 	addrClient.sin_family = AF_INET;
 	addrClient.sin_port = htons(30000);
 	connect(socketClient, (const struct sockaddr *)&addrClient, sizeof(addrClient));
-	printf("connected\n");
+	std::cout << "CONNECTED" << std::endl;
 
-	User user;
-	recv(socketClient, &user, sizeof(User), 0);
-	printf("%s %d\n", user.nom, user.age);
+	t_user user;
+	char msg[33];
+	recv(socketClient, msg, 32, 0);
+	std::cout << msg << std::endl;
+	std::cin >> user.nom;
+	std::cin >> user.age;
+	connect(socketClient, (const struct sockaddr *)&addrClient, sizeof(addrClient));
+	send(socketClient, &user, sizeof(user), 0);
 
 	close(socketClient);
 

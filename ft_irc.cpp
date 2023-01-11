@@ -42,46 +42,86 @@ int ft_parsing(char **argv)
     }
     return 0;
 }
+
+//my beautiful function to write message in the terminal letter by letter :]
+void	typeWriter(std::string str)
+{
+	for (size_t i = 0; i < str.size(); i++)
+	{
+		usleep(15000);
+		std::cout << str[i] << std::flush;
+	}
+}
+
 typedef struct s_user
 {
 	char nom[30];
 	int age;
 }t_user;
+
+void *socketThread(void *arg)
+{
+    int socket = *(int*)arg;
+    char msg[] = "quel est votre nom et votre age";
+    t_user user;
+    //? Sending the message with the right len
+	send(socket, msg, strlen(msg)+1, 0);
+	typeWriter("WAITING TO RECEIVE INFORMATIONS OF THE USER...\n");
+    //? Receive the informations about user in &user
+    recv(socket, &user, sizeof(user), 0);
+	fflush(0);
+    std::stringstream ss;
+    ss << user.age;
+    string str = ss.str();
+	typeWriter("Name: ");
+    typeWriter(user.nom); 
+	typeWriter("\nAge: ");
+    typeWriter(str);
+    typeWriter("\n\n");
+    close(socket);
+    free (arg);
+    pthread_exit(NULL);
+}
+
 void start_server(char **argv)
 {
-        IRC server(argv[1], argv[2]);
+	IRC server(argv[1], argv[2]);
 
 	while(1)
 	{
-		printf("ok");
 		//? Initialisation de la socket
 		int socketServer = socket(AF_INET, SOCK_STREAM, 0); //? Socket = IPV4, FLUX, don't care
 
 		//? Creating struct for the server
 		struct sockaddr_in addrServer;
 
-		printf("ok");
 		addrServer.sin_addr.s_addr = inet_addr("127.0.0.1"); //? Address
 		addrServer.sin_family = AF_INET; //? IPV4
 		addrServer.sin_port = htons(30000); //? Using port not used (more than 10000 is pretty safe)
 
-		printf("ok1");
 		//? Connection to server
 		bind(socketServer, (const struct sockaddr *)&addrServer, sizeof(addrServer)); //? Server, arg type sockaddr for conversion and size
-		listen(socketServer, 20); //? Server, numbers of clients
+		listen(socketServer, 3); //? Server, numbers of clients
 
-		printf("ok2");
 		//? Accept if a user join the server
-		struct sockaddr_in addrClient;
-		socklen_t csize = sizeof(addrClient);
-		int socketClient = accept(socketServer, (struct sockaddr *)&addrClient, &csize);
-			
-		t_user user;
-		send(socketClient, &user, sizeof(t_user), 0);
+        pthread_t clientThread[3];
+        for (int i = 0; i < 3; i++)
+        {
+            struct sockaddr_in addrClient;
+            socklen_t csize = sizeof(addrClient);
+            int socketClient = accept(socketServer, (struct sockaddr *)&addrClient, &csize);
 
-		printf("ok3");
-		close(socketClient);
-		close(socketServer); 
+			int *arg = new int;
+            *arg = socketClient;
+            
+            pthread_create(&clientThread[i], NULL, socketThread, arg);
+        }
+        for(int i = 0; i < 3; i++)
+        {
+            pthread_join(clientThread[i], NULL);
+        }
+
+        close(socketServer);
 	}
 }
 

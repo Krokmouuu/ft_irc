@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <cstring>
 #include <vector>
+#include <sstream>
 
 using namespace std;
 
