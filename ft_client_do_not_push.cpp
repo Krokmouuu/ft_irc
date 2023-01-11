@@ -22,7 +22,7 @@ int main(void)
 	struct sockaddr_in addrClient;
 	addrClient.sin_addr.s_addr = inet_addr("127.0.0.1");
 	addrClient.sin_family = AF_INET;
-	addrClient.sin_port = htons(30000);
+	addrClient.sin_port = htons(10000);
 	connect(socketClient, (const struct sockaddr *)&addrClient, sizeof(addrClient));
 	std::cout << "CONNECTED" << std::endl;
 
@@ -39,3 +39,12 @@ int main(void)
 
 	return 0;
 }
+
+/*• Only 1 poll() (or equivalent) can be used for handling all these operations (read,
+write, but also listen, and so forth).
+Because you have to use non-blocking file descriptors, it is
+possible to use read/recv or write/send functions with no poll()
+(or equivalent), and your server wouldn’t be blocking.
+But it would consume more system resources.
+Thus, if you try to read/recv or write/send in any file descriptor
+without using poll() (or equivalent), your grade will be 0.*/

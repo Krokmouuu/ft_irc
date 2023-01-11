@@ -73,11 +73,7 @@ void *socketThread(void *arg)
     std::stringstream ss;
     ss << user.age;
     string str = ss.str();
-	typeWriter("Name: ");
-    typeWriter(user.nom); 
-	typeWriter("\nAge: ");
-    typeWriter(str);
-    typeWriter("\n\n");
+	typeWriter("Name: "), typeWriter(user.nom), typeWriter("\nAge: "), typeWriter(str), typeWriter("\n\n");
     close(socket);
     free (arg);
     pthread_exit(NULL);
@@ -86,43 +82,39 @@ void *socketThread(void *arg)
 void start_server(char **argv)
 {
 	IRC server(argv[1], argv[2]);
+    int maxuser = 3;
 
-	while(1)
-	{
-		//? Initialisation de la socket
-		int socketServer = socket(AF_INET, SOCK_STREAM, 0); //? Socket = IPV4, FLUX, don't care
+	//? Initialisation de la socket
+	int socketServer = socket(AF_INET, SOCK_STREAM, 0); //? Socket = IPV4, FLUX, don't care
 
-		//? Creating struct for the server
-		struct sockaddr_in addrServer;
+	//? Creating struct for the server
+	struct sockaddr_in addrServer;
 
-		addrServer.sin_addr.s_addr = inet_addr("127.0.0.1"); //? Address
-		addrServer.sin_family = AF_INET; //? IPV4
-		addrServer.sin_port = htons(30000); //? Using port not used (more than 10000 is pretty safe)
+	addrServer.sin_addr.s_addr = inet_addr("127.0.0.1"); //? Address
+	addrServer.sin_family = AF_INET; //? IPV4
+	addrServer.sin_port = htons(atoi(argv[1])); //? Using port not used (more than 10000 is pretty safe)
 
-		//? Connection to server
-		bind(socketServer, (const struct sockaddr *)&addrServer, sizeof(addrServer)); //? Server, arg type sockaddr for conversion and size
-		listen(socketServer, 3); //? Server, numbers of clients
-
-		//? Accept if a user join the server
-        pthread_t clientThread[3];
-        for (int i = 0; i < 3; i++)
-        {
-            struct sockaddr_in addrClient;
-            socklen_t csize = sizeof(addrClient);
-            int socketClient = accept(socketServer, (struct sockaddr *)&addrClient, &csize);
-
-			int *arg = new int;
-            *arg = socketClient;
+	//? Connection to server
+	bind(socketServer, (const struct sockaddr *)&addrServer, sizeof(addrServer)); //? Server, arg type sockaddr for conversion and size
+	listen(socketServer, 3); //? Server, numbers of clients
+	//? Accept if a user join the server
+    pthread_t clientThread[maxuser];
+    struct sockaddr_in addrClient;
+    for(int i = 0; i < maxuser; i++)
+    {
+        socklen_t csize = sizeof(addrClient);
+        int socketClient = accept(socketServer, (struct sockaddr *)&addrClient, &csize);
+		//! socketClient is always the same
+        printf("USER NUMERO : %d\n", socketClient);
+		int *arg = new int;
+        *arg = socketClient;
             
-            pthread_create(&clientThread[i], NULL, socketThread, arg);
-        }
-        for(int i = 0; i < 3; i++)
-        {
-            pthread_join(clientThread[i], NULL);
-        }
-
-        close(socketServer);
-	}
+        pthread_create(&clientThread[i], NULL, socketThread, arg);
+    }
+    for(int i = 0; i < maxuser; i++)
+        pthread_join(clientThread[i], NULL);
+    close(socketServer);
+    return ;
 }
 
 int main(int argc, char **argv)
