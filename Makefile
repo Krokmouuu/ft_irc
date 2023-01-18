@@ -4,7 +4,7 @@ COMP =		c++
 CFLAGS =	-Wall -Werror -Wextra -std=c++98 -fsanitize=address
 
 
-SRCS =		ft_irc.cpp
+SRCS =		*.cpp
 
 OBJS =		$(SRCS:%.cpp=%.o)
 

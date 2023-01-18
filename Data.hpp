@@ -1,4 +1,6 @@
-#include "ft_irc.hpp"
+#pragma once
+
+#include "headers.hpp"
 
 class Data
 {
@@ -8,12 +10,16 @@ class Data
         Data() {};
         Data(const Data &params)
         {
-            return ;
+            *this = params;
         };
         Data &operator=(const Data &params)
         {
             if (this != &params)
             {
+                this->username = params.username;
+                this->password = params.password;
+                this->nickname = params.nickname;
+                this->number = params.number;
             }
             return *this;
         }
@@ -21,6 +27,9 @@ class Data
 
     private :
 
-
+    string username;
+    string password;
+    string nickname;
+    int    number;
 
 };
