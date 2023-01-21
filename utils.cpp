@@ -1,7 +1,7 @@
 #include "ft_irc.hpp"
 
 //my beautiful function to write message in the terminal letter by letter :]
-void	typeWriter(string str)
+void typeWriter(string str)
 {
 	for (size_t i = 0; i < str.size(); i++)
 	{

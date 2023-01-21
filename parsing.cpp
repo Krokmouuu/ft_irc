@@ -1,4 +1,49 @@
 #include "ft_irc.hpp"
+#include "Data.hpp"
+
+int parse_input(string input, IRC server, Data *data, int user)
+{
+    data->setnumber(user - 4);
+    if (input == server.getpassword() && data->getlog() == 0)
+    {
+        data->setlog(1);
+        send(user, "Password correct.\n", 18, 0);
+        send(user, "Please enter your username: ", 29, 0);
+    }
+    else if (data->getlog() == 1 && data->getusername() == "")
+    {
+        if (input.size() < 2 || input.size() > 26)
+        {
+            send(user, "Username must be between 2 and 26 characters.\nPlease enter your username: ", 75, 0);
+            return 0;
+        }
+        data->setusername(input);
+        send(user, "Please enter your nickname: ", 28, 0);
+        return 1;
+    }
+    else if (data->getlog() != 0 && data->getnickname() == "" && data->getusername() != "")
+    {
+        if (data->getlog() != 0 && data->getusername() != "")
+        {
+            data->setnickname(input);
+            send(user, "Welcome to the server ", 22, 0);
+            send(user, data->getusername().c_str(), data->getusername().length(), 0);
+            send(user, " (", 2, 0);
+            send(user, data->getnickname().c_str(), data->getnickname().length(), 0);
+            send(user, ") ", 2, 0);
+            send(user, "!\n", 2, 0);
+            data->setlog(2);
+            return 0;
+        }
+    }
+    else if (input != server.getpassword() && data->getlog() == 0)
+    {
+        send(user, "Password incorrect.\n", 20, 0);
+        send(user, "Please enter password: ", 24, 0);
+        return 1;
+    }
+    return 0;
+}
 
 int ft_parsing(char **argv)
 {
@@ -38,22 +83,13 @@ int ft_parsing(char **argv)
             return 1;
         }
     }
+    if (i <= 3)
+    {
+        cout << "Password too short" << endl;
+        return 1;
+    }
     return 0;
 }
-
-// int valid_user(t_user user)
-// {
-//     int i = 0;
-//     while (user.username[i++] != '\0' && i < 30)
-//     {
-//         if (user.username[i] < 32 || user.username[i] > 126)
-//         {
-//             typeWriter("USERNAME INVALID\n");
-//             return 1;
-//         }
-//     }
-//     return 0;
-// }
 
 int parsing_nb_user(string nb, IRC server)
 {
