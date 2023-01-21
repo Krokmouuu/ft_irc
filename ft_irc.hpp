@@ -17,6 +17,15 @@
 #define TRUE  1 
 #define FALSE 0
 
+#define NEW_CLIENT 0
+#define LOGGED 1
+#define LOG_COMPLETED 2
+#define CONFIRMED_CLIENT 3
+
+
+#define JOIN_CHANNEL 0
+#define INSIDE_CHANNEL 1
+
 using namespace std;
 
 class IRC
@@ -71,3 +80,4 @@ void	typeWriter(string str);
 int     parsing_nb_user(string nb, IRC server);
 int     ft_parsing(char **argv);
 int     parse_input(string input, IRC server, Data *data, int user);
+char	*string_to_char(string str);

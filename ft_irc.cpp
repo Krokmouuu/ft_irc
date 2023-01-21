@@ -1,15 +1,30 @@
 #include "ft_irc.hpp"
 #include "Data.hpp"
 
+void    default_channel(Data *data)
+{
+    if (data->getchannel() == "Default" && data->getconnected() == JOIN_CHANNEL)
+    {
+        send(data->getfd(), "Joined: The accueil.\nCurrent channel : The accueil.\n", 53, 0);
+        data->setconnected(1);
+        const char *str = string_to_char(data->getusername() + " " + data->getnickname() + ": ");
+        send(data->getfd(), str, strlen(str), 0);
+    }
+    else if (data->getchannel() == "Default" && data->getconnected() == INSIDE_CHANNEL)
+    {
+        const char *str = string_to_char(data->getusername() + " " + data->getnickname() + ": ");
+        send(data->getfd(), str, strlen(str), 0);
+    }
+}
+
 void start_server(IRC server)  
 {  
     int opt = TRUE;  
     int master_socket, addrlen, new_socket, max_clients, activity, i, valread, sd;
-    vector<Data> vdata;
-    Data data;
 
     typeWriter("Welcome in PLE-BLEROY ImanRC server settings.\nPlease enter maximum user allowed to join the server : ");
     cin >> max_clients;
+    vector<Data> data(max_clients);
     typeWriter("Maximum user allowed to join the server : " + to_string(max_clients) + "\n");
 
     int client_socket[max_clients];
@@ -159,6 +174,7 @@ void start_server(IRC server)
                     printf("User #%d disconnected , ip %s , port %d \n", sd, inet_ntoa(address.sin_addr), ntohs(address.sin_port));
                     //Close the socket and mark as 0 in list for reuse
                     count_user--;
+                    data.at(sd - 4).setlog(CONFIRMED_CLIENT);
                     close( sd );  
                     client_socket[i] = 0;
                 }    
@@ -169,10 +185,12 @@ void start_server(IRC server)
                     //of the data read
                     buffer[valread] = '\0';
                     string input(buffer, strlen(buffer) - 1);
-                    if (parse_input(input, server, &data, sd) == 1)
+                    if (parse_input(input, server, &data[sd - 4], sd) == 1)
                         continue;
-                    else if (data.getlog() == 2)
-                        vdata.push_back(data);
+                    if (data.at(sd - 4).getlog() == LOG_COMPLETED)
+                    {
+                        default_channel(&data.at(sd - 4));
+                    }
                 }
             }
         }  

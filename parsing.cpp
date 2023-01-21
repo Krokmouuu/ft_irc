@@ -3,14 +3,26 @@
 
 int parse_input(string input, IRC server, Data *data, int user)
 {
-    data->setnumber(user - 4);
-    if (input == server.getpassword() && data->getlog() == 0)
+    if (input == server.getpassword() && data->getlog() == NEW_CLIENT)
     {
         data->setlog(1);
         send(user, "Password correct.\n", 18, 0);
         send(user, "Please enter your username: ", 29, 0);
+        data->setfd(user);
     }
-    else if (data->getlog() == 1 && data->getusername() == "")
+    else if (data->getlog() == CONFIRMED_CLIENT)
+    {
+        send(user, "Welcome back ", 13, 0);
+        send(user, data->getusername().c_str(), data->getusername().length(), 0);
+        send(user, " !\n", 3, 0);
+        std::string s = data->getusername() + " " + data->getnickname() + ": ";
+        const char* str = s.c_str();
+
+        send(user, str, strlen(str), 0);
+        data->setlog(LOG_COMPLETED);
+        return 1;
+    }
+    else if (data->getlog() == LOGGED && data->getusername() == "")
     {
         if (input.size() < 2 || input.size() > 26)
         {
@@ -21,9 +33,9 @@ int parse_input(string input, IRC server, Data *data, int user)
         send(user, "Please enter your nickname: ", 28, 0);
         return 1;
     }
-    else if (data->getlog() != 0 && data->getnickname() == "" && data->getusername() != "")
+    else if (data->getlog() != NEW_CLIENT && data->getnickname() == "" && data->getusername() != "")
     {
-        if (data->getlog() != 0 && data->getusername() != "")
+        if (data->getlog() != NEW_CLIENT && data->getusername() != "")
         {
             data->setnickname(input);
             send(user, "Welcome to the server ", 22, 0);
@@ -36,7 +48,7 @@ int parse_input(string input, IRC server, Data *data, int user)
             return 0;
         }
     }
-    else if (input != server.getpassword() && data->getlog() == 0)
+    else if (input != server.getpassword() && data->getlog() == NEW_CLIENT)
     {
         send(user, "Password incorrect.\n", 20, 0);
         send(user, "Please enter password: ", 24, 0);

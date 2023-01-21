@@ -9,3 +9,10 @@ void typeWriter(string str)
 		std::cout << str[i] << std::flush;
 	}
 }
+
+char	*string_to_char(string str)
+{
+	char *cstr = new char[str.length() + 1];
+	strcpy(cstr, str.c_str());
+	return cstr;
+}
