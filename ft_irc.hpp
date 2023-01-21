@@ -13,6 +13,7 @@
 #include <sys/time.h>
 #include <vector>
 #include "Data.hpp"
+#include "Channel.hpp"
 
 #define TRUE  1 
 #define FALSE 0
@@ -20,9 +21,9 @@
 #define NEW_CLIENT 0
 #define LOGGED 1
 #define LOG_COMPLETED 2
-#define CONFIRMED_CLIENT 3
+#define WELCOME_BACK 3
 
-
+#define DEFAULT 2
 #define JOIN_CHANNEL 0
 #define INSIDE_CHANNEL 1
 
@@ -81,3 +82,5 @@ int     parsing_nb_user(string nb, IRC server);
 int     ft_parsing(char **argv);
 int     parse_input(string input, IRC server, Data *data, int user);
 char	*string_to_char(string str);
+void    default_channel(vector<Data> *data, vector<Channel> chan, string input, int user);
+vector<Channel> init_channels();

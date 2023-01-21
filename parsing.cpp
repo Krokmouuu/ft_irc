@@ -10,7 +10,7 @@ int parse_input(string input, IRC server, Data *data, int user)
         send(user, "Please enter your username: ", 29, 0);
         data->setfd(user);
     }
-    else if (data->getlog() == CONFIRMED_CLIENT)
+    else if (data->getlog() == WELCOME_BACK)
     {
         send(user, "Welcome back ", 13, 0);
         send(user, data->getusername().c_str(), data->getusername().length(), 0);
@@ -45,6 +45,7 @@ int parse_input(string input, IRC server, Data *data, int user)
             send(user, ") ", 2, 0);
             send(user, "!\n", 2, 0);
             data->setlog(2);
+            data->setconnected(DEFAULT);
             return 0;
         }
     }

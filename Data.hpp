@@ -13,7 +13,7 @@ class Data
             this->nickname = "";
             this->logged = 0;
             this->fd = 0;
-            this->channel = "Default";
+            this->channel = "The accueil";
             this->connected = 0;
         }
         Data(const Data &params)
