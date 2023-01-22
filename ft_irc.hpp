@@ -18,14 +18,6 @@
 #define TRUE  1 
 #define FALSE 0
 
-#define NEW_CLIENT 0
-#define LOGGED 1
-#define LOG_COMPLETED 2
-#define WELCOME_BACK 3
-
-#define DEFAULT 2
-#define JOIN_CHANNEL 0
-#define INSIDE_CHANNEL 1
 
 using namespace std;
 
@@ -80,7 +72,11 @@ void    start_server(char **argv, IRC server);
 void	typeWriter(string str);
 int     parsing_nb_user(string nb, IRC server);
 int     ft_parsing(char **argv);
-int     parse_input(string input, IRC server, Data *data, int user);
+int     parse_log(string input, IRC server, Data *data, int user);
 char	*string_to_char(string str);
-void    default_channel(vector<Data> *data, vector<Channel> chan, string input, int user);
+void    default_channel(vector<Data> *data, vector<Channel> *chan, int user);
 vector<Channel> init_channels();
+void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input);
+void    print_name(vector<Channel> *chan, int user);
+void	print_server(vector<Data> *data, vector<Channel> *chan, int user);
+void     reset_client(Data *data, int user, vector<Channel> *chan);;

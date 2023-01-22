@@ -1,26 +1,14 @@
 #include "ft_irc.hpp"
 #include "Data.hpp"
 
-int parse_input(string input, IRC server, Data *data, int user)
+int parse_log(string input, IRC server, Data *data, int user)
 {
     if (input == server.getpassword() && data->getlog() == NEW_CLIENT)
     {
-        data->setlog(1);
+        data->setlog(LOGGED);
         send(user, "Password correct.\n", 18, 0);
         send(user, "Please enter your username: ", 29, 0);
         data->setfd(user);
-    }
-    else if (data->getlog() == WELCOME_BACK)
-    {
-        send(user, "Welcome back ", 13, 0);
-        send(user, data->getusername().c_str(), data->getusername().length(), 0);
-        send(user, " !\n", 3, 0);
-        std::string s = data->getusername() + " " + data->getnickname() + ": ";
-        const char* str = s.c_str();
-
-        send(user, str, strlen(str), 0);
-        data->setlog(LOG_COMPLETED);
-        return 1;
     }
     else if (data->getlog() == LOGGED && data->getusername() == "")
     {
@@ -44,8 +32,9 @@ int parse_input(string input, IRC server, Data *data, int user)
             send(user, data->getnickname().c_str(), data->getnickname().length(), 0);
             send(user, ") ", 2, 0);
             send(user, "!\n", 2, 0);
-            data->setlog(2);
+            data->setlog(LOG_COMPLETED);
             data->setconnected(DEFAULT);
+            data->setfd(user);
             return 0;
         }
     }

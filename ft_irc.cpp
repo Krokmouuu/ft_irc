@@ -9,7 +9,9 @@ void start_server(IRC server)
 
     typeWriter("Welcome in PLE-BLEROY ImanRC server settings.\nPlease enter maximum user allowed to join the server : ");
     cin >> max_clients;
-    vector<Data> data(max_clients);
+    vector<Data> data;
+    for (int i = 0; i < max_clients; i++)
+        data.push_back(Data());
     vector<Channel> channels = init_channels();
     typeWriter("Maximum user allowed to join the server : " + to_string(max_clients) + "\n");
 
@@ -122,7 +124,7 @@ void start_server(IRC server)
             if(send(new_socket, message, (ssize_t)strlen(message), 0) != (ssize_t)strlen(message) == 0)
             {  
                 typeWriter("Welcome message sent successfully\n");  
-                if (send(new_socket, "Please enter password: ", strlen("Please enter password: "), 0) != strlen("Please enter password: "))
+                if (send(new_socket, "Please enter password: ", 24, 0) != 24)
                     perror("send");
                 typeWriter("Password asked to user: #" + to_string(new_socket) + "\n");    
             }
@@ -159,7 +161,8 @@ void start_server(IRC server)
                     printf("User #%d disconnected , ip %s , port %d \n", sd, inet_ntoa(address.sin_addr), ntohs(address.sin_port));
                     //Close the socket and mark as 0 in list for reuse
                     count_user--;
-                    data.at(sd - 4).setlog(WELCOME_BACK);
+                    if (data.at(sd - 4).getlog() == LOG_COMPLETED)
+                        reset_client(&data[sd - 4], sd, &channels);
                     close( sd );  
                     client_socket[i] = 0;
                 }    
@@ -170,9 +173,12 @@ void start_server(IRC server)
                     //of the data read
                     buffer[valread] = '\0';
                     string input(buffer, strlen(buffer) - 1);
-                    if (parse_input(input, server, &data[sd - 4], sd) == 1)
-                        continue;            
-                    default_channel(&data, channels, input, sd);
+                    if (parse_log(input, server, &data[sd - 4], sd) == 1)
+                        continue;
+                    if (data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == DEFAULT)
+                        default_channel(&data, &channels, sd);
+                    if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL)
+                        parse_input(&data, &channels, sd, input);
                 }
             }
         }  
