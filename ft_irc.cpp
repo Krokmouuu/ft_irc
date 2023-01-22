@@ -5,7 +5,7 @@
 void start_server(IRC server)  
 {  
     int opt = TRUE;  
-    int master_socket, addrlen, new_socket, max_clients, activity, i, valread, sd;
+    int master_socket, addrlen, new_socket, max_clients, activity, i, valread, sd, announce;
 
     typeWriter("Welcome in PLE-BLEROY ImanRC server settings.\nPlease enter maximum user allowed to join the server : ");
     cin >> max_clients;
@@ -17,7 +17,6 @@ void start_server(IRC server)
 
     int client_socket[max_clients];
     int max_sd;
-    int count_user = 0;
     struct sockaddr_in address;  
          
     char buffer[1025];  //data buffer of 1K 
@@ -111,7 +110,7 @@ void start_server(IRC server)
                 perror("accept");  
                 exit(EXIT_FAILURE);  
             }  
-            if (count_user == max_clients)
+            if (server.getcurrent_user() == max_clients)
             {
                 send(new_socket, "Server is full try again later.\n", strlen("Server is full try again later.\n"), 0);
                 close(new_socket);
@@ -139,7 +138,7 @@ void start_server(IRC server)
                 {  
                     client_socket[i] = new_socket;  
                     typeWriter("Adding to list of sockets as " + to_string(i) + "\n");
-                    count_user++;
+                    server.setcurrent_user(server.getcurrent_user() + 1);
                          
                     break;  
                 }  
@@ -152,7 +151,7 @@ void start_server(IRC server)
             sd = client_socket[i];  
                  
             if (FD_ISSET( sd , &readfds))  
-            {  
+            { 
                 //Check if it was for closing , and also read the 
                 //incoming message 
                 if ((valread = read(sd, buffer, 1024)) == 0)  
@@ -160,9 +159,12 @@ void start_server(IRC server)
                     //Somebody disconnected , get his details and print 
                     printf("User #%d disconnected , ip %s , port %d \n", sd, inet_ntoa(address.sin_addr), ntohs(address.sin_port));
                     //Close the socket and mark as 0 in list for reuse
-                    count_user--;
+                    server.setcurrent_user(server.getcurrent_user() - 1);
                     if (data.at(sd - 4).getlog() == LOG_COMPLETED)
+                    {
                         reset_client(&data[sd - 4], sd, &channels);
+                        // user_left(&data, &channels, sd);
+                    }
                     close( sd );  
                     client_socket[i] = 0;
                 }    
@@ -176,9 +178,19 @@ void start_server(IRC server)
                     if (parse_log(input, server, &data[sd - 4], sd) == 1)
                         continue;
                     if (data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == DEFAULT)
+                    {
+                        announce = TRUE;
                         default_channel(&data, &channels, sd);
-                    if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL)
-                        parse_input(&data, &channels, sd, input);
+                        print_name(&data, &channels, sd, TRUE);
+                    }
+                    if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && announce == FALSE && input != "")
+                    {
+                        parse_input(&data, &channels, sd, input, &server);
+                    }
+                    if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && announce == FALSE && input == "")
+                        print_name(&data, &channels, sd, FALSE);
+
+                    announce = FALSE;
                 }
             }
         }  

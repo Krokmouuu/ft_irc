@@ -23,16 +23,23 @@ vector<Channel> init_channels()
     return channels;
 }
 
-void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input)
+void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server)
 {
-    if (input == "/quit")
+    (void)server;
+    if (input == "")
+        return ;
+    if (data->at(user - 4).getchannel() == "The accueil")
     {
         for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)
-            send(chan->at(0).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + " left the channel.\n"), data->at(user - 4).getnickname().size() + 20, 0);
-        reset_client(&data->at(user - 4), user, chan);
-        close (user);
+            if (chan->at(0).getuser(i).getfd() != user)
+                send(chan->at(0).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 4, 0);
     }
-    // print_name(&chan[user - 4], user);
+    print_name(data, chan, user, TRUE);
+    // if (data->at(user - 4).getchannel() == "La taniere")
+    // if (data->at(user - 4).getchannel() == "Juraquantic Park")
+    // if (data->at(user - 4).getchannel() == "WAURK WAURK WAURK")
+    // if (data->at(user - 4).getchannel() == "chiez le")
+    // if (data->at(user - 4).getchannel() == "Sonic Enjoyers")
 }
 
 void    default_channel(vector<Data> *data, vector<Channel> *chan, int user)
@@ -40,8 +47,8 @@ void    default_channel(vector<Data> *data, vector<Channel> *chan, int user)
     if (data->at(user - 4).getconnected() == DEFAULT)
     {
         send(user, string_to_char("\nWelcome to < The accueil > channel !\n"), 39, 0);
-        data->at(user - 4).setconnected(INSIDE_CHANNEL);
         chan->at(0).adduser(data->at(user - 4));
+        data->at(user - 4).setconnected(INSIDE_CHANNEL);
         for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)
             send(chan->at(0).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + " joined the channel.\n"), data->at(user - 4).getnickname().size() + 23, 0);
     }

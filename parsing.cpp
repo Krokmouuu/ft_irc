@@ -35,6 +35,7 @@ int parse_log(string input, IRC server, Data *data, int user)
             data->setlog(LOG_COMPLETED);
             data->setconnected(DEFAULT);
             data->setfd(user);
+            data->setnumber(user - 4);
             return 0;
         }
     }

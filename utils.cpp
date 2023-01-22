@@ -1,22 +1,20 @@
 #include "ft_irc.hpp"
 
-
-void	print_server(vector<Data> *data, vector<Channel> *chan, int user)
+//! This function is used to print the name of the user in the terminal
+void print_name(vector<Data> *data, vector<Channel> *chan, int user, bool useless)
 {
-	send(chan->at(0).vgetusers().at(user - 4).getfd(), string_to_char(chan->at(0).vgetusers().at(user - 4).getnickname() + ": "), chan->at(0).vgetusers().at(user - 4).getnickname().size() + 2,0);
-	for (size_t i = 0; i < data->size(); i++)
+	(void)data;
+	(void)user;
+	if (useless == TRUE)
 	{
-		if (data->at(i).getfd() != chan->at(0).vgetusers().at(user - 4).getfd())
+		for (size_t i = 0; i < chan->at(i).vgetusers().size(); i++)
 		{
-			send(chan->at(0).vgetusers().at(user - 4).getfd(), string_to_char(data->at(i).getnickname() + " "), data->at(i).getnickname().size() + 1,0);
+			for (size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
+				send(chan->at(i).getuser(j).getfd(), string_to_char(chan->at(i).vgetusers().at(j).getnickname() + ": "), chan->at(i).vgetusers().at(j).getnickname().size() + 2,0);
 		}
 	}
-	// send(chan->at(0).vgetusers().at(user - 4).getfd(), string_to_char(" joined the channel.\n"), 31,0);
-}
-
-void print_name(vector<Channel> *chan, int user)
-{
-	send(chan->at(0).vgetusers().at(user - 4).getfd(), string_to_char(chan->at(0).vgetusers().at(user - 4).getnickname() + ": "), chan->at(0).vgetusers().at(user - 4).getnickname().size() + 2,0);
+	else
+	    send(user, string_to_char(data->at(user - 4).getnickname() + ": "), data->at(user - 4).getnickname().size() + 2, 0);
 }
 
 //my beautiful function to write message in the terminal letter by letter :]

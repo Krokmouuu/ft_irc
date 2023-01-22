@@ -18,7 +18,6 @@
 #define TRUE  1 
 #define FALSE 0
 
-
 using namespace std;
 
 class IRC
@@ -26,7 +25,7 @@ class IRC
 
     public :
 
-        IRC(string server, string pass) : serverport(server), password(pass) {};
+        IRC(string server, string pass) : serverport(server), password(pass), current_user(0) {};
         IRC(const IRC &params)
         {
             this->serverport = params.serverport;
@@ -76,7 +75,6 @@ int     parse_log(string input, IRC server, Data *data, int user);
 char	*string_to_char(string str);
 void    default_channel(vector<Data> *data, vector<Channel> *chan, int user);
 vector<Channel> init_channels();
-void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input);
-void    print_name(vector<Channel> *chan, int user);
-void	print_server(vector<Data> *data, vector<Channel> *chan, int user);
-void     reset_client(Data *data, int user, vector<Channel> *chan);;
+void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
+void    print_name(vector<Data> *data, vector<Channel> *chan, int user, bool useless);
+void    reset_client(Data *data, int user, vector<Channel> *chan);;

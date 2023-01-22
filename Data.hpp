@@ -25,6 +25,7 @@ class Data
             this->fd = 0;
             this->channel = "The accueil";
             this->connected = DEFAULT;
+            this->number = 0;
         }
         Data(const Data &params)
         {
@@ -40,6 +41,7 @@ class Data
                 this->fd = params.fd;
                 this->channel = params.channel;
                 this->connected = params.connected;
+                this->number = params.number;
             }
             return *this;
         }
@@ -51,13 +53,15 @@ class Data
     int     getfd() const { return this->fd; };
     string  getchannel() const { return this->channel; };
     int     getconnected() const { return this->connected; };
-    
+    int     getnumber() const { return this->number; };
+
     void    setusername(string username) { this->username = username; };
     void    setnickname(string nickname) { this->nickname = nickname; };
     void    setlog(int logged) { this->logged = logged; };
     void    setfd(int fd) { this->fd = fd; };
     void    setchannel(string channel) { this->channel = channel; };
     void    setconnected(int connected) { this->connected = connected; };
+    void    setnumber(int number) { this->number = number; };
     private :
 
     string  username;
@@ -66,4 +70,5 @@ class Data
     int     fd;
     string  channel;
     int     connected;
+    int     number;
 };
