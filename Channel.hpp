@@ -10,6 +10,8 @@ class Channel
         Channel(const Channel &params)
         {
             this->name = params.name;
+            this->users = params.users;
+            this->users_fd = params.users_fd;
             return ;
         }
         Channel &operator=(const Channel &params)

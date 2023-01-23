@@ -1,14 +1,38 @@
 #include "ft_irc.hpp"
 
-void reset_client(Data *data, int user, vector<Channel> *chan)
+vector<string> init_string()
 {
+	vector<string> tmp;
+	tmp.push_back("/join");
+	tmp.push_back("/quit");
+	tmp.push_back("/leave");
+	tmp.push_back("/w");
+	tmp.push_back("/msg");
+	tmp.push_back("/ping");
+	tmp.push_back("/pong");
+	tmp.push_back("/nick");
+	tmp.push_back("/afk");
+	tmp.push_back("/names");
+	tmp.push_back("/back");
+	tmp.push_back("/list");
+	tmp.push_back("/help");
+	tmp.push_back("/whois");
+	tmp.push_back("/who");
+	return tmp;
+}
+
+void reset_client(Data *data, int user, vector<Channel> *chan, string channel)
+{
+	(void)user;
+	(void)chan;
+	(void)channel;
     data->setusername("");
     data->setnickname("");
     data->setlog(NEW_CLIENT);
     data->setfd(0);
     data->setchannel("The accueil");
     data->setconnected(DEFAULT);
-    chan->at(0).removeuser(user - 4);
+	data->setaway(FALSE);
 }
 
 //! This function is used to print the name of the user in the terminal, TRUE = print all the name of the users in the channel, FALSE = print the name of the user who send the message
@@ -22,7 +46,7 @@ void print_name(vector<Data> *data, vector<Channel> *chan, int user, bool useles
 				send(chan->at(i).getuser(j).getfd(), string_to_char(chan->at(i).vgetusers().at(j).getnickname() + ": "), chan->at(i).vgetusers().at(j).getnickname().size() + 2,0);
 		}
 	}
-	else
+	else if (useless == FALSE)
 	    send(user, string_to_char(data->at(user - 4).getnickname() + ": "), data->at(user - 4).getnickname().size() + 2, 0);
 }
 

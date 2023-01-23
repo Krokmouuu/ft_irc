@@ -26,6 +26,7 @@ class Data
             this->channel = "The accueil";
             this->connected = DEFAULT;
             this->number = 0;
+            this->away = 0;
         }
         Data(const Data &params)
         {
@@ -42,6 +43,7 @@ class Data
                 this->channel = params.channel;
                 this->connected = params.connected;
                 this->number = params.number;
+                this->away = params.away;
             }
             return *this;
         }
@@ -54,7 +56,9 @@ class Data
     string  getchannel() const { return this->channel; };
     int     getconnected() const { return this->connected; };
     int     getnumber() const { return this->number; };
+    int     getaway() const { return this->away; };
 
+    void    setaway(int away) { this->away = away; };
     void    setusername(string username) { this->username = username; };
     void    setnickname(string nickname) { this->nickname = nickname; };
     void    setlog(int logged) { this->logged = logged; };
@@ -71,4 +75,6 @@ class Data
     string  channel;
     int     connected;
     int     number;
+    int     away;
+
 };

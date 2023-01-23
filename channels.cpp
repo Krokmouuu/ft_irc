@@ -1,6 +1,28 @@
 #include "ft_irc.hpp"
 
-void    user_left(vector<Data> *data, vector<Channel> *chan, int user, string channel)
+void user_join(vector<Data> *data, vector<Channel> *chan, int user, string channel)
+{
+    size_t j = 0;
+    while(chan->at(j).getname() != channel && chan->size() > j)
+        j++;
+    for (size_t i = 0; i < chan->at(j).vgetusers().size(); i++)
+    {
+        if (chan->at(j).getuser(i).getfd() != user)
+            send(chan->at(j).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + " has joined the channel.\n"), data->at(user - 4).getnickname().size() + 26, 0);
+    }
+    data->at(user - 4).setchannel(channel);
+    for(size_t i = 0; i < chan->size(); i ++)
+    {
+        if (chan->at(i).getname() == channel)
+        {
+            chan->at(i).adduser(data->at(user - 4));
+            break;
+        }
+    }
+    print_name(data, chan, user, TRUE);
+}
+
+void user_left(vector<Data> *data, vector<Channel> *chan, int user, string channel)
 {
     size_t j = 0;
     while(chan->at(j).getname() != channel && chan->size() > j)
@@ -9,6 +31,17 @@ void    user_left(vector<Data> *data, vector<Channel> *chan, int user, string ch
     {
         if (chan->at(j).getuser(i).getfd() != user)
             send(chan->at(j).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + " has left the channel.\n"), data->at(user - 4).getnickname().size() + 25, 0);
+    }
+    data->at(user - 4).setchannel(channel);
+    for(size_t i = 0; i < chan->size(); i++)
+    {
+        if (chan->at(i).getname() == channel)
+        {
+            for(size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
+                if (chan->at(i).getuser(j).getfd() == user)
+                    chan->at(i).removeuser(j);
+            break;
+        }
     }
     print_name(data, chan, user, TRUE);
 }
@@ -28,20 +61,49 @@ vector<Channel> init_channels()
 void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server)
 {
     (void)server;
-    if (input == "")
+    
+    if (command_input(data, chan, user, input, server) == 0)
+    {
+        print_name(data, chan, user, FALSE);
         return ;
-    if (data->at(user - 4).getchannel() == "The accueil")
+    }
+    else if (data->at(user - 4).getchannel() == "The accueil")
     {
         for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)
             if (chan->at(0).getuser(i).getfd() != user)
                 send(chan->at(0).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 4, 0);
     }
+    else if (data->at(user - 4).getchannel() == "La taniere")
+    {
+        for (size_t i = 0; i < chan->at(1).vgetusers().size(); i++)
+            if (chan->at(1).getuser(i).getfd() != user)
+                send(chan->at(1).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 4, 0);
+    }
+    else if (data->at(user - 4).getchannel() == "Juraquantic Park")
+    {
+        for (size_t i = 0; i < chan->at(3).vgetusers().size(); i++)
+            if (chan->at(3).getuser(i).getfd() != user)
+                send(chan->at(3).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 4, 0);
+    }
+    else if (data->at(user - 4).getchannel() == "WAURK WAURK WAURK")
+    {
+        for (size_t i = 0; i < chan->at(3).vgetusers().size(); i++)
+            if (chan->at(3).getuser(i).getfd() != user)
+                send(chan->at(3).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 4, 0);
+    }
+    else if (data->at(user - 4).getchannel() == "chiez le")
+    {
+        for (size_t i = 0; i < chan->at(4).vgetusers().size(); i++)
+            if (chan->at(4).getuser(i).getfd() != user)
+                send(chan->at(4).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 4, 0);
+    }
+    else if (data->at(user - 4).getchannel() == "Sonic Enjoyers")
+    {
+        for (size_t i = 0; i < chan->at(5).vgetusers().size(); i++)
+            if (chan->at(5).getuser(i).getfd() != user)
+                send(chan->at(5).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 4, 0);
+    }
     print_name(data, chan, user, TRUE);
-    // if (data->at(user - 4).getchannel() == "La taniere")
-    // if (data->at(user - 4).getchannel() == "Juraquantic Park")
-    // if (data->at(user - 4).getchannel() == "WAURK WAURK WAURK")
-    // if (data->at(user - 4).getchannel() == "chiez le")
-    // if (data->at(user - 4).getchannel() == "Sonic Enjoyers")
 }
 
 void    default_channel(vector<Data> *data, vector<Channel> *chan, int user)
@@ -49,9 +111,8 @@ void    default_channel(vector<Data> *data, vector<Channel> *chan, int user)
     if (data->at(user - 4).getconnected() == DEFAULT)
     {
         send(user, string_to_char("\nWelcome to < The accueil > channel !\n"), 39, 0);
-        chan->at(0).adduser(data->at(user - 4));
         data->at(user - 4).setconnected(INSIDE_CHANNEL);
-        for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)
-            send(chan->at(0).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + " joined the channel.\n"), data->at(user - 4).getnickname().size() + 23, 0);
+        data->at(user - 4).setnumber(user - 4);
+        user_join(data, chan, user, "The accueil");
     }
 }

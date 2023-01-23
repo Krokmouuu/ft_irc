@@ -30,6 +30,10 @@ class IRC
         {
             this->serverport = params.serverport;
             this->password = params.password;
+            this->maxuser = params.maxuser;
+            this->current_user = params.current_user;
+            this->announce = params.announce;
+            this->socketServer = params.socketServer;
             return ;
         }
         IRC &operator=(const IRC &params)
@@ -38,6 +42,10 @@ class IRC
             {
                 this->serverport = params.serverport;
                 this->password = params.password;
+                this->maxuser = params.maxuser;
+                this->current_user = params.current_user;
+                this->announce = params.announce;
+                this->socketServer = params.socketServer;
             }
             return *this;
         }
@@ -59,23 +67,26 @@ class IRC
 
     private :
 
-        string serverport;
-        string password;
-        int    maxuser;
-        int    current_user;
-        int announce;
-        int   socketServer;
+        string  serverport;
+        string  password;
+        int     maxuser;
+        int     current_user;
+        int     announce;
+        int     socketServer;
 };
 
-void    start_server(char **argv, IRC server);
-void	typeWriter(string str);
-int     parsing_nb_user(string nb, IRC server);
-int     ft_parsing(char **argv);
-int     parse_log(string input, IRC server, Data *data, int user);
-char	*string_to_char(string str);
-void    default_channel(vector<Data> *data, vector<Channel> *chan, int user);
+void            start_server(char **argv, IRC server);
+void	        typeWriter(string str);
+int             parsing_nb_user(string nb, IRC server);
+int             ft_parsing(char **argv);
+int             parse_log(string input, IRC server, Data *data, int user);
+char	        *string_to_char(string str);
+void            default_channel(vector<Data> *data, vector<Channel> *chan, int user);
 vector<Channel> init_channels();
-void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
-void    print_name(vector<Data> *data, vector<Channel> *chan, int user, bool useless);
-void    reset_client(Data *data, int user, vector<Channel> *chan);;
-void    user_left(vector<Data> *data, vector<Channel> *chan, int user, string channel);
+void            parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
+void            print_name(vector<Data> *data, vector<Channel> *chan, int user, bool useless);
+void            reset_client(Data *data, int user, vector<Channel> *chan, string channel);
+void            user_left(vector<Data> *data, vector<Channel> *chan, int user, string channel);
+void            user_join(vector<Data> *data, vector<Channel> *chan, int user, string channel);
+int             command_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
+vector<string>  init_string();
