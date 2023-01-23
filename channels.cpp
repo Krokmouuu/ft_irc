@@ -6,18 +6,14 @@ void user_join(vector<Data> *data, vector<Channel> *chan, int user, string chann
     while(chan->at(j).getname() != channel && chan->size() > j)
         j++;
     for (size_t i = 0; i < chan->at(j).vgetusers().size(); i++)
-    {
         if (chan->at(j).getuser(i).getfd() != user)
-            send(chan->at(j).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + " has joined the channel.\n"), data->at(user - 4).getnickname().size() + 26, 0);
-    }
+            send(chan->at(j).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + " has joined the channel.\n"), data->at(user - 4).getnickname().size() + 25, 0);
     data->at(user - 4).setchannel(channel);
     for(size_t i = 0; i < chan->size(); i ++)
     {
         if (chan->at(i).getname() == channel)
-        {
             chan->at(i).adduser(data->at(user - 4));
             break;
-        }
     }
 }
 
@@ -27,20 +23,16 @@ void user_left(vector<Data> *data, vector<Channel> *chan, int user, string chann
     while(chan->at(j).getname() != channel && chan->size() > j)
         j++;
     for (size_t i = 0; i < chan->at(j).vgetusers().size(); i++)
-    {
         if (chan->at(j).getuser(i).getfd() != user)
             send(chan->at(j).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + " has left the channel.\n"), data->at(user - 4).getnickname().size() + 24, 0);
-    }
     data->at(user - 4).setchannel(channel);
     for(size_t i = 0; i < chan->size(); i++)
     {
         if (chan->at(i).getname() == channel)
-        {
             for(size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
                 if (chan->at(i).getuser(j).getfd() == user)
                     chan->at(i).removeuser(j);
             break;
-        }
     }
 }
 
@@ -62,7 +54,7 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
     
     if (command_input(data, chan, user, input, server) == 0)
     {
-        print_name(data, chan, user, FALSE);
+        // print_name(data, chan, user, FALSE);
         return ;
     }
     else if (data->at(user - 4).getchannel() == "The accueil")
