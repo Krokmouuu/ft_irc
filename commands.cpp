@@ -18,6 +18,7 @@ int    command_input(vector<Data> *data, vector<Channel> *chan, int user, string
 {
     (void)data;
     (void)server;
+    (void)user;
     if (input[0] != '/')
         return 1;
     vector<string> tmp = init_string();
@@ -27,8 +28,9 @@ int    command_input(vector<Data> *data, vector<Channel> *chan, int user, string
         {
             if (input == "/join " + chan->at(j).getname())
             {
-               user_left(data, chan, user, data->at(user - 4).getchannel());
-               user_join(data, chan, user, chan->at(j).getname());
+                // send(user, string_to_char("Welcome to < " + chan->at(j).getname() + " >" + " channel !\n"), 29 + chan->at(j).getname().size(), 0);
+                user_join(data, chan, user, chan->at(j).getname());
+                user_left(data, chan, user, data->at(user - 4).getchannel());
                return 0;
             }
         }

@@ -32,7 +32,6 @@ class IRC
             this->password = params.password;
             this->maxuser = params.maxuser;
             this->current_user = params.current_user;
-            this->announce = params.announce;
             this->socketServer = params.socketServer;
             return ;
         }
@@ -44,7 +43,6 @@ class IRC
                 this->password = params.password;
                 this->maxuser = params.maxuser;
                 this->current_user = params.current_user;
-                this->announce = params.announce;
                 this->socketServer = params.socketServer;
             }
             return *this;
@@ -56,14 +54,12 @@ class IRC
         int    getmaxuser() const { return this->maxuser; };
         int    getsocketServer() const { return this->socketServer; };
         int    getcurrent_user() const { return this->current_user; };
-        int    getannounce() const { return this->announce; };
 
         void   setsocketServer(int socketServer) { this->socketServer = socketServer; };
         void   setmaxuser(int maxuser) { this->maxuser = maxuser; };
         void   setcurrent_user(int current_user) { this->current_user = current_user; };
-        void   setannounce(int announce) { this->announce = announce; };
-        void    decrease_user() { this->current_user--; };
-        void    increase_user() { this->current_user++; };
+        void   decrease_user() { this->current_user--; };
+        void   increase_user() { this->current_user++; };
 
     private :
 
@@ -71,7 +67,6 @@ class IRC
         string  password;
         int     maxuser;
         int     current_user;
-        int     announce;
         int     socketServer;
 };
 

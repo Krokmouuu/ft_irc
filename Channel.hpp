@@ -30,6 +30,7 @@ class Channel
         vector<Data> vgetusers() const { return this->users; };
         Data getuser(int i) const { return this->users[i]; };
         vector<int> getusers_fd() const { return this->users_fd; };
+        vector<int> removeusers_fd(int i) { this->users_fd.erase(this->users_fd.begin() + i); return this->users_fd; };
         void removeuser(int i) { this->users.erase(this->users.begin() + i); };
 
         void insertuser(Data user, int i) { this->users.insert(this->users.begin() + i, user); };

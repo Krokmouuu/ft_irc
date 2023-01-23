@@ -3,7 +3,8 @@
 //? getlog()
 #define NEW_CLIENT 0
 #define LOGGED 1
-#define LOG_COMPLETED 2
+#define LOGGED_MAYBE 2
+#define LOG_COMPLETED 3
 
 //? getconnected()
 #define DEFAULT 2

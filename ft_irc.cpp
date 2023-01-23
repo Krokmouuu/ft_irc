@@ -158,7 +158,7 @@ void start_server(IRC server)
                     printf("User #%d disconnected , ip %s , port %d \n", sd, inet_ntoa(address.sin_addr), ntohs(address.sin_port));
                     //Close the socket and mark as 0 in list for reuse
                     server.setcurrent_user(server.getcurrent_user() - 1);
-                    if (data.at(sd - 4).getlog() == LOG_COMPLETED)
+                    if (data.at(sd - 4).getlog() != NEW_CLIENT)
                     {
                         user_left(&data, &channels, sd, data.at(sd - 4).getchannel());
                         reset_client(&data[sd - 4], sd, &channels, data.at(sd - 4).getchannel());
@@ -177,8 +177,8 @@ void start_server(IRC server)
                         continue;
                     if (data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == DEFAULT)
                     {
-                        server.setannounce(TRUE);
                         default_channel(&data, &channels, sd);
+                        continue;
                     }
                     if ((input == "/quit" || input == "/leave") && data.at(sd - 4).getlog() == LOG_COMPLETED)
                     {
@@ -187,11 +187,9 @@ void start_server(IRC server)
                         reset_client(&data[sd - 4], sd, &channels, data.at(sd - 4).getchannel());
                         close( sd );  
                         client_socket[i] = 0;
-
                     }
-                    if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && server.getannounce() == FALSE && input != "")
+                    if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && input.size() > 0)
                         parse_input(&data, &channels, sd, input, &server);
-                    server.setannounce(FALSE);
                 }
             }
         }  

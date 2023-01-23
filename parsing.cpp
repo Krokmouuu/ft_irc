@@ -10,20 +10,25 @@ int parse_log(string input, IRC server, Data *data, int user)
         send(user, "Please enter your username: ", 29, 0);
         data->setfd(user);
     }
-    else if (data->getlog() == LOGGED && data->getusername() == "")
+    else if (data->getlog() == LOGGED)
     {
         if (input.size() < 2 || input.size() > 26)
         {
             send(user, "Username must be between 2 and 26 characters.\nPlease enter your username: ", 75, 0);
-            return 0;
+            return 1;
         }
         data->setusername(input);
+        data->setlog(LOGGED_MAYBE);
         send(user, "Please enter your nickname: ", 28, 0);
-        return 1;
     }
-    else if (data->getlog() != NEW_CLIENT && data->getnickname() == "" && data->getusername() != "")
+    else if (data->getlog() == LOGGED_MAYBE)
     {
-        if (data->getlog() != NEW_CLIENT && data->getusername() != "")
+        if (input.size() < 2 || input.size() > 26)
+        {
+            send(user, "Nickname must be between 2 and 26 characters.\nPlease enter your nickname: ", 75, 0);
+            return 1;
+        }
+        else
         {
             data->setnickname(input);
             send(user, "Welcome to the server ", 22, 0);
@@ -36,7 +41,6 @@ int parse_log(string input, IRC server, Data *data, int user)
             data->setconnected(DEFAULT);
             data->setfd(user);
             data->setnumber(user - 4);
-            return 0;
         }
     }
     else if (input != server.getpassword() && data->getlog() == NEW_CLIENT)
