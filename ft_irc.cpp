@@ -5,7 +5,7 @@
 void start_server(IRC server)  
 {  
     int opt = TRUE;  
-    int master_socket, addrlen, new_socket, max_clients, activity, i, valread, sd, announce;
+    int master_socket, addrlen, new_socket, max_clients, activity, i, valread, sd;
 
     typeWriter("Welcome in PLE-BLEROY ImanRC server settings.\nPlease enter maximum user allowed to join the server : ");
     cin >> max_clients;
@@ -27,9 +27,7 @@ void start_server(IRC server)
      
     //initialise all client_socket[] to 0 so not checked 
     for (i = 0; i < max_clients; i++)  
-    {  
         client_socket[i] = 0;  
-    }  
          
     //create a master socket 
     if( (master_socket = socket(AF_INET , SOCK_STREAM , 0)) == 0)  
@@ -162,8 +160,8 @@ void start_server(IRC server)
                     server.setcurrent_user(server.getcurrent_user() - 1);
                     if (data.at(sd - 4).getlog() == LOG_COMPLETED)
                     {
+                        user_left(&data, &channels, sd, data.at(sd - 4).getchannel());
                         reset_client(&data[sd - 4], sd, &channels);
-                        // user_left(&data, &channels, sd);
                     }
                     close( sd );  
                     client_socket[i] = 0;
@@ -179,18 +177,15 @@ void start_server(IRC server)
                         continue;
                     if (data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == DEFAULT)
                     {
-                        announce = TRUE;
+                        server.setannounce(TRUE);
                         default_channel(&data, &channels, sd);
                         print_name(&data, &channels, sd, TRUE);
                     }
-                    if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && announce == FALSE && input != "")
-                    {
+                    if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && server.getannounce() == FALSE && input != "")
                         parse_input(&data, &channels, sd, input, &server);
-                    }
-                    if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && announce == FALSE && input == "")
+                    if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && server.getannounce() == FALSE && input == "")
                         print_name(&data, &channels, sd, FALSE);
-
-                    announce = FALSE;
+                    server.setannounce(FALSE);
                 }
             }
         }  

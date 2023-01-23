@@ -48,12 +48,12 @@ class IRC
         int    getmaxuser() const { return this->maxuser; };
         int    getsocketServer() const { return this->socketServer; };
         int    getcurrent_user() const { return this->current_user; };
-
+        int    getannounce() const { return this->announce; };
 
         void   setsocketServer(int socketServer) { this->socketServer = socketServer; };
         void   setmaxuser(int maxuser) { this->maxuser = maxuser; };
         void   setcurrent_user(int current_user) { this->current_user = current_user; };
-
+        void   setannounce(int announce) { this->announce = announce; };
         void    decrease_user() { this->current_user--; };
         void    increase_user() { this->current_user++; };
 
@@ -63,7 +63,7 @@ class IRC
         string password;
         int    maxuser;
         int    current_user;
-        
+        int announce;
         int   socketServer;
 };
 
@@ -78,3 +78,4 @@ vector<Channel> init_channels();
 void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
 void    print_name(vector<Data> *data, vector<Channel> *chan, int user, bool useless);
 void    reset_client(Data *data, int user, vector<Channel> *chan);;
+void    user_left(vector<Data> *data, vector<Channel> *chan, int user, string channel);

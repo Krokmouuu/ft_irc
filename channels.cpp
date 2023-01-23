@@ -1,14 +1,16 @@
 #include "ft_irc.hpp"
 
-void reset_client(Data *data, int user, vector<Channel> *chan)
+void    user_left(vector<Data> *data, vector<Channel> *chan, int user, string channel)
 {
-    data->setusername("");
-    data->setnickname("");
-    data->setlog(NEW_CLIENT);
-    data->setfd(0);
-    data->setchannel("The accueil");
-    data->setconnected(DEFAULT);
-    chan->at(0).removeuser(user - 4);
+    size_t j = 0;
+    while(chan->at(j).getname() != channel && chan->size() > j)
+        j++;
+    for (size_t i = 0; i < chan->at(j).vgetusers().size(); i++)
+    {
+        if (chan->at(j).getuser(i).getfd() != user)
+            send(chan->at(j).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + " has left the channel.\n"), data->at(user - 4).getnickname().size() + 25, 0);
+    }
+    print_name(data, chan, user, TRUE);
 }
 
 vector<Channel> init_channels()

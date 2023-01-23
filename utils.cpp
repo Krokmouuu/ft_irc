@@ -1,10 +1,19 @@
 #include "ft_irc.hpp"
 
-//! This function is used to print the name of the user in the terminal
+void reset_client(Data *data, int user, vector<Channel> *chan)
+{
+    data->setusername("");
+    data->setnickname("");
+    data->setlog(NEW_CLIENT);
+    data->setfd(0);
+    data->setchannel("The accueil");
+    data->setconnected(DEFAULT);
+    chan->at(0).removeuser(user - 4);
+}
+
+//! This function is used to print the name of the user in the terminal, TRUE = print all the name of the users in the channel, FALSE = print the name of the user who send the message
 void print_name(vector<Data> *data, vector<Channel> *chan, int user, bool useless)
 {
-	(void)data;
-	(void)user;
 	if (useless == TRUE)
 	{
 		for (size_t i = 0; i < chan->at(i).vgetusers().size(); i++)
