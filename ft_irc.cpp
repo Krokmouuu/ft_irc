@@ -182,8 +182,6 @@ void start_server(IRC server)
                     }
                     if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && server.getannounce() == FALSE && input != "")
                         parse_input(&data, &channels, sd, input, &server);
-                    if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && server.getannounce() == FALSE && input == "")
-                        print_name(&data, &channels, sd, FALSE);
                     server.setannounce(FALSE);
                 }
             }

@@ -19,7 +19,6 @@ void user_join(vector<Data> *data, vector<Channel> *chan, int user, string chann
             break;
         }
     }
-    print_name(data, chan, user, TRUE);
 }
 
 void user_left(vector<Data> *data, vector<Channel> *chan, int user, string channel)
@@ -30,7 +29,7 @@ void user_left(vector<Data> *data, vector<Channel> *chan, int user, string chann
     for (size_t i = 0; i < chan->at(j).vgetusers().size(); i++)
     {
         if (chan->at(j).getuser(i).getfd() != user)
-            send(chan->at(j).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + " has left the channel.\n"), data->at(user - 4).getnickname().size() + 25, 0);
+            send(chan->at(j).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + " has left the channel.\n"), data->at(user - 4).getnickname().size() + 24, 0);
     }
     data->at(user - 4).setchannel(channel);
     for(size_t i = 0; i < chan->size(); i++)
@@ -43,7 +42,6 @@ void user_left(vector<Data> *data, vector<Channel> *chan, int user, string chann
             break;
         }
     }
-    print_name(data, chan, user, TRUE);
 }
 
 vector<Channel> init_channels()
@@ -71,7 +69,7 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
     {
         for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)
             if (chan->at(0).getuser(i).getfd() != user)
-                send(chan->at(0).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 4, 0);
+                send(chan->at(0).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 3, 0);
     }
     else if (data->at(user - 4).getchannel() == "La taniere")
     {
@@ -103,7 +101,6 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
             if (chan->at(5).getuser(i).getfd() != user)
                 send(chan->at(5).getuser(i).getfd(), string_to_char("\n" + data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 4, 0);
     }
-    print_name(data, chan, user, TRUE);
 }
 
 void    default_channel(vector<Data> *data, vector<Channel> *chan, int user)
