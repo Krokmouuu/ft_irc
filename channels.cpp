@@ -29,22 +29,18 @@ void user_join_left(vector<Data> *data, vector<Channel> *chan, int user, string 
     }
     data->at(user - 4).setchannel(joinchannel);
     for(size_t i = 0; i < chan->size(); i ++)
-    {
         if (chan->at(i).getname() == joinchannel)
         {
             data->at(user - 4).setchannel(joinchannel);
             chan->at(i).adduser(data->at(user - 4));
             break;
         }
-    }
     for (size_t i = 0; i < chan->at(k).vgetusers().size(); i++)
-    {
         if (chan->at(k).getuser(i).getfd() == user)
         {
             chan->at(k).removeuser(i);
             break;
         }
-    }
 }
 
 void user_left(vector<Data> *data, vector<Channel> *chan, int user, string channel)
@@ -62,25 +58,13 @@ void user_left(vector<Data> *data, vector<Channel> *chan, int user, string chann
     for(size_t i = 0; i < chan->size(); i++)
     {
         if (chan->at(i).getname() == channel)
-        {
             data->at(user - 4).setchannel(channel);
             for(size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
-            {
                 if (chan->at(i).getuser(j).getfd() == user)
-                {
-                    cout << chan->at(i).getuser(j).getnickname() << endl;
                     chan->at(i).removeuser(j);
-                }
-            }
-        }
         break;
     }
 }
-//! NEED FIX
-//! NEED FIX
-//! NEED FIX
-//! NEED FIX
-
 vector<Channel> init_channels()
 {
     vector<Channel> channels;

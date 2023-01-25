@@ -12,6 +12,7 @@
 #include <netinet/in.h>
 #include <sys/time.h>
 #include <vector>
+#include <sstream> 
 #include "Data.hpp"
 #include "Channel.hpp"
 
@@ -70,18 +71,25 @@ class IRC
         int     socketServer;
 };
 
+
+//! Server
 void            start_server(char **argv, IRC server);
-void	        typeWriter(string str);
-int             parsing_nb_user(string nb, IRC server);
+
+//! Parsing
 int             ft_parsing(char **argv);
-int             parse_log(string input, IRC server, Data *data, int user);
-char	        *string_to_char(string str);
-void            default_channel(vector<Data> *data, vector<Channel> *chan, int user);
-vector<Channel> init_channels();
+int             parse_log(string input, IRC server, Data *data, int user, vector<Data> *vdata);
+int             parsing_nb_user(string nb, IRC server);
 void            parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
-void            print_name(vector<Data> *data, vector<Channel> *chan, int user, bool useless);
-void            reset_client(Data *data, int user, vector<Channel> *chan, string channel);
+int             command_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
+
+//! Channels
+void            default_channel(vector<Data> *data, vector<Channel> *chan, int user);
 void            user_join_left(vector<Data> *data, vector<Channel> *chan, int user, string joinchannel , string leftchannel);
 void            user_left(vector<Data> *data, vector<Channel> *chan, int user, string channel);
-int             command_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
+
+//! Utils
+void	        typeWriter(string str);
+char	        *string_to_char(string str);
+vector<Channel> init_channels();
 vector<string>  init_string();
+void            reset_client(Data *data, int user, vector<Channel> *chan, string channel);

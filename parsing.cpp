@@ -1,7 +1,7 @@
 #include "ft_irc.hpp"
 #include "Data.hpp"
 
-int parse_log(string input, IRC server, Data *data, int user)
+int parse_log(string input, IRC server, Data *data, int user, vector<Data> *vdata)
 {
     if (input == server.getpassword() && data->getlog() == NEW_CLIENT)
     {
@@ -30,6 +30,14 @@ int parse_log(string input, IRC server, Data *data, int user)
         }
         else
         {
+            for (size_t i = 0; i < vdata->size(); i++)
+            {
+                if (vdata->at(i).getnickname() == input)
+                {
+                    send(user, "Nickname already taken.\nPlease enter your nickname: ", 52, 0);
+                    return 1;
+                }
+            }
             data->setnickname(input);
             send(user, "Welcome to the server ", 22, 0);
             send(user, data->getusername().c_str(), data->getusername().length(), 0);

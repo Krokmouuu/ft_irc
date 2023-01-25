@@ -161,7 +161,6 @@ void start_server(IRC server)
                     {
                         user_left(&data, &channels, sd, data.at(sd - 4).getchannel());
                         reset_client(&data[sd - 4], sd, &channels, data.at(sd - 4).getchannel());
-                        return ;
                     }
                     close( sd );  
                     client_socket[i] = 0;
@@ -170,26 +169,33 @@ void start_server(IRC server)
                 else
                 {
                     //set the string terminating NULL byte on the end 
-                    //of the data read
-                    buffer[valread] = '\0';
-                    string input(buffer, strlen(buffer) - 1);
-                    if (parse_log(input, server, &data[sd - 4], sd) == 1)
-                        continue;
-                    if (data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == DEFAULT)
+                    //of the data 
+                    try
                     {
-                        default_channel(&data, &channels, sd);
-                        continue;
+                        buffer[valread] = '\0';
+                        string input(buffer, strlen(buffer) - 1);
+                        if (parse_log(input, server, &data[sd - 4], sd, &data) == 1)
+                            continue;
+                        if (data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == DEFAULT)
+                        {
+                            default_channel(&data, &channels, sd);
+                            continue;
+                        }
+                        if ((input == "/quit" || input == "/leave") && data.at(sd - 4).getlog() == LOG_COMPLETED)
+                        {
+                            server.setcurrent_user(server.getcurrent_user() - 1);
+                            user_left(&data, &channels, sd, data.at(sd - 4).getchannel());
+                            reset_client(&data[sd - 4], sd, &channels, data.at(sd - 4).getchannel());
+                            close( sd );  
+                            client_socket[i] = 0;
+                        }
+                        if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && input.size() > 0)
+                            parse_input(&data, &channels, sd, input, &server);
                     }
-                    if ((input == "/quit" || input == "/leave") && data.at(sd - 4).getlog() == LOG_COMPLETED)
+                    catch(const std::exception& e)
                     {
-                        server.setcurrent_user(server.getcurrent_user() - 1);
-                        user_left(&data, &channels, sd, data.at(sd - 4).getchannel());
-                        reset_client(&data[sd - 4], sd, &channels, data.at(sd - 4).getchannel());
-                        close( sd );  
-                        client_socket[i] = 0;
+                        std::cerr << e.what() << '\n';
                     }
-                    if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && input.size() > 0)
-                        parse_input(&data, &channels, sd, input, &server);
                 }
             }
         }  
