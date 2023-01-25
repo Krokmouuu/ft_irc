@@ -1,5 +1,10 @@
 #pragma once
 
+
+//?
+#define ADMIN 1
+#define CLIENT 0
+
 //? getlog()
 #define NEW_CLIENT 0
 #define LOGGED 1
@@ -28,6 +33,7 @@ class Data
             this->connected = DEFAULT;
             this->number = 0;
             this->away = 0;
+            this->admin = CLIENT;
         }
         Data(const Data &params)
         {
@@ -45,6 +51,7 @@ class Data
                 this->connected = params.connected;
                 this->number = params.number;
                 this->away = params.away;
+                this->admin = params.admin;
             }
             return *this;
         }
@@ -58,6 +65,7 @@ class Data
     int     getconnected() const { return this->connected; };
     int     getnumber() const { return this->number; };
     int     getaway() const { return this->away; };
+    int     getadmin() const { return this->admin; };
 
     void    setaway(int away) { this->away = away; };
     void    setusername(string username) { this->username = username; };
@@ -67,6 +75,8 @@ class Data
     void    setchannel(string channel) { this->channel = channel; };
     void    setconnected(int connected) { this->connected = connected; };
     void    setnumber(int number) { this->number = number; };
+    void    setadmin(int admin) { this->admin = admin; };
+
     private :
 
     string  username;
@@ -77,5 +87,7 @@ class Data
     int     connected;
     int     number;
     int     away;
+
+    int     admin;
 
 };

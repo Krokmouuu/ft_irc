@@ -80,7 +80,8 @@ int             ft_parsing(char **argv);
 int             parse_log(string input, IRC server, Data *data, int user, vector<Data> *vdata);
 int             parsing_nb_user(string nb, IRC server);
 void            parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
-int             command_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
+//? Commands
+int             join_command(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
 
 //! Channels
 void            default_channel(vector<Data> *data, vector<Channel> *chan, int user);
@@ -89,7 +90,5 @@ void            user_left(vector<Data> *data, vector<Channel> *chan, int user, s
 
 //! Utils
 void	        typeWriter(string str);
-char	        *string_to_char(string str);
 vector<Channel> init_channels();
-vector<string>  init_string();
 void            reset_client(Data *data, int user, vector<Channel> *chan, string channel);
