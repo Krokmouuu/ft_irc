@@ -81,7 +81,7 @@ vector<Channel> init_channels();
 void            parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
 void            print_name(vector<Data> *data, vector<Channel> *chan, int user, bool useless);
 void            reset_client(Data *data, int user, vector<Channel> *chan, string channel);
-void            user_left(vector<Data> *data, vector<Channel> *chan, int user, string channel);
 void            user_join_left(vector<Data> *data, vector<Channel> *chan, int user, string joinchannel , string leftchannel);
+void            user_left(vector<Data> *data, vector<Channel> *chan, int user, string channel);
 int             command_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
 vector<string>  init_string();
