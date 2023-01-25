@@ -20,7 +20,7 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
     string word;
     while (ss >> word)
     {
-        if (word == "quoi")
+        if (word == "quoi" || word == "QUOI" || word == "Quoi" || word == "quoi?" || word == "QUOI?" || word == "Quoi?" || word == "koi" || word == "Koi")
         {
             for (size_t i = 0; i < chan->size(); i++)
             {
