@@ -10,7 +10,11 @@ void user_join(vector<Data> *data, vector<Channel> *chan, int user, string chann
         j++;
     for (size_t i = 0; i < chan->at(j).vgetusers().size(); i++)
         if (chan->at(j).getuser(i).getfd() != user)
-            send(chan->at(j).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + " has joined the channel.\n"), data->at(user - 4).getnickname().size() + 25, 0);
+         {
+            char *tmp = string_to_char(data->at(user - 4).getnickname() + " has joined the channel.\n");
+            send(chan->at(j).getuser(i).getfd(), tmp, data->at(user - 4).getnickname().size() + 25, 0);
+            free(tmp);
+        }
     data->at(user - 4).setchannel(channel);
     for(size_t i = 0; i < chan->size(); i ++)
     {
