@@ -31,14 +31,22 @@ void user_left(vector<Data> *data, vector<Channel> *chan, int user, string chann
     for (size_t i = 0; i < chan->at(j).vgetusers().size(); i++)
         if (chan->at(j).getuser(i).getfd() != user)
             send(chan->at(j).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + " has left the channel.\n"), data->at(user - 4).getnickname().size() + 24, 0);
-    data->at(user - 4).setchannel(channel);
+    // data->at(user - 4).setchannel(channel);
+    
     for(size_t i = 0; i < chan->size(); i++)
     {
         if (chan->at(i).getname() == channel)
+        {
             for(size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
+            {
                 if (chan->at(i).getuser(j).getfd() == user)
+                {
+                    cout << chan->at(i).getuser(j).getnickname() << endl;
                     chan->at(i).removeuser(j);
-            break;
+                }
+            }
+        }
+        break;
     }
 }
 //! NEED FIX
@@ -108,6 +116,9 @@ void    default_channel(vector<Data> *data, vector<Channel> *chan, int user)
         send(user, string_to_char("\nWelcome to < The accueil > channel !\n"), 39, 0);
         data->at(user - 4).setconnected(INSIDE_CHANNEL);
         data->at(user - 4).setnumber(user - 4);
-        user_join(data, chan, user, "The accueil");
+        chan->at(0).adduser(data->at(user - 4));
+        for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)
+            if (chan->at(0).getuser(i).getfd() != user)
+                send(chan->at(0).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + " has joined the channel.\n"), data->at(user - 4).getnickname().size() + 25, 0);
     }
 }

@@ -137,7 +137,6 @@ void start_server(IRC server)
                     client_socket[i] = new_socket;  
                     typeWriter("Adding to list of sockets as " + to_string(i) + "\n");
                     server.setcurrent_user(server.getcurrent_user() + 1);
-                         
                     break;  
                 }  
             }  
