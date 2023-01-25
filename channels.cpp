@@ -12,18 +12,18 @@ void user_join_left(vector<Data> *data, vector<Channel> *chan, int user, string 
     for (size_t i = 0; i < chan->at(k).vgetusers().size(); i++)
     {
         tmp = string_to_char(data->at(user - 4).getnickname() + " has left the channel.\n");
-        send(chan->at(k).getuser(i).getfd(), tmp, data->at(user - 4).getnickname().size() + 25, 0);
+        send(chan->at(k).getuser(i).getfd(), tmp, data->at(user - 4).getnickname().size() + 24, 0);
         free(tmp);
     }
     tmp = string_to_char("Welcome to < " + joinchannel + " > channel !\n");
-    send(user, tmp, 28 + joinchannel.size(), 0);
+    send(user, tmp, 27 + joinchannel.size(), 0);
     free(tmp);
     for (size_t i = 0; i < chan->at(j).vgetusers().size(); i++)
     {
         if (chan->at(j).getuser(i).getfd() != user)
         {
             tmp = string_to_char(data->at(user - 4).getnickname() + " has joined the channel.\n");
-            send(chan->at(j).getuser(i).getfd(), tmp, data->at(user - 4).getnickname().size() + 25, 0);
+            send(chan->at(j).getuser(i).getfd(), tmp, data->at(user - 4).getnickname().size() + 26, 0);
             free(tmp);
         }
     }
