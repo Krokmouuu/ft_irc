@@ -30,13 +30,16 @@ void user_left(vector<Data> *data, vector<Channel> *chan, int user, string chann
         j++;
     for (size_t i = 0; i < chan->at(j).vgetusers().size(); i++)
         if (chan->at(j).getuser(i).getfd() != user)
-            send(chan->at(j).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + " has left the channel.\n"), data->at(user - 4).getnickname().size() + 24, 0);
-    // data->at(user - 4).setchannel(channel);
-    
+        {
+            char *tmp = string_to_char(data->at(user - 4).getnickname() + " has left the channel.\n");
+            send(chan->at(j).getuser(i).getfd(), tmp, data->at(user - 4).getnickname().size() + 24, 0);
+            free(tmp);
+        }
     for(size_t i = 0; i < chan->size(); i++)
     {
         if (chan->at(i).getname() == channel)
         {
+            data->at(user - 4).setchannel(channel);
             for(size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
             {
                 if (chan->at(i).getuser(j).getfd() == user)
@@ -73,39 +76,69 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
         return ;
     else if (data->at(user - 4).getchannel() == "The accueil")
     {
+        char *tmp = NULL;
         for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)
             if (chan->at(0).getuser(i).getfd() != user)
-                send(chan->at(0).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 3, 0);
+            {
+                tmp = string_to_char(data->at(user - 4).getnickname() + ": " + input + "\n");
+                send(chan->at(0).getuser(i).getfd(), tmp, data->at(user - 4).getnickname().size() + input.size() + 3, 0);
+                free(tmp);
+            }
     }
     else if (data->at(user - 4).getchannel() == "La taniere")
     {
+        char *tmp = NULL;
         for (size_t i = 0; i < chan->at(1).vgetusers().size(); i++)
             if (chan->at(1).getuser(i).getfd() != user)
-                send(chan->at(1).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 3, 0);
+            {
+                tmp = string_to_char(data->at(user - 4).getnickname() + ": " + input + "\n");
+                send(chan->at(1).getuser(i).getfd(), tmp, data->at(user - 4).getnickname().size() + input.size() + 3, 0);
+                free(tmp);
+            }
     }
     else if (data->at(user - 4).getchannel() == "Juraquantic Park")
     {
-        for (size_t i = 0; i < chan->at(3).vgetusers().size(); i++)
-            if (chan->at(3).getuser(i).getfd() != user)
-                send(chan->at(3).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 3, 0);
+        char *tmp = NULL;
+        for (size_t i = 0; i < chan->at(2).vgetusers().size(); i++)
+            if (chan->at(2).getuser(i).getfd() != user)
+            {
+                tmp = string_to_char(data->at(user - 4).getnickname() + ": " + input + "\n");
+                send(chan->at(2).getuser(i).getfd(), tmp, data->at(user - 4).getnickname().size() + input.size() + 3, 0);
+                free(tmp);
+            }
     }
     else if (data->at(user - 4).getchannel() == "WAURK WAURK WAURK")
     {
+        char *tmp = NULL;
         for (size_t i = 0; i < chan->at(3).vgetusers().size(); i++)
             if (chan->at(3).getuser(i).getfd() != user)
+            {
+                tmp = string_to_char(data->at(user - 4).getnickname() + ": " + input + "\n");
                 send(chan->at(3).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 3, 0);
+                free(tmp);
+            }
     }
     else if (data->at(user - 4).getchannel() == "chiez le")
     {
+        char *tmp = NULL;
         for (size_t i = 0; i < chan->at(4).vgetusers().size(); i++)
             if (chan->at(4).getuser(i).getfd() != user)
-                send(chan->at(4).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 3, 0);
+            {
+                tmp = string_to_char(data->at(user - 4).getnickname() + ": " + input + "\n");
+                send(chan->at(4).getuser(i).getfd(), tmp, data->at(user - 4).getnickname().size() + input.size() + 3, 0);
+                free(tmp);
+            }
     }
     else if (data->at(user - 4).getchannel() == "Sonic Enjoyers")
     {
+        char *tmp = NULL;
         for (size_t i = 0; i < chan->at(5).vgetusers().size(); i++)
             if (chan->at(5).getuser(i).getfd() != user)
-                send(chan->at(5).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + ": " + input + "\n"), data->at(user - 4).getnickname().size() + input.size() + 3, 0);
+            {
+                tmp = string_to_char(data->at(user - 4).getnickname() + ": " + input + "\n");
+                send(chan->at(5).getuser(i).getfd(), tmp, data->at(user - 4).getnickname().size() + input.size() + 3, 0);
+                free(tmp);
+            }
     }
 }
 
@@ -113,12 +146,18 @@ void    default_channel(vector<Data> *data, vector<Channel> *chan, int user)
 {
     if (data->at(user - 4).getconnected() == DEFAULT)
     {
-        send(user, string_to_char("\nWelcome to < The accueil > channel !\n"), 39, 0);
+        char *tmp = string_to_char("\nWelcome to < The accueil > channel !\n");
+        send(user, tmp, 39, 0);
+        free(tmp);
         data->at(user - 4).setconnected(INSIDE_CHANNEL);
         data->at(user - 4).setnumber(user - 4);
         chan->at(0).adduser(data->at(user - 4));
         for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)
             if (chan->at(0).getuser(i).getfd() != user)
-                send(chan->at(0).getuser(i).getfd(), string_to_char(data->at(user - 4).getnickname() + " has joined the channel.\n"), data->at(user - 4).getnickname().size() + 25, 0);
+            {
+                tmp = string_to_char(data->at(user - 4).getnickname() + " has joined the channel.\n");
+                send(chan->at(0).getuser(i).getfd(), tmp, data->at(user - 4).getnickname().size() + 25, 0);
+                free(tmp);
+            }
     }
 }

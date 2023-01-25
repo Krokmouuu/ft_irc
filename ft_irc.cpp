@@ -161,6 +161,7 @@ void start_server(IRC server)
                     {
                         user_left(&data, &channels, sd, data.at(sd - 4).getchannel());
                         reset_client(&data[sd - 4], sd, &channels, data.at(sd - 4).getchannel());
+                        return ;
                     }
                     close( sd );  
                     client_socket[i] = 0;
@@ -217,5 +218,6 @@ int main(int argc, char **argv)
             std::cerr << e.what() << '\n';
         }
     }
+    system("leaks ircserv");
     return 0;
 }
