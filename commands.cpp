@@ -35,11 +35,7 @@ int    command_input(vector<Data> *data, vector<Channel> *chan, int user, string
                     free(tmp);
                     return 0;
                 }
-                user_left(data, chan, user, data->at(user - 4).getchannel());
-                user_join(data, chan, user, chan->at(i).getname());
-                tmp = string_to_char("Welcome to < " + chan->at(i).getname() + " > channel !\n");
-                send(user, tmp, 28 + chan->at(i).getname().size(), 0);
-                free(tmp);
+                user_join_left(data, chan, user, chan->at(i).getname(), data->at(user - 4).getchannel());
                 return 0;
             }
         }
