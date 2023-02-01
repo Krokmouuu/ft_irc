@@ -110,7 +110,7 @@ void start_server(IRC server)
             }  
             if (server.getcurrent_user() == max_clients)
             {
-                send(new_socket, "Server is full try again later.\n", strlen("Server is full try again later.\n"), 0);
+                send(new_socket, "\033[1;31mServer is full try again later.\033[0m\n", strlen("\033[1;31mServer is full try again later.\033[0m\n"), 0);
                 close(new_socket);
                 continue;
             }
@@ -168,8 +168,7 @@ void start_server(IRC server)
                 //Parse the incoming input
                 else
                 {
-                    //set the string terminating NULL byte on the end 
-                    //of the data 
+                    //set the string terminating NULL byte on the end of the data 
                     try
                     {
                         buffer[valread] = '\0';
@@ -207,7 +206,7 @@ int main(int argc, char **argv)
 {
     if (argc != 3)
     {
-        cout << "Server port and password is needed" << endl; 
+        cout << "\033[1;31mServer port and password is needed\033[0m" << endl;
         return 0;
     }
     else
