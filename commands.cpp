@@ -7,8 +7,8 @@
 //? /nick X
 //? /afk X 
 //? /back X 
-//? /names X
-// /list V
+// /names Y
+// /list Y
 //? /help X 
 //? /help [command] X
 //? /whois X 
