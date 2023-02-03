@@ -73,45 +73,15 @@ vector<Channel> init_channels()
     return channels;
 }
 
-void	list_command(vector<Channel> *chan, int user)
-{
-	string tmp;
-
-	tmp = "\033[1;36m    Channels: \033[0m\n";
-	send(user, tmp.c_str(), tmp.size(), 0);
-	for(size_t n = 0; n <= chan->size(); n++)
-	{
-		tmp = "• " + chan->at(n).getname() + "\n";
-		send(user, tmp.c_str(), tmp.size(), 0);
-	}
-
-}
-
-void	names_command(int user, vector<Data> *data)
-{
-	string tmp;
-
-	tmp = "\033[1;36m    Users: \033[0m\n";
-	send(user, tmp.c_str(), tmp.size(), 0);
-	for (size_t n = 0; n <= data->size(); n++)
-	{
-		if (data->at(n).getnickname().length() > 1)
-		{
-			tmp = "• " + data->at(n).getnickname() + "\n";
-			send(user, tmp.c_str(), tmp.size(), 0);
-		}
-	}
-}
-
 void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server)
 {
     (void)server;
     string tmp;
 	if (input == "/list")
 		list_command(chan, user);
-	if (input == "/names" || input == "/who")
+	else if (input == "/names" || input == "/who")
 		names_command(user, data);
-    if (join_command(data, chan, user, input, server) == 0)
+    else if (join_command(data, chan, user, input, server) == 0)
         return ;
     else if (data->at(user - 4).getchannel() == "The accueil")
     {

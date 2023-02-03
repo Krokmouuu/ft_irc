@@ -80,8 +80,11 @@ int             ft_parsing(char **argv);
 int             parse_log(string input, IRC server, Data *data, int user, vector<Data> *vdata);
 int             parsing_nb_user(string nb, IRC server);
 void            parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
-//? Commands
+
+//! Commands
+void	        names_command(int user, vector<Data> *data);
 int             join_command(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
+void	        list_command(vector<Channel> *chan, int user);
 
 //! Channels
 void            default_channel(vector<Data> *data, vector<Channel> *chan, int user);
