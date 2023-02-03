@@ -49,9 +49,18 @@ int    join_command(vector<Data> *data, vector<Channel> *chan, int user, string 
 {
     (void)server;
     beep_beep_boop(input, user, data, chan);
-    if (input[0] != '/')
-        return 1;
+    stringstream coucou(input);
+    string tmp2;
     string tmp;
+    int i = 0;
+    while (coucou >> tmp2)
+        i++;
+    if (i == 1)
+    {
+        tmp = "Please enter a channel name\n";
+        send(user, tmp.c_str(), tmp.size(), 0);
+        return 0;
+    }
     for (size_t i = 0; i < chan->size(); i++)
     {
         if (input == "/join " + chan->at(i).getname())
@@ -67,12 +76,6 @@ int    join_command(vector<Data> *data, vector<Channel> *chan, int user, string 
                 return 0;
             }
         }
-    }
-    if (input == "/join" || input == "/join ")
-    {
-        tmp = "Please enter a channel name\n";
-        send(user, tmp.c_str(), tmp.size(), 0);
-        return 0;
     }
     tmp = "Channel not found\n";
     send(user, tmp.c_str(), tmp.size(), 0);    
@@ -107,3 +110,4 @@ void	names_command(int user, vector<Data> *data)
 		}
 	}
 }
+  

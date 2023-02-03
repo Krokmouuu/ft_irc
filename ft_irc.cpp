@@ -15,6 +15,7 @@ void start_server(IRC server)
     vector<Channel> channels = init_channels();
     typeWriter("Maximum user allowed to join the server : " + to_string(max_clients) + "\n");
 
+    server.setadminpassword("admin");
     int client_socket[max_clients];
     int max_sd;
     struct sockaddr_in address;  

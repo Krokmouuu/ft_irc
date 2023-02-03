@@ -55,7 +55,9 @@ class IRC
         int    getmaxuser() const { return this->maxuser; };
         int    getsocketServer() const { return this->socketServer; };
         int    getcurrent_user() const { return this->current_user; };
+        string getadminpassword() const { return this->adminpassword; };
 
+        void   setadminpassword(string adminpassword) { this->adminpassword = adminpassword; };
         void   setsocketServer(int socketServer) { this->socketServer = socketServer; };
         void   setmaxuser(int maxuser) { this->maxuser = maxuser; };
         void   setcurrent_user(int current_user) { this->current_user = current_user; };
@@ -66,6 +68,7 @@ class IRC
 
         string  serverport;
         string  password;
+        string  adminpassword;
         int     maxuser;
         int     current_user;
         int     socketServer;

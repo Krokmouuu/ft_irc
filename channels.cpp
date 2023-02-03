@@ -73,16 +73,47 @@ vector<Channel> init_channels()
     return channels;
 }
 
+vector<string> init_cmd()
+{
+    vector<string> cmd;
+    cmd.push_back("/join");
+    cmd.push_back("/w");
+    cmd.push_back("/msg");
+    cmd.push_back("/ping");
+    cmd.push_back("/pong");
+    cmd.push_back("/nick");
+    cmd.push_back("/afk");
+    cmd.push_back("/back");
+    cmd.push_back("/names");
+    cmd.push_back("/list");
+    cmd.push_back("/help");
+    cmd.push_back("/who");
+    cmd.push_back("/whois");
+    cmd.push_back("/kick");
+    cmd.push_back("/kill");
+    cmd.push_back("/op");
+    return cmd;
+}
+
 void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server)
 {
-    (void)server;
     string tmp;
-	if (input == "/list")
-		list_command(chan, user);
-	else if (input == "/names" || input == "/who")
-		names_command(user, data);
-    else if (join_command(data, chan, user, input, server) == 0)
-        return ;
+    if (input[0] == '/')
+    {
+        stringstream parse(input);
+        string cmd;
+        vector<string> list_cmd = init_cmd();
+        while (parse >> cmd)
+        {
+            if (cmd == "/join")
+                join_command(data, chan, user, input, server);
+            else if (cmd == "/list")
+                list_command(chan, user);
+            else if (cmd == "/names")
+                names_command(user, data);
+            return ;
+        }
+    }
     else if (data->at(user - 4).getchannel() == "The accueil")
     {
         for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)
