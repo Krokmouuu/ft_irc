@@ -86,7 +86,7 @@ void            parse_input(vector<Data> *data, vector<Channel> *chan, int user,
 
 //! Commands
 void	        names_command(int user, vector<Data> *data);
-int             join_command(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
+void            join_command(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
 void	        list_command(vector<Channel> *chan, int user);
 
 //! Channels

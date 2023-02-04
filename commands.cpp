@@ -45,7 +45,7 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
     }
 }
 
-int    join_command(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server)
+void    join_command(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server)
 {
     (void)server;
     beep_beep_boop(input, user, data, chan);
