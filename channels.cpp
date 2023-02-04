@@ -82,16 +82,14 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
     {
         stringstream parse(input);
         string cmd;
-        while (parse >> cmd)
-        {
-            if (cmd == "/join")
-                join_command(data, chan, user, input, server);
-            else if (cmd == "/list")
-                list_command(chan, user);
-            else if (cmd == "/names")
-                names_command(user, data);
-            return ;
-        }
+        parse >> cmd;
+        if (cmd == "/join")
+            join_command(data, chan, user, input, server);
+        else if (cmd == "/list")
+            list_command(chan, user);
+        else if (cmd == "/names")
+            names_command(user, data);
+        return ;
     }
     else if (data->at(user - 4).getchannel() == "The accueil")
     {
