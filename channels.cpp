@@ -12,28 +12,6 @@ vector<Channel> init_channels()
     return channels;
 }
 
-vector<string> init_cmd()
-{
-    vector<string> cmd;
-    cmd.push_back("/join");
-    cmd.push_back("/w");
-    cmd.push_back("/msg");
-    cmd.push_back("/ping");
-    cmd.push_back("/pong");
-    cmd.push_back("/nick");
-    cmd.push_back("/afk");
-    cmd.push_back("/back");
-    cmd.push_back("/names");
-    cmd.push_back("/list");
-    cmd.push_back("/help");
-    cmd.push_back("/who");
-    cmd.push_back("/whois");
-    cmd.push_back("/kick");
-    cmd.push_back("/kill");
-    cmd.push_back("/op");
-    return cmd;
-}
-
 void user_join_left(vector<Data> *data, vector<Channel> *chan, int user, string joinchannel , string leftchannel)
 {
     string tmp;
@@ -104,7 +82,6 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
     {
         stringstream parse(input);
         string cmd;
-        vector<string> list_cmd = init_cmd();
         while (parse >> cmd)
         {
             if (cmd == "/join")
