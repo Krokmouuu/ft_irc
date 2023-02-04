@@ -59,7 +59,7 @@ void    join_command(vector<Data> *data, vector<Channel> *chan, int user, string
     {
         tmp = "Please enter a channel name\n";
         send(user, tmp.c_str(), tmp.size(), 0);
-        return 0;
+        return ;
     }
     for (size_t i = 0; i < chan->size(); i++)
     {
@@ -70,16 +70,16 @@ void    join_command(vector<Data> *data, vector<Channel> *chan, int user, string
                 {
                     tmp = "You are already in < " + chan->at(i).getname() + " >" + " channel !\n";
                     send(data->at(user - 4).getfd(), tmp.c_str(), tmp.size(), 0);
-                    return 0;
+                    return ;
                 }
                 user_join_left(data, chan, user, chan->at(i).getname(), data->at(user - 4).getchannel());
-                return 0;
+                return ;
             }
         }
     }
     tmp = "Channel not found\n";
     send(user, tmp.c_str(), tmp.size(), 0);    
-    return 0;
+    return ;
 }
 
 void	list_command(vector<Channel> *chan, int user)
