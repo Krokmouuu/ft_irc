@@ -29,7 +29,7 @@ class Data
             this->nickname = "";
             this->logged = NEW_CLIENT;
             this->fd = 0;
-            this->channel = "The accueil";
+            this->channel = "The_accueil";
             this->connected = DEFAULT;
             this->number = 0;
             this->away = 0;

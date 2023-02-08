@@ -98,6 +98,8 @@ void            msg_command(int user, vector<Data> *data, string input);
 void            nick_command(int user, vector<Data> *data, string input);
 void            away_command(int user, vector<Data> *data, string input);
 void            op_command(int user, vector<Data> *data, string input, IRC *server, int op);
+void            kick_command(int user, vector<Data> *data, string input, IRC *server, vector<Channel> *chan);
+void            kill_command(int user, vector<Data> *data, string input, vector<Channel> *chan);
 
 //! Channels
 void            default_channel(vector<Data> *data, vector<Channel> *chan, int user);

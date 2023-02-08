@@ -17,16 +17,6 @@
 // /op Y
 // /deop Y
 
-//! Syntax:
-
-//! KICK <channel> <client> :[<message>]
-//! Forcibly removes <client> from <channel>.[12] This command may only be issued by channel operators. Defined in RFC 1459.
-
-//! KILL
-//! Syntax:
-
-//! KILL <client> <comment>
-
 void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> *chan)
 {
     string tmp;
@@ -213,7 +203,7 @@ void msg_command(int user, vector<Data> *data, string input)
     }
 	for (size_t n = 0; n < data->size(); n++)
 	{
-		if (data->at(n).getnickname() == receveur)
+		if (data->at(n).getnickname() == receveur && data->at(n).getaway() == FALSE)
 		{
 			tmp = "from ";
 			sender = data->at(user - 4).getnickname() + ":";
@@ -222,6 +212,16 @@ void msg_command(int user, vector<Data> *data, string input)
 			send(data->at(n).getfd(), finalMSG.c_str(), finalMSG.size(), 0);
 			return ;
 		}
+		else if (data->at(n).getnickname() == receveur && data->at(n).getaway() == TRUE)
+        {
+			sender = "from " + data->at(user - 4).getnickname() + ":";
+            tmp = receveur + " is away: " + data->at(n).getaway_message() + "\n";
+            send(user, tmp.c_str(), tmp.size(), 0);
+            send(data->at(n).getfd(), sender.c_str(), sender.size(), 0);
+			send(data->at(n).getfd(), finalMSG.c_str(), finalMSG.size(), 0);
+            return ;
+        }
+
     }
 	tmp = "User not found\n";
 	send(user, tmp.c_str(), tmp.size(), 0);
@@ -313,4 +313,98 @@ void op_command(int user, vector<Data> *data, string input, IRC *server, int op)
 	send(user, tmp.c_str(), tmp.size(), 0);
 }
 
-// void kick_command(int user, vector<Data> *data, )
+void kick_command(int user, vector<Data> *data, string input, IRC *server, vector<Channel> *chan)
+{
+	string channel;
+	string client;
+    stringstream ss(input);
+	string tmp;
+
+    ss >> tmp;
+	ss >> channel;
+	ss >> client;
+    if (input[tmp.length() + 1] == ' ')
+    {
+        tmp = "Bad input\n";
+        send(user, tmp.c_str(), tmp.size(), 0);
+        return ;
+    }
+	bool check_user = FALSE;
+	for(size_t n = 0; n < data->size(); n++)
+	{
+		tmp = data->at(n).getnickname();
+		if (client == tmp)
+			check_user = TRUE;
+	}
+	if (check_user == FALSE)
+	{
+		tmp = "User not found kk\n";
+		send(user, tmp.c_str(), tmp.size(), 0);
+		return ;
+	}
+	bool check_channel = FALSE;
+	for(size_t n = 0; n < chan->size(); n++)
+		if (chan->at(n).getname() == channel)
+			check_channel = TRUE;
+	if (check_channel == FALSE)
+	{
+		tmp = "Channel not found\n";
+		send(user, tmp.c_str(), tmp.size(), 0);
+		return ;
+	}
+	for (size_t j = 0; j < server->vget_adminusers().size(); j++)
+	{
+		if (server->getwhitelist_users(j) == data->at(user - 4).getusername())
+		{
+            for (size_t i = 0; i < data->size(); i++)
+            {
+                if (data->at(i).getusername() == client)
+                {
+					if (data->at(i).getchannel() == "The_accueil")
+                    {
+						kill_command(user, data, input, chan);
+                        return ;
+                    }
+                    user_join_left(data, chan,  data->at(i).getfd(), "The_accueil", data->at(i).getchannel());
+					tmp = "kicking " + client + "\n";
+					send(user, tmp.c_str(), tmp.size(), 0);
+					return ;
+                    //! send to the client that he has been kicked
+                }
+            }
+		}
+    }
+	tmp = "You're not an admin\n";
+	send(user, tmp.c_str(), tmp.size(), 0);
+}
+
+//! KILL <client> <comment>
+void kill_command(int user, vector<Data> *data, string input, vector<Channel> *chan)
+{
+    stringstream ss(input);
+    string tmp;
+
+    ss >> tmp;
+    if (input[tmp.length() + 1] == ' ')
+    {
+        tmp = "Bad input\n";
+        send(user, tmp.c_str(), tmp.size(), 0);
+        return ;
+    }
+    string client;
+
+    ss >> client;
+    for (size_t i = 0; i < data->size(); i++)
+    {
+        if (data->at(i).getnickname() == client)
+        {
+            tmp = "You have been killed by " + data->at(user - 4).getnickname() + "\n";
+            send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
+            user_left(data, chan, user, data->at(user - 4).getchannel());
+            // reset_client(&data[user - 4], user, &chan, data->at(user - 4).getchannel());
+            close(data->at(i).getfd());
+            //! RESET LE CLIENT
+        }
+    }
+    return ;
+}

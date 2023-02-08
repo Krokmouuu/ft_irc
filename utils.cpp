@@ -9,7 +9,7 @@ void reset_client(Data *data, int user, vector<Channel> *chan, string channel)
     data->setnickname("");
     data->setlog(NEW_CLIENT);
     data->setfd(0);
-    data->setchannel("The accueil");
+    data->setchannel("The_accueil");
     data->setconnected(DEFAULT);
 	data->setaway(FALSE);
 	data->setaway_message("");

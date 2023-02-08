@@ -3,12 +3,12 @@
 vector<Channel> init_channels()
 {
     vector<Channel> channels;
-    channels.push_back(Channel("The accueil")); //? 0
-    channels.push_back(Channel("La taniere")); //? 1
-    channels.push_back(Channel("Juraquantic Park")); //? 2
-    channels.push_back(Channel("Le Spa")); //? 3
-    channels.push_back(Channel("chiez le")); //? 4
-    channels.push_back(Channel("Sonic Enjoyers")); //? 5
+    channels.push_back(Channel("The_accueil")); //? 0
+    channels.push_back(Channel("La_taniere")); //? 1
+    channels.push_back(Channel("Juraquantic_Park")); //? 2
+    channels.push_back(Channel("Le_Spa")); //? 3
+    channels.push_back(Channel("chiez_le")); //? 4
+    channels.push_back(Channel("Sonic_Enjoyers")); //? 5
     return channels;
 }
 
@@ -99,13 +99,20 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
             op_command(user, data, input, server, ADMIN);
         else if (cmd == "/deop")
             op_command(user, data, input, server, CLIENT);
-        // else if (cmd == "/kick")
-        //     kick_command(user, data, input, server, chan);
-        // else if (cmd == "/kill")
+        else if (cmd == "/kick")
+            kick_command(user, data, input, server, chan);
+        else if (cmd == "/kill")
+            kill_command(user, data, input, chan);
         return ;
     }
+    if (data->at(user - 4).getaway() == TRUE)
+    {
+        data->at(user - 4).setaway(FALSE);
+        tmp = "You are now back\n";
+        send(user, tmp.c_str(), tmp.size(), 0);
+    }
     beep_beep_boop(input, user, data, chan);
-    if (data->at(user - 4).getchannel() == "The accueil")
+    if (data->at(user - 4).getchannel() == "The_accueil")
     {
         for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)
             if (chan->at(0).getuser(i).getfd() != user)
@@ -114,7 +121,7 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
                 send(chan->at(0).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
             }
     }
-    else if (data->at(user - 4).getchannel() == "La taniere")
+    else if (data->at(user - 4).getchannel() == "La_taniere")
     {
         for (size_t i = 0; i < chan->at(1).vgetusers().size(); i++)
             if (chan->at(1).getuser(i).getfd() != user)
@@ -123,7 +130,7 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
                 send(chan->at(1).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
             }
     }
-    else if (data->at(user - 4).getchannel() == "Juraquantic Park")
+    else if (data->at(user - 4).getchannel() == "Juraquantic_Park")
     {
         for (size_t i = 0; i < chan->at(2).vgetusers().size(); i++)
             if (chan->at(2).getuser(i).getfd() != user)
@@ -132,7 +139,7 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
                 send(chan->at(2).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
             }
     }
-    else if (data->at(user - 4).getchannel() == "Le Spa")
+    else if (data->at(user - 4).getchannel() == "Le_Spa")
     {
         for (size_t i = 0; i < chan->at(3).vgetusers().size(); i++)
             if (chan->at(3).getuser(i).getfd() != user)
@@ -141,7 +148,7 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
                 send(chan->at(3).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
             }
     }
-    else if (data->at(user - 4).getchannel() == "chiez le")
+    else if (data->at(user - 4).getchannel() == "chiez_le")
     {
         for (size_t i = 0; i < chan->at(4).vgetusers().size(); i++)
             if (chan->at(4).getuser(i).getfd() != user)
@@ -150,7 +157,7 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
                 send(chan->at(4).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
             }
     }
-    else if (data->at(user - 4).getchannel() == "Sonic Enjoyers")
+    else if (data->at(user - 4).getchannel() == "Sonic_Enjoyers")
     {
         for (size_t i = 0; i < chan->at(5).vgetusers().size(); i++)
             if (chan->at(5).getuser(i).getfd() != user)
@@ -165,7 +172,7 @@ void    default_channel(vector<Data> *data, vector<Channel> *chan, int user)
 {
     if (data->at(user - 4).getconnected() == DEFAULT)
     {
-        string tmp = "\nWelcome to < The accueil > channel !\n";
+        string tmp = "\nWelcome to < The_accueil > channel !\n";
         send(user, tmp.c_str(), tmp.size(), 0);
         data->at(user - 4).setconnected(INSIDE_CHANNEL);
         data->at(user - 4).setnumber(user - 4);
