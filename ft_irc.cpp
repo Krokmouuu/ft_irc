@@ -21,7 +21,7 @@ void start_server(IRC server)
     struct sockaddr_in address;  
          
     char buffer[1025];  //data buffer of 1K 
-         
+
     //set of socket descriptors 
     fd_set readfds;  
     char message[] = "Welcome in PLE-BLEROY ImanRC server.\n\r";  

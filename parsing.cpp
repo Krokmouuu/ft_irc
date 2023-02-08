@@ -12,6 +12,14 @@ int parse_log(string input, IRC server, Data *data, int user, vector<Data> *vdat
     }
     else if (data->getlog() == LOGGED)
     {
+        for (size_t i = 0; i < input.size(); i++)
+        {
+            if (input[i] > 0 && input[i] < 33)
+            {
+                send(user, "Username can't contain a space.\nPlease enter your username: ", 61, 0);
+                return 1;
+            }
+        }
         if (input.size() < 2 || input.size() > 26)
         {
             send(user, "Username must be between 2 and 26 characters.\nPlease enter your username: ", 75, 0);
@@ -23,6 +31,14 @@ int parse_log(string input, IRC server, Data *data, int user, vector<Data> *vdat
     }
     else if (data->getlog() == LOGGED_MAYBE)
     {
+        for (size_t i = 0; i < input.size(); i++)
+        {
+            if (input[i] > 0 && input[i] < 33)
+            {
+                send(user, "Nickname can't contain a space.\nPlease enter your username: ", 61, 0);
+                return 1;
+            }
+        }
         if (input.size() < 2 || input.size() > 26)
         {
             send(user, "Nickname must be between 2 and 26 characters.\nPlease enter your nickname: ", 75, 0);

@@ -89,9 +89,16 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
             list_command(chan, user);
         else if (cmd == "/names")
             names_command(user, data);
+        else if (cmd == "/w" || cmd == "/msg")
+            msg_command(user, data, input);
+        else if (cmd == "/nick")
+            nick_command(user, data, input);
+        else if (cmd == "/away")
+            away_command(user, data, input);
         return ;
     }
-    else if (data->at(user - 4).getchannel() == "The accueil")
+    beep_beep_boop(input, user, data, chan);
+    if (data->at(user - 4).getchannel() == "The accueil")
     {
         for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)
             if (chan->at(0).getuser(i).getfd() != user)

@@ -64,10 +64,12 @@ class Data
     string  getchannel() const { return this->channel; };
     int     getconnected() const { return this->connected; };
     int     getnumber() const { return this->number; };
-    int     getaway() const { return this->away; };
+    bool    getaway() const { return this->away; };
     int     getadmin() const { return this->admin; };
+    string  getaway_message() const { return this->away_message; };
 
-    void    setaway(int away) { this->away = away; };
+    void    setaway_message(string away_message) { this->away_message = away_message; };
+    void    setaway(bool away) { this->away = away; };
     void    setusername(string username) { this->username = username; };
     void    setnickname(string nickname) { this->nickname = nickname; };
     void    setlog(int logged) { this->logged = logged; };
@@ -86,7 +88,8 @@ class Data
     string  channel;
     int     connected;
     int     number;
-    int     away;
+    bool    away;
+    string  away_message;
 
     int     admin;
 

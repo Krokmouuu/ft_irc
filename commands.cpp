@@ -2,11 +2,10 @@
 
 // /join Y
 // /quit / leave Y
-//? /w /msg X
+// /w /msg Y
 //? /ping / pong X
-//? /nick X
-//? /afk X 
-//? /back X 
+// /nick Y
+// /away Y 
 // /names Y
 // /list Y
 //? /help X 
@@ -48,7 +47,6 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
 void    join_command(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server)
 {
     (void)server;
-    beep_beep_boop(input, user, data, chan);
     stringstream coucou(input);
     string tmp2;
     string tmp;
@@ -110,4 +108,110 @@ void	names_command(int user, vector<Data> *data)
 		}
 	}
 }
-  
+
+void away_command(int user, vector<Data> *data, string input)
+{
+    string tmp;
+    stringstream ss(input);
+    string word;
+    string tmp2;
+    ss >> tmp2;
+    if (input[tmp2.length() + 1] == ' ')
+    {
+        tmp = "Bad input\n";
+        send(user, tmp.c_str(), tmp.size(), 0);
+        return ;
+    }
+    if (data->at(user - 4).getaway() == TRUE)
+    {
+        data->at(user - 4).setaway(FALSE);
+        tmp = "You are now back\n";
+        send(user, tmp.c_str(), tmp.size(), 0);
+        return ;
+    }
+    data->at(user - 4).setaway(TRUE);
+	word += &input[tmp2.length() + 1];
+	if (word.length() <= 1)
+    {
+		word = "";
+        tmp = "You are now afk";
+		tmp += "\n";
+    }
+    else if (word.length() > 1)
+        tmp = "You are now afk: " + word + "\n";
+	data->at(user - 4).setaway_message(word);
+    send(user, tmp.c_str(), tmp.size(), 0);
+}
+
+void nick_command(int user, vector<Data> *data, string input)
+{
+    string tmp;
+    string newnick;
+    stringstream ss(input);
+    string word;
+	string tmp2;
+
+	ss >> tmp2;
+	if (input[tmp2.length() + 1] == ' ')
+	{
+		tmp = "Bad input\n";
+		send(user, tmp.c_str(), tmp.size(), 0);
+        return ;
+	}
+	ss >> newnick;
+    for (size_t i = 0; i < data->size(); i++)
+    {
+        if (data->at(i).getnickname() == newnick)
+        {
+            tmp = "Nickname already taken\n";
+            send(user, tmp.c_str(), tmp.size(), 0);
+            return ;
+        }
+    }
+    data->at(user - 4).setnickname(newnick);
+    tmp = "Nickname changed to " + newnick + "\n";
+    send(user, tmp.c_str(), tmp.size(), 0);
+}
+
+void msg_command(int user, vector<Data> *data, string input)
+{
+    string tmp;
+	string finalMSG;
+    string receveur;
+    stringstream cc(input);
+	string sender;
+    
+	cc >> tmp;
+	cc >> receveur;
+	size_t size = tmp.length() + receveur.length() + 1;
+
+	if (input[tmp.length() + 1] == ' ')
+	{
+		tmp = "Bad input\n";
+		send(user, tmp.c_str(), tmp.size(), 0);
+        return ;
+	}
+	finalMSG += &input[size];
+	finalMSG += "\n";
+	if (data->at(user - 4).getaway() == TRUE)
+    {
+        data->at(user - 4).setaway(FALSE);
+        data->at(user - 4).setaway_message("");
+        tmp = "You are now back\n";
+        send(user, tmp.c_str(), tmp.size(), 0);
+    }
+	for (size_t n = 0; n < data->size(); n++)
+	{
+		if (data->at(n).getnickname() == receveur)
+		{
+			tmp = "from ";
+			sender = data->at(user - 4).getnickname() + ":";
+			send(data->at(n).getfd(), tmp.c_str(), tmp.size(), 0);
+			send(data->at(n).getfd(), sender.c_str(), sender.size(), 0);
+			send(data->at(n).getfd(), finalMSG.c_str(), finalMSG.size(), 0);
+			return ;
+		}
+    }
+	tmp = "User not found\n";
+	send(user, tmp.c_str(), tmp.size(), 0);
+}

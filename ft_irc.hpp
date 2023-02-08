@@ -16,7 +16,7 @@
 #include "Data.hpp"
 #include "Channel.hpp"
 
-#define TRUE  1 
+#define TRUE  1
 #define FALSE 0
 
 using namespace std;
@@ -77,6 +77,7 @@ class IRC
 
 //! Server
 void            start_server(char **argv, IRC server);
+void            beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> *chan);
 
 //! Parsing
 int             ft_parsing(char **argv);
@@ -88,6 +89,9 @@ void            parse_input(vector<Data> *data, vector<Channel> *chan, int user,
 void	        names_command(int user, vector<Data> *data);
 void            join_command(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
 void	        list_command(vector<Channel> *chan, int user);
+void            msg_command(int user, vector<Data> *data, string input);
+void            nick_command(int user, vector<Data> *data, string input);
+void            away_command(int user, vector<Data> *data, string input);
 
 //! Channels
 void            default_channel(vector<Data> *data, vector<Channel> *chan, int user);
