@@ -14,7 +14,18 @@
 //? /who X
 //? kick (leave channel) X
 //? kill (leave server) X
-// op Y
+// /op Y
+// /deop Y
+
+//! Syntax:
+
+//! KICK <channel> <client> :[<message>]
+//! Forcibly removes <client> from <channel>.[12] This command may only be issued by channel operators. Defined in RFC 1459.
+
+//! KILL
+//! Syntax:
+
+//! KILL <client> <comment>
 
 void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> *chan)
 {
@@ -216,7 +227,7 @@ void msg_command(int user, vector<Data> *data, string input)
 	send(user, tmp.c_str(), tmp.size(), 0);
 }
 
-void op_command(int user, vector<Data> *data, string input, IRC *server)
+void op_command(int user, vector<Data> *data, string input, IRC *server, int op)
 {
     string tmp;
     string newop;
@@ -260,20 +271,40 @@ void op_command(int user, vector<Data> *data, string input, IRC *server)
             {
                 if (data->at(i).getusername() == newop)
                 {
-                    if (data->at(i).getadmin() == ADMIN)
-                    {
-                        tmp = data->at(i).getusername() + " is already an op\n";
-                        send(user, tmp.c_str(), tmp.size(), 0);
-                        return ;
-                    }
-                    else if (data->at(i).getadmin() != ADMIN)
-                    {
-                        data->at(i).setadmin(ADMIN);
-                        tmp = data->at(i).getusername() + " is now an op\n";
-                        server->setwhitelist_users(newop);
-                        send(user, tmp.c_str(), tmp.size(), 0);
-                        return ;
-                    }
+					if (op == 1)
+					{
+						if (data->at(i).getadmin() == ADMIN)
+						{
+							tmp = data->at(i).getusername() + " is already an op\n";
+							send(user, tmp.c_str(), tmp.size(), 0);
+							return ;
+						}
+						else if (data->at(i).getadmin() != ADMIN)
+						{
+							data->at(i).setadmin(ADMIN);
+							tmp = data->at(i).getusername() + " is now an op\n";
+							server->setwhitelist_users(newop);
+							send(user, tmp.c_str(), tmp.size(), 0);
+							return ;
+						}
+					}
+					else if (op == 0)
+					{
+						if (data->at(i).getadmin() != ADMIN)
+						{
+							tmp = data->at(i).getusername() + " isn't op\n";
+							send(user, tmp.c_str(), tmp.size(), 0);
+							return ;
+						}
+						else if (data->at(i).getadmin() == ADMIN)
+						{
+							data->at(i).setadmin(CLIENT);
+							tmp = data->at(i).getusername() + " is not op anymore\n";
+							server->remove_admin(j); 
+							send(user, tmp.c_str(), tmp.size(), 0);
+							return ;
+						}
+					}
                 }
             }
 		}
@@ -281,3 +312,5 @@ void op_command(int user, vector<Data> *data, string input, IRC *server)
 	tmp = "You're not an admin\n";
 	send(user, tmp.c_str(), tmp.size(), 0);
 }
+
+// void kick_command(int user, vector<Data> *data, )

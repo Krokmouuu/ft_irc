@@ -58,6 +58,7 @@ class IRC
         string getadminpassword() const { return this->adminpassword; };
         string getwhitelist_users(int i) const { return this->whitelist_users[i]; };
         vector<string> vget_adminusers() const { return this->whitelist_users; };
+        void remove_admin(int i) { this->whitelist_users.erase(this->whitelist_users.begin() + i);}
 
         void   setwhitelist_users(string user) { this->whitelist_users.push_back(user); };
         void   setadminpassword(string adminpassword) { this->adminpassword = adminpassword; };
@@ -96,7 +97,7 @@ void	        list_command(vector<Channel> *chan, int user);
 void            msg_command(int user, vector<Data> *data, string input);
 void            nick_command(int user, vector<Data> *data, string input);
 void            away_command(int user, vector<Data> *data, string input);
-void            op_command(int user, vector<Data> *data, string input, IRC *server);
+void            op_command(int user, vector<Data> *data, string input, IRC *server, int op);
 
 //! Channels
 void            default_channel(vector<Data> *data, vector<Channel> *chan, int user);
