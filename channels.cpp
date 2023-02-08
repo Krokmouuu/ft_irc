@@ -95,6 +95,8 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
             nick_command(user, data, input);
         else if (cmd == "/away")
             away_command(user, data, input);
+        else if (cmd == "/op")
+            op_command(user, data, input, server);
         return ;
     }
     beep_beep_boop(input, user, data, chan);

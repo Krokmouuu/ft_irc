@@ -7,7 +7,7 @@ void start_server(IRC server)
     int opt = TRUE;  
     int master_socket, addrlen, new_socket, max_clients, activity, i, valread, sd;
 
-    typeWriter("Welcome in PLE-BLEROY ImanRC server settings.\nPlease enter maximum user allowed to join the server : ");
+    typeWriter("Welcome in PLE-BLEROY IRC server settings.\nPlease enter maximum user allowed to join the server : ");
     cin >> max_clients;
     vector<Data> data;
     for (int i = 0; i < max_clients; i++)
@@ -16,6 +16,8 @@ void start_server(IRC server)
     typeWriter("Maximum user allowed to join the server : " + to_string(max_clients) + "\n");
 
     server.setadminpassword("admin");
+    server.setwhitelist_users("pleber");
+    server.setwhitelist_users("bleroy");
     int client_socket[max_clients];
     int max_sd;
     struct sockaddr_in address;  
@@ -24,7 +26,7 @@ void start_server(IRC server)
 
     //set of socket descriptors 
     fd_set readfds;  
-    char message[] = "Welcome in PLE-BLEROY ImanRC server.\n\r";  
+    char message[] = "Welcome in PLE-BLEROY IRC server.\n\r";  
      
     //initialise all client_socket[] to 0 so not checked 
     for (i = 0; i < max_clients; i++)  
@@ -174,7 +176,7 @@ void start_server(IRC server)
                     {
                         buffer[valread] = '\0';
                         string input(buffer, strlen(buffer) - 1);
-                        if (parse_log(input, server, &data[sd - 4], sd, &data) == 1)
+                        if (parse_log(input, &server, &data[sd - 4], sd, &data) == 1)
                             continue;
                         if (data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == DEFAULT)
                         {
@@ -186,7 +188,7 @@ void start_server(IRC server)
                             server.setcurrent_user(server.getcurrent_user() - 1);
                             user_left(&data, &channels, sd, data.at(sd - 4).getchannel());
                             reset_client(&data[sd - 4], sd, &channels, data.at(sd - 4).getchannel());
-                            close( sd );  
+                            close(sd);  
                             client_socket[i] = 0;
                         }
                         if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && input.size() > 0)

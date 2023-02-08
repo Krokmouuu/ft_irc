@@ -12,6 +12,8 @@ void reset_client(Data *data, int user, vector<Channel> *chan, string channel)
     data->setchannel("The accueil");
     data->setconnected(DEFAULT);
 	data->setaway(FALSE);
+	data->setaway_message("");
+	data->setadmin(CLIENT);
 }
 
 //my beautiful function to write message in the terminal letter by letter :]

@@ -1,9 +1,9 @@
 #include "ft_irc.hpp"
 #include "Data.hpp"
 
-int parse_log(string input, IRC server, Data *data, int user, vector<Data> *vdata)
+int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vdata)
 {
-    if (input == server.getpassword() && data->getlog() == NEW_CLIENT)
+    if (input == server->getpassword() && data->getlog() == NEW_CLIENT)
     {
         data->setlog(LOGGED);
         send(user, "Password correct.\n", 18, 0);
@@ -65,9 +65,13 @@ int parse_log(string input, IRC server, Data *data, int user, vector<Data> *vdat
             data->setconnected(DEFAULT);
             data->setfd(user);
             data->setnumber(user - 4);
+			data->setadmin(CLIENT);
+            for (size_t i = 0; i < server->vget_adminusers().size(); i++)
+                if (server->getwhitelist_users(i) == data->getusername())
+                    data->setadmin(ADMIN);
         }
     }
-    else if (input != server.getpassword() && data->getlog() == NEW_CLIENT)
+    else if (input != server->getpassword() && data->getlog() == NEW_CLIENT)
     {
         send(user, "Password incorrect.\n", 20, 0);
         send(user, "Please enter password: ", 24, 0);

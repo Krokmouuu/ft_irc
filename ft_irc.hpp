@@ -56,7 +56,10 @@ class IRC
         int    getsocketServer() const { return this->socketServer; };
         int    getcurrent_user() const { return this->current_user; };
         string getadminpassword() const { return this->adminpassword; };
+        string getwhitelist_users(int i) const { return this->whitelist_users[i]; };
+        vector<string> vget_adminusers() const { return this->whitelist_users; };
 
+        void   setwhitelist_users(string user) { this->whitelist_users.push_back(user); };
         void   setadminpassword(string adminpassword) { this->adminpassword = adminpassword; };
         void   setsocketServer(int socketServer) { this->socketServer = socketServer; };
         void   setmaxuser(int maxuser) { this->maxuser = maxuser; };
@@ -69,6 +72,7 @@ class IRC
         string  serverport;
         string  password;
         string  adminpassword;
+        vector<string> whitelist_users;
         int     maxuser;
         int     current_user;
         int     socketServer;
@@ -81,7 +85,7 @@ void            beep_beep_boop(string input, int user, vector<Data> *data, vecto
 
 //! Parsing
 int             ft_parsing(char **argv);
-int             parse_log(string input, IRC server, Data *data, int user, vector<Data> *vdata);
+int             parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vdata);
 int             parsing_nb_user(string nb, IRC server);
 void            parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
 
@@ -92,6 +96,7 @@ void	        list_command(vector<Channel> *chan, int user);
 void            msg_command(int user, vector<Data> *data, string input);
 void            nick_command(int user, vector<Data> *data, string input);
 void            away_command(int user, vector<Data> *data, string input);
+void            op_command(int user, vector<Data> *data, string input, IRC *server);
 
 //! Channels
 void            default_channel(vector<Data> *data, vector<Channel> *chan, int user);

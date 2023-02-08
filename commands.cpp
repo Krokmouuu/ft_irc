@@ -3,18 +3,18 @@
 // /join Y
 // /quit / leave Y
 // /w /msg Y
-//? /ping / pong X
 // /nick Y
 // /away Y 
 // /names Y
 // /list Y
+//? /ping / pong X
 //? /help X 
 //? /help [command] X
 //? /whois X 
 //? /who X
 //? kick (leave channel) X
 //? kill (leave server) X
-//? op X
+// op Y
 
 void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> *chan)
 {
@@ -213,5 +213,71 @@ void msg_command(int user, vector<Data> *data, string input)
 		}
     }
 	tmp = "User not found\n";
+	send(user, tmp.c_str(), tmp.size(), 0);
+}
+
+void op_command(int user, vector<Data> *data, string input, IRC *server)
+{
+    string tmp;
+    string newop;
+    stringstream ss(input);
+    string word;
+    string tmp2;
+	string pass;
+    ss >> tmp2;
+    if (input[tmp2.length() + 1] == ' ')
+    {
+        tmp = "Bad input\n";
+        send(user, tmp.c_str(), tmp.size(), 0);
+        return ;
+    }
+	ss >> newop;
+    ss >> pass;
+	bool check_user = FALSE;
+	for(size_t n = 0; n < data->size(); n++)
+	{
+		tmp = data->at(n).getusername();
+		if (newop == tmp)
+			check_user = TRUE;
+	}
+	if (check_user == FALSE)
+	{
+		tmp = "User not found\n";
+		send(user, tmp.c_str(), tmp.size(), 0);
+		return ;
+	}
+	if (pass != server->getadminpassword())
+	{
+		tmp = "Bad password\n";
+		send(user, tmp.c_str(), tmp.size(), 0);
+		return ;
+	}
+	for (size_t j = 0; j < server->vget_adminusers().size(); j++)
+	{
+		if (server->getwhitelist_users(j) == data->at(user - 4).getusername())
+		{
+            for (size_t i = 0; i < data->size(); i++)
+            {
+                if (data->at(i).getusername() == newop)
+                {
+                    if (data->at(i).getadmin() == ADMIN)
+                    {
+                        tmp = data->at(i).getusername() + " is already an op\n";
+                        send(user, tmp.c_str(), tmp.size(), 0);
+                        return ;
+                    }
+                    else if (data->at(i).getadmin() != ADMIN)
+                    {
+                        data->at(i).setadmin(ADMIN);
+                        tmp = data->at(i).getusername() + " is now an op\n";
+                        server->setwhitelist_users(newop);
+                        send(user, tmp.c_str(), tmp.size(), 0);
+                        return ;
+                    }
+                }
+            }
+		}
+    }
+	tmp = "You're not an admin\n";
 	send(user, tmp.c_str(), tmp.size(), 0);
 }
