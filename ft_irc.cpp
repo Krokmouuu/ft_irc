@@ -175,9 +175,6 @@ void start_server(IRC server)
                     {
                         buffer[valread] = '\0';
                         string input(buffer, strlen(buffer) - 1);
-                        // stringstream cc(input);
-                        // string tmp;
-                        // cc << tmp;
                         if (parse_log(input, &server, &data[sd - 4], sd, &data) == 1)
                             continue;
                         if (data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == DEFAULT)
@@ -185,10 +182,6 @@ void start_server(IRC server)
                             default_channel(&data, &channels, sd);
                             continue;
                         }
-                        // if (tmp == "/kill" && data.at(sd - 4).getadmin() == ADMIN)
-                        // {
-                        //     cout << "hola" << endl;
-                        // }
                         if ((input == "/quit" || input == "/leave") && data.at(sd - 4).getlog() == LOG_COMPLETED)
                         {
                             server.setcurrent_user(server.getcurrent_user() - 1);
