@@ -102,7 +102,7 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
         else if (cmd == "/kick")
             kick_command(user, data, input, server, chan);
         else if (cmd == "/kill")
-            kill_command(user, data, input, chan);
+            kill_command(user, data, input, chan, server);
         return ;
     }
     if (data->at(user - 4).getaway() == TRUE)

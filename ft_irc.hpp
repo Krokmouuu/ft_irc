@@ -99,7 +99,7 @@ void            nick_command(int user, vector<Data> *data, string input);
 void            away_command(int user, vector<Data> *data, string input);
 void            op_command(int user, vector<Data> *data, string input, IRC *server, int op);
 void            kick_command(int user, vector<Data> *data, string input, IRC *server, vector<Channel> *chan);
-void            kill_command(int user, vector<Data> *data, string input, vector<Channel> *chan);
+void            kill_command(int user, vector<Data> *data, string input, vector<Channel> *chan, IRC *server);
 
 //! Channels
 void            default_channel(vector<Data> *data, vector<Channel> *chan, int user);
@@ -109,4 +109,4 @@ void            user_left(vector<Data> *data, vector<Channel> *chan, int user, s
 //! Utils
 void	        typeWriter(string str);
 vector<Channel> init_channels();
-void            reset_client(Data *data, int user, vector<Channel> *chan, string channel);
+void            reset_client(Data *data);

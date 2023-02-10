@@ -1,10 +1,7 @@
 #include "ft_irc.hpp"
 
-void reset_client(Data *data, int user, vector<Channel> *chan, string channel)
+void reset_client(Data *data)
 {
-	(void)user;
-	(void)chan;
-	(void)channel;
     data->setusername("");
     data->setnickname("");
     data->setlog(NEW_CLIENT);

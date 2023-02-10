@@ -185,7 +185,6 @@ void msg_command(int user, vector<Data> *data, string input)
 	cc >> tmp;
 	cc >> receveur;
 	size_t size = tmp.length() + receveur.length() + 1;
-
 	if (input[tmp.length() + 1] == ' ')
 	{
 		tmp = "Bad input\n";
@@ -331,14 +330,11 @@ void kick_command(int user, vector<Data> *data, string input, IRC *server, vecto
     }
 	bool check_user = FALSE;
 	for(size_t n = 0; n < data->size(); n++)
-	{
-		tmp = data->at(n).getnickname();
-		if (client == tmp)
+		if (client == data->at(n).getnickname() && data->at(n).getnickname().size() > 2)
 			check_user = TRUE;
-	}
 	if (check_user == FALSE)
 	{
-		tmp = "User not found kk\n";
+		tmp = "User not found\n";
 		send(user, tmp.c_str(), tmp.size(), 0);
 		return ;
 	}
@@ -352,24 +348,34 @@ void kick_command(int user, vector<Data> *data, string input, IRC *server, vecto
 		send(user, tmp.c_str(), tmp.size(), 0);
 		return ;
 	}
+    string reason = &input[input.find(client) + client.length() + 1];
 	for (size_t j = 0; j < server->vget_adminusers().size(); j++)
 	{
-		if (server->getwhitelist_users(j) == data->at(user - 4).getusername())
+		if (server->getwhitelist_users(j) == data->at(user - 4).getnickname())
 		{
             for (size_t i = 0; i < data->size(); i++)
             {
-                if (data->at(i).getusername() == client)
+                if (data->at(i).getnickname() == client)
                 {
 					if (data->at(i).getchannel() == "The_accueil")
                     {
-						kill_command(user, data, input, chan);
-                        return ;
+						tmp = client + " have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\n";
+					    send(user, tmp.c_str(), tmp.size(), 0);
+						tmp = "You have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\n";
+					    send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
+                        user_left(data, chan, user, data->at(user - 4).getchannel());
+                        close(data->at(i).getfd());
+                        reset_client(&data->at(i));
+                        server->setcurrent_user(server->getcurrent_user() - 1);
+                        //! SOCKET OF THE USER IS NOT CLOSED IN THE MAIN NEED TO FIX Cf : variable "client_socket"
+                        return;
                     }
-                    user_join_left(data, chan,  data->at(i).getfd(), "The_accueil", data->at(i).getchannel());
-					tmp = "kicking " + client + "\n";
+					tmp = client + " have been kicked for: " + reason + "\n";
 					send(user, tmp.c_str(), tmp.size(), 0);
+                    tmp = "You have been kicked by " + data->at(user - 4).getnickname() + " for: " + reason + "\n";
+					send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
+                    user_join_left(data, chan,  data->at(i).getfd(), "The_accueil", data->at(i).getchannel());
 					return ;
-                    //! send to the client that he has been kicked
                 }
             }
 		}
@@ -379,32 +385,54 @@ void kick_command(int user, vector<Data> *data, string input, IRC *server, vecto
 }
 
 //! KILL <client> <comment>
-void kill_command(int user, vector<Data> *data, string input, vector<Channel> *chan)
+void kill_command(int user, vector<Data> *data, string input, vector<Channel> *chan, IRC *server)
 {
     stringstream ss(input);
     string tmp;
 
     ss >> tmp;
+    string client;
+    ss >> client;
     if (input[tmp.length() + 1] == ' ')
     {
         tmp = "Bad input\n";
         send(user, tmp.c_str(), tmp.size(), 0);
         return ;
     }
-    string client;
-
-    ss >> client;
-    for (size_t i = 0; i < data->size(); i++)
-    {
-        if (data->at(i).getnickname() == client)
-        {
-            tmp = "You have been killed by " + data->at(user - 4).getnickname() + "\n";
-            send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
-            user_left(data, chan, user, data->at(user - 4).getchannel());
-            // reset_client(&data[user - 4], user, &chan, data->at(user - 4).getchannel());
-            close(data->at(i).getfd());
-            //! RESET LE CLIENT
+    bool check_user = FALSE;
+	for(size_t n = 0; n < data->size(); n++)
+		if (client == data->at(n).getnickname() && data->at(n).getnickname().size() > 2)
+			check_user = TRUE;
+	if (check_user == FALSE)
+	{
+		tmp = "User not found\n";
+		send(user, tmp.c_str(), tmp.size(), 0);
+		return ;
+	}
+    string reason = &input[input.find(client) + client.length() + 1];
+    for (size_t j = 0; j < server->vget_adminusers().size(); j++)
+	{
+		if (server->getwhitelist_users(j) == data->at(user - 4).getnickname())
+		{
+            for (size_t i = 0; i < data->size(); i++)
+            {
+              
+                if (data->at(i).getnickname() == client)
+                {
+                    tmp = client + " have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\n";
+                    send(user, tmp.c_str(), tmp.size(), 0);
+                    tmp = "You have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\n";
+                    send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
+                    user_left(data, chan, data->at(i).getfd(), data->at(i).getchannel());
+                    close(data->at(i).getfd());
+                    reset_client(&data->at(i));
+                    server->setcurrent_user(server->getcurrent_user() - 1);
+                    //! SOCKET OF THE USER IS NOT CLOSED IN THE MAIN NEED TO FIX Cf : variable "client_socket"
+                    return ;
+                }
+            }
         }
     }
-    return ;
+	tmp = "You're not an admin\n";
+	send(user, tmp.c_str(), tmp.size(), 0);
 }

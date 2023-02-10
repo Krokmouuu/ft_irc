@@ -131,7 +131,7 @@ void start_server(IRC server)
                 else
                     perror("send");
                  
-            //add new socket to array of sockets 
+            //add new socket to array of sockets
             for (i = 0; i < max_clients; i++)  
             {  
                 //if position is empty 
@@ -141,15 +141,14 @@ void start_server(IRC server)
                     typeWriter("Adding to list of sockets as " + to_string(i) + "\n");
                     server.setcurrent_user(server.getcurrent_user() + 1);
                     break;  
-                }  
+                }
             }  
         }  
          
         //else its some IO operation on some other socket
         for (i = 0; i < max_clients; i++)  
         {  
-            sd = client_socket[i];  
-                 
+            sd = client_socket[i];
             if (FD_ISSET( sd , &readfds))  
             { 
                 //Check if it was for closing , and also read the 
@@ -163,7 +162,7 @@ void start_server(IRC server)
                     if (data.at(sd - 4).getlog() != NEW_CLIENT)
                     {
                         user_left(&data, &channels, sd, data.at(sd - 4).getchannel());
-                        reset_client(&data[sd - 4], sd, &channels, data.at(sd - 4).getchannel());
+                        reset_client(&data[sd - 4]);
                     }
                     close( sd );  
                     client_socket[i] = 0;
@@ -176,6 +175,9 @@ void start_server(IRC server)
                     {
                         buffer[valread] = '\0';
                         string input(buffer, strlen(buffer) - 1);
+                        // stringstream cc(input);
+                        // string tmp;
+                        // cc << tmp;
                         if (parse_log(input, &server, &data[sd - 4], sd, &data) == 1)
                             continue;
                         if (data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == DEFAULT)
@@ -183,11 +185,15 @@ void start_server(IRC server)
                             default_channel(&data, &channels, sd);
                             continue;
                         }
+                        // if (tmp == "/kill" && data.at(sd - 4).getadmin() == ADMIN)
+                        // {
+                        //     cout << "hola" << endl;
+                        // }
                         if ((input == "/quit" || input == "/leave") && data.at(sd - 4).getlog() == LOG_COMPLETED)
                         {
                             server.setcurrent_user(server.getcurrent_user() - 1);
                             user_left(&data, &channels, sd, data.at(sd - 4).getchannel());
-                            reset_client(&data[sd - 4], sd, &channels, data.at(sd - 4).getchannel());
+                            reset_client(&data[sd - 4]);
                             close(sd);  
                             client_socket[i] = 0;
                         }
