@@ -79,6 +79,14 @@ void start_server(IRC server)
         max_sd = master_socket;  
              
         //add child sockets to set 
+        for (int i = 0; i < max_clients; i++)
+            if (data[i].getfd() == -1)
+            {
+                client_socket[i] = 0;
+                data[i].setfd(client_socket[i]);
+                continue;
+            }
+          
         for ( i = 0 ; i < max_clients ; i++)  
         {  
             //socket descriptor 

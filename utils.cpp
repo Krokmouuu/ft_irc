@@ -5,7 +5,7 @@ void reset_client(Data *data)
     data->setusername("");
     data->setnickname("");
     data->setlog(NEW_CLIENT);
-    data->setfd(0);
+    data->setfd(-1);
     data->setchannel("The_accueil");
     data->setconnected(DEFAULT);
 	data->setaway(FALSE);
