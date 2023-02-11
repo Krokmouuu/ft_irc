@@ -100,6 +100,7 @@ void            away_command(int user, vector<Data> *data, string input);
 void            op_command(int user, vector<Data> *data, string input, IRC *server, int op);
 void            kick_command(int user, vector<Data> *data, string input, IRC *server, vector<Channel> *chan);
 void            kill_command(int user, vector<Data> *data, string input, vector<Channel> *chan, IRC *server);
+void            help_command(int user, string input);
 
 //! Channels
 void            default_channel(vector<Data> *data, vector<Channel> *chan, int user);
@@ -107,6 +108,8 @@ void            user_join_left(vector<Data> *data, vector<Channel> *chan, int us
 void            user_left(vector<Data> *data, vector<Channel> *chan, int user, string channel);
 
 //! Utils
+vector<string>  commands();
+vector<string>	init_commands();
 void	        typeWriter(string str);
 vector<Channel> init_channels();
 void            reset_client(Data *data);

@@ -8,12 +8,12 @@
 // /names Y
 // /list Y
 //? /ping / pong X
-//? /help X 
-//? /help [command] X
+// /help Y
+// /help [command] Y
 //? /whois X 
 //? /who X
-//? kick (leave channel) X
-//? kill (leave server) X
+// kick (leave channel) Y
+// kill (leave server) Y
 // /op Y
 // /deop Y
 
@@ -367,7 +367,6 @@ void kick_command(int user, vector<Data> *data, string input, IRC *server, vecto
                         close(data->at(i).getfd());
                         reset_client(&data->at(i));
                         server->setcurrent_user(server->getcurrent_user() - 1);
-                        //! SOCKET OF THE USER IS NOT CLOSED IN THE MAIN NEED TO FIX Cf : variable "client_socket"
                         return;
                     }
 					tmp = client + " have been kicked for: " + reason + "\n";
@@ -384,7 +383,6 @@ void kick_command(int user, vector<Data> *data, string input, IRC *server, vecto
 	send(user, tmp.c_str(), tmp.size(), 0);
 }
 
-//! KILL <client> <comment>
 void kill_command(int user, vector<Data> *data, string input, vector<Channel> *chan, IRC *server)
 {
     stringstream ss(input);
@@ -427,7 +425,6 @@ void kill_command(int user, vector<Data> *data, string input, vector<Channel> *c
                     close(data->at(i).getfd());
                     reset_client(&data->at(i));
                     server->setcurrent_user(server->getcurrent_user() - 1);
-                    //! SOCKET OF THE USER IS NOT CLOSED IN THE MAIN NEED TO FIX Cf : variable "client_socket"
                     return ;
                 }
             }
@@ -435,4 +432,37 @@ void kill_command(int user, vector<Data> *data, string input, vector<Channel> *c
     }
 	tmp = "You're not an admin\n";
 	send(user, tmp.c_str(), tmp.size(), 0);
+}
+
+void    help_command(int user, string input)
+{
+    vector<string> tmp = init_commands();
+    vector<string> tmp3 = commands();
+    string tmp2;
+    if (input.length() - 1 == 4)
+    {
+        for (size_t i = 0; i < tmp.size(); i++)
+            send(user, tmp.at(i).c_str(), tmp.at(i).size(), 0);
+        return ;
+    }
+    else
+    {
+        stringstream ss(input);
+        size_t i = 0;
+        for (size_t i = 0; i < 2; i++)
+            ss >> tmp2;
+        i = tmp2.length() - 1;
+        if (tmp2 != "/w" || tmp2 != "/msg")
+            tmp3.erase(tmp3.begin() + 3);
+        for (size_t i = 0; i < tmp.size(); i++)
+        {
+            if (tmp3.at(i) == tmp2)
+            {
+                send(user, tmp.at(i).c_str(), tmp.at(i).size(), 0);
+                return;
+            }
+        }
+    }
+    tmp2 = "Command not found\n";
+    send(user, tmp2.c_str(), tmp2.size(), 0);
 }

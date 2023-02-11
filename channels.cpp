@@ -103,6 +103,13 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
             kick_command(user, data, input, server, chan);
         else if (cmd == "/kill")
             kill_command(user, data, input, chan, server);
+        else if (cmd == "/help")
+            help_command(user, input);
+        else
+        {
+            tmp = "Command not found\n";
+            send(user, tmp.c_str(), tmp.size(), 0);
+        }
         return ;
     }
     if (data->at(user - 4).getaway() == TRUE)
