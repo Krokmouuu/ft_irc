@@ -105,6 +105,10 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
             kill_command(user, data, input, chan, server);
         else if (cmd == "/help")
             help_command(user, input);
+        // else if (cmd == "/who") //! For Pleberr
+        //     who_command(user, data, input);
+        // else if (cmd == "/whois") //! For Pleberr
+        //     whois_command(user, data, input);
         else
         {
             tmp = "Command not found\n";

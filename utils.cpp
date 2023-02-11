@@ -15,6 +15,10 @@ vector<string> commands()
 	commands.push_back("/kick");
 	commands.push_back("/kill");
 	commands.push_back("/help");
+	commands.push_back("/leave");
+	commands.push_back("/quit");
+	commands.push_back("/whois");
+	commands.push_back("/who");
 	return commands;
 }
 
@@ -32,6 +36,9 @@ vector<string>	init_commands()
 	commands.push_back("/kick <channel> <user>: kick a user from a channel\n");
 	commands.push_back("/kill <user>: kick a user from the server\n");
 	commands.push_back("/help | /help <command>: display all commands or a specific command\n");
+	commands.push_back("/quit | /leave: quit the server\n");
+	commands.push_back("/whois \n"); //! Enter what command do
+	commands.push_back("/who: \n"); //! Enter what command do
 	return commands;
 }
 
