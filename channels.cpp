@@ -23,16 +23,16 @@ void user_join_left(vector<Data> *data, vector<Channel> *chan, int user, string 
         k++;
     for (size_t i = 0; i < chan->at(k).vgetusers().size(); i++)
     {
-        tmp = data->at(user - 4).getnickname() + " has left the channel.\n";
+        tmp = "\033[38;5;208m" + data->at(user - 4).getnickname() + " has left the channel.\033[0m\n";
         send(chan->at(k).getuser(i).getfd(), tmp.c_str(),tmp.size(), 0);
     }
-    tmp = "Welcome to < " + joinchannel + " > channel !\n";
+    tmp = "\033[38;5;120mWelcome to < " + joinchannel + " > channel !\033[0m\n";
     send(user, tmp.c_str(), tmp.size(), 0);
     for (size_t i = 0; i < chan->at(j).vgetusers().size(); i++)
     {
         if (chan->at(j).getuser(i).getfd() != user)
         {
-            tmp = data->at(user - 4).getnickname() + " has joined the channel.\n";
+            tmp = "\033[38;5;120m" + data->at(user - 4).getnickname() + " has joined the channel.\033[0m\n";
             send(chan->at(j).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
         }
     }
@@ -60,7 +60,7 @@ void user_left(vector<Data> *data, vector<Channel> *chan, int user, string chann
     for (size_t i = 0; i < chan->at(j).vgetusers().size(); i++)
         if (chan->at(j).getuser(i).getfd() != user)
         {
-            string tmp = data->at(user - 4).getnickname() + " has left the channel.\n";
+            string tmp = "\033[38;5;208m" + data->at(user - 4).getnickname() + " has left the channel.\033[0m\n";
             send(chan->at(j).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
         }
     for(size_t i = 0; i < chan->size(); i++)
@@ -92,7 +92,7 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
         else if (cmd == "/w" || cmd == "/msg")
             msg_command(user, data, input);
         else if (cmd == "/nick")
-            nick_command(user, data, input);
+            nick_command(user, data, input, server);
         else if (cmd == "/away")
             away_command(user, data, input);
         else if (cmd == "/op")
@@ -109,7 +109,7 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
             whois_command(user, data, input);
         else
         {
-            tmp = "Command not found\n";
+            tmp = "\033[38;5;208mCommand not found\033[0m\n";
             send(user, tmp.c_str(), tmp.size(), 0);
         }
         return ;
@@ -181,7 +181,7 @@ void    default_channel(vector<Data> *data, vector<Channel> *chan, int user)
 {
     if (data->at(user - 4).getconnected() == DEFAULT)
     {
-        string tmp = "\nWelcome to < The_accueil > channel !\n";
+        string tmp = "\n\033[38;5;120mWelcome to < The_accueil > channel !\033[0m\n";
         send(user, tmp.c_str(), tmp.size(), 0);
         data->at(user - 4).setconnected(INSIDE_CHANNEL);
         data->at(user - 4).setnumber(user - 4);
@@ -189,7 +189,7 @@ void    default_channel(vector<Data> *data, vector<Channel> *chan, int user)
         for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)
             if (chan->at(0).getuser(i).getfd() != user)
             {
-                tmp = data->at(user - 4).getnickname() + " has joined the channel.\n";
+                tmp = "\033[38;5;120m" + data->at(user - 4).getnickname() + " has joined the channel.\033[0m\n";
                 send(chan->at(0).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
             }
     }

@@ -56,7 +56,7 @@ void    join_command(vector<Data> *data, vector<Channel> *chan, int user, string
         i++;
     if (i == 1)
     {
-        tmp = "Please enter a channel name\n";
+        tmp = "\033[38;5;104mPlease enter a channel name\033[0m\n";
         send(user, tmp.c_str(), tmp.size(), 0);
         return ;
     }
@@ -67,7 +67,7 @@ void    join_command(vector<Data> *data, vector<Channel> *chan, int user, string
             {
                 if (data->at(user - 4).getchannel() == chan->at(i).getname())
                 {
-                    tmp = "You are already in < " + chan->at(i).getname() + " >" + " channel !\n";
+                    tmp = "\033[38;5;104mYou are already in < " + chan->at(i).getname() + " >" + " channel !\033[0m\n";
                     send(data->at(user - 4).getfd(), tmp.c_str(), tmp.size(), 0);
                     return ;
                 }
@@ -76,7 +76,7 @@ void    join_command(vector<Data> *data, vector<Channel> *chan, int user, string
             }
         }
     }
-    tmp = "Channel not found\n";
+    tmp = "\033[38;5;104mChannel not found\033[0m\n";
     send(user, tmp.c_str(), tmp.size(), 0);    
     return ;
 }
@@ -94,6 +94,7 @@ void	list_command(vector<Channel> *chan, int user)
 	}
 }
 
+//! lister que les users du current channel
 void	names_command(int user, vector<Data> *data)
 {
 	string tmp;
@@ -119,14 +120,14 @@ void away_command(int user, vector<Data> *data, string input)
     ss >> tmp2;
     if (input[tmp2.length() + 1] == ' ')
     {
-        tmp = "Bad input\n";
+        tmp = "\033[38;5;104mBad input\033[0m\n";
         send(user, tmp.c_str(), tmp.size(), 0);
         return ;
     }
     if (data->at(user - 4).getaway() == TRUE)
     {
         data->at(user - 4).setaway(FALSE);
-        tmp = "You are now back\n";
+        tmp = "\033[38;5;104mYou are now back\033[0m\n";
         send(user, tmp.c_str(), tmp.size(), 0);
         return ;
     }
@@ -135,16 +136,17 @@ void away_command(int user, vector<Data> *data, string input)
 	if (word.length() <= 1)
     {
 		word = "";
-        tmp = "You are now afk";
+        tmp = "\033[38;5;104mYou are now afk\033[0m";
 		tmp += "\n";
     }
     else if (word.length() > 1)
-        tmp = "You are now afk: " + word + "\n";
+        tmp = "\033[38;5;104mYou are now afk: " + word + "\033[0m\n";
 	data->at(user - 4).setaway_message(word);
     send(user, tmp.c_str(), tmp.size(), 0);
 }
 
-void nick_command(int user, vector<Data> *data, string input)
+//! laisser que chiffres et lettres pour rename
+void nick_command(int user, vector<Data> *data, string input, IRC *server)
 {
     string tmp;
     string newnick;
@@ -155,25 +157,42 @@ void nick_command(int user, vector<Data> *data, string input)
 	ss >> tmp2;
 	if (input[tmp2.length() + 1] == ' ')
 	{
-		tmp = "Bad input\n";
+		tmp = "\033[38;5;104mBad input\033[0m\n";
 		send(user, tmp.c_str(), tmp.size(), 0);
         return ;
 	}
 	ss >> newnick;
+	if (newnick.length() < 3)
+	{
+		tmp = "\033[38;5;104mName too short\033[0m\n";
+		send(user, tmp.c_str(), tmp.size(), 0);
+		return ;
+	}
+
     for (size_t i = 0; i < data->size(); i++)
     {
         if (data->at(i).getnickname() == newnick)
         {
-            tmp = "Nickname already taken\n";
+            tmp = "\033[38;5;104mNickname already taken\033[0m\n";
             send(user, tmp.c_str(), tmp.size(), 0);
             return ;
         }
     }
+    for (size_t i = 0; i < server->vget_adminusers().size(); i++)
+	{
+		if (server->getwhitelist_users(i) == newnick)
+		{
+			tmp = "\033[38;5;104mForbidden name\033[0m\n";
+            send(user, tmp.c_str(), tmp.size(), 0);
+            return ;
+		}
+	}
     data->at(user - 4).setnickname(newnick);
-    tmp = "Nickname changed to " + newnick + "\n";
+    tmp = "\033[38;5;104mNickname changed to " + newnick + "\033[0m\n";
     send(user, tmp.c_str(), tmp.size(), 0);
 }
 
+//! If you whispser yourself, displays you instead of nickname
 void msg_command(int user, vector<Data> *data, string input)
 {
     string tmp;
@@ -187,7 +206,7 @@ void msg_command(int user, vector<Data> *data, string input)
 	size_t size = tmp.length() + receveur.length() + 1;
 	if (input[tmp.length() + 1] == ' ')
 	{
-		tmp = "Bad input\n";
+		tmp = "\033[38;5;104mBad input\033[0m\n";
 		send(user, tmp.c_str(), tmp.size(), 0);
         return ;
 	}
@@ -197,7 +216,7 @@ void msg_command(int user, vector<Data> *data, string input)
     {
         data->at(user - 4).setaway(FALSE);
         data->at(user - 4).setaway_message("");
-        tmp = "You are now back\n";
+        tmp = "\033[38;5;104mYou are now back\033[0m\n";
         send(user, tmp.c_str(), tmp.size(), 0);
     }
 	for (size_t n = 0; n < data->size(); n++)
@@ -222,7 +241,7 @@ void msg_command(int user, vector<Data> *data, string input)
         }
 
     }
-	tmp = "User not found\n";
+	tmp = "\033[38;5;104mUser not found\033[0m\n";
 	send(user, tmp.c_str(), tmp.size(), 0);
 }
 
@@ -237,7 +256,7 @@ void op_command(int user, vector<Data> *data, string input, IRC *server, int op)
     ss >> tmp2;
     if (input[tmp2.length() + 1] == ' ')
     {
-        tmp = "Bad input\n";
+        tmp = "\033[38;5;104mBad input\033[0m\n";
         send(user, tmp.c_str(), tmp.size(), 0);
         return ;
     }
@@ -252,13 +271,13 @@ void op_command(int user, vector<Data> *data, string input, IRC *server, int op)
 	}
 	if (check_user == FALSE)
 	{
-		tmp = "User not found\n";
+		tmp = "\033[38;5;104mUser not found\033[0m\n";
 		send(user, tmp.c_str(), tmp.size(), 0);
 		return ;
 	}
 	if (pass != server->getadminpassword())
 	{
-		tmp = "Bad password\n";
+		tmp = "\033[38;5;104mBad password\033[0m\n";
 		send(user, tmp.c_str(), tmp.size(), 0);
 		return ;
 	}
@@ -274,14 +293,14 @@ void op_command(int user, vector<Data> *data, string input, IRC *server, int op)
 					{
 						if (data->at(i).getadmin() == ADMIN)
 						{
-							tmp = data->at(i).getusername() + " is already an op\n";
+							tmp = "\033[38;5;104m" + data->at(i).getusername() + " is already an op\033[0m\n";
 							send(user, tmp.c_str(), tmp.size(), 0);
 							return ;
 						}
 						else if (data->at(i).getadmin() != ADMIN)
 						{
 							data->at(i).setadmin(ADMIN);
-							tmp = data->at(i).getusername() + " is now an op\n";
+							tmp = "\033[38;5;104m" + data->at(i).getusername() + " is now an op\033[0m\n";
 							server->setwhitelist_users(newop);
 							send(user, tmp.c_str(), tmp.size(), 0);
 							return ;
@@ -291,14 +310,14 @@ void op_command(int user, vector<Data> *data, string input, IRC *server, int op)
 					{
 						if (data->at(i).getadmin() != ADMIN)
 						{
-							tmp = data->at(i).getusername() + " isn't op\n";
+							tmp = "\033[38;5;104m" + data->at(i).getusername() + " isn't op\033[0m\n";
 							send(user, tmp.c_str(), tmp.size(), 0);
 							return ;
 						}
 						else if (data->at(i).getadmin() == ADMIN)
 						{
 							data->at(i).setadmin(CLIENT);
-							tmp = data->at(i).getusername() + " is not op anymore\n";
+							tmp = "\033[38;5;104m" + data->at(i).getusername() + " is not op anymore\033[0m\n";
 							server->remove_admin(j); 
 							send(user, tmp.c_str(), tmp.size(), 0);
 							return ;
@@ -308,7 +327,7 @@ void op_command(int user, vector<Data> *data, string input, IRC *server, int op)
             }
 		}
     }
-	tmp = "You're not an admin\n";
+	tmp = "\033[38;5;104mYou're not an admin\033[0m\n";
 	send(user, tmp.c_str(), tmp.size(), 0);
 }
 
@@ -324,7 +343,7 @@ void kick_command(int user, vector<Data> *data, string input, IRC *server, vecto
 	ss >> client;
     if (input[tmp.length() + 1] == ' ')
     {
-        tmp = "Bad input\n";
+        tmp = "\033[38;5;104mBad input\033[0m\n";
         send(user, tmp.c_str(), tmp.size(), 0);
         return ;
     }
@@ -334,7 +353,7 @@ void kick_command(int user, vector<Data> *data, string input, IRC *server, vecto
 			check_user = TRUE;
 	if (check_user == FALSE)
 	{
-		tmp = "User not found\n";
+		tmp = "\033[38;5;104mUser not found\033[0m\n";
 		send(user, tmp.c_str(), tmp.size(), 0);
 		return ;
 	}
@@ -344,14 +363,14 @@ void kick_command(int user, vector<Data> *data, string input, IRC *server, vecto
 			check_channel = TRUE;
 	if (check_channel == FALSE)
 	{
-		tmp = "Channel not found\n";
+		tmp = "\033[38;5;104mChannel not found\033[0m\n";
 		send(user, tmp.c_str(), tmp.size(), 0);
 		return ;
 	}
-    string reason = &input[input.find(client) + client.length() + 1];
+    string reason = &input[input.find(client) + client.length()];
 	for (size_t j = 0; j < server->vget_adminusers().size(); j++)
 	{
-		if (server->getwhitelist_users(j) == data->at(user - 4).getnickname())
+		if (server->getwhitelist_users(j) == data->at(user - 4).getusername())
 		{
             for (size_t i = 0; i < data->size(); i++)
             {
@@ -359,19 +378,19 @@ void kick_command(int user, vector<Data> *data, string input, IRC *server, vecto
                 {
 					if (data->at(i).getchannel() == "The_accueil")
                     {
-						tmp = client + " have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\n";
-					    send(user, tmp.c_str(), tmp.size(), 0);
-						tmp = "You have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\n";
-					    send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
-                        user_left(data, chan, user, data->at(user - 4).getchannel());
-                        close(data->at(i).getfd());
-                        reset_client(&data->at(i));
-                        server->setcurrent_user(server->getcurrent_user() - 1);
-                        return;
+						tmp = "\033[38;5;104m" + client + " have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\033[0m\n";
+						send(user, tmp.c_str(), tmp.size(), 0);
+						tmp = "\033[38;5;104mYou have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\033[0m\n";
+						send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
+						user_left(data, chan, data->at(i).getfd(), data->at(i).getchannel());
+						close(data->at(i).getfd());
+						reset_client(&data->at(i));
+						server->setcurrent_user(server->getcurrent_user() - 1);
+						return ;
                     }
-					tmp = client + " have been kicked for: " + reason + "\n";
+					tmp = "\033[38;5;104m" + client + " have been kicked for: " + reason + "\033[0m\n";
 					send(user, tmp.c_str(), tmp.size(), 0);
-                    tmp = "You have been kicked by " + data->at(user - 4).getnickname() + " for: " + reason + "\n";
+                    tmp = "\033[38;5;104mYou have been kicked by " + data->at(user - 4).getnickname() + " for: " + reason + "\033[0m\n";
 					send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
                     user_join_left(data, chan,  data->at(i).getfd(), "The_accueil", data->at(i).getchannel());
 					return ;
@@ -379,7 +398,7 @@ void kick_command(int user, vector<Data> *data, string input, IRC *server, vecto
             }
 		}
     }
-	tmp = "You're not an admin\n";
+	tmp = "\033[38;5;104mYou're not an admin\033[0m\n";
 	send(user, tmp.c_str(), tmp.size(), 0);
 }
 
@@ -393,7 +412,7 @@ void kill_command(int user, vector<Data> *data, string input, vector<Channel> *c
     ss >> client;
     if (input[tmp.length() + 1] == ' ')
     {
-        tmp = "Bad input\n";
+        tmp = "\033[38;5;104mBad input\033[0m\n";
         send(user, tmp.c_str(), tmp.size(), 0);
         return ;
     }
@@ -403,23 +422,23 @@ void kill_command(int user, vector<Data> *data, string input, vector<Channel> *c
 			check_user = TRUE;
 	if (check_user == FALSE)
 	{
-		tmp = "User not found\n";
+		tmp = "\033[38;5;104mUser not found\033[0m\n";
 		send(user, tmp.c_str(), tmp.size(), 0);
 		return ;
 	}
     string reason = &input[input.find(client) + client.length() + 1];
     for (size_t j = 0; j < server->vget_adminusers().size(); j++)
 	{
-		if (server->getwhitelist_users(j) == data->at(user - 4).getnickname())
+		if (server->getwhitelist_users(j) == data->at(user - 4).getusername())
 		{
             for (size_t i = 0; i < data->size(); i++)
             {
               
                 if (data->at(i).getnickname() == client)
                 {
-                    tmp = client + " have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\n";
+                    tmp = "\033[38;5;104m" + client + " have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\033[0m\n";
                     send(user, tmp.c_str(), tmp.size(), 0);
-                    tmp = "You have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\n";
+                    tmp = "\033[38;5;104mYou have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\033[0m\n";
                     send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
                     user_left(data, chan, data->at(i).getfd(), data->at(i).getchannel());
                     close(data->at(i).getfd());
@@ -430,7 +449,7 @@ void kill_command(int user, vector<Data> *data, string input, vector<Channel> *c
             }
         }
     }
-	tmp = "You're not an admin\n";
+	tmp = "\033[38;5;104mYou're not an admin\033[0m\n";
 	send(user, tmp.c_str(), tmp.size(), 0);
 }
 
@@ -463,7 +482,7 @@ void    help_command(int user, string input)
             }
         }
     }
-    tmp2 = "Command not found\n";
+    tmp2 = "\033[38;5;104mCommand not found\033[0m\n";
     send(user, tmp2.c_str(), tmp2.size(), 0);
 }
 
@@ -492,6 +511,6 @@ void	whois_command(int user, vector<Data> *data, string input)
 			}
 		}
 	}
-	display = "No user found\n";
+	display = "\033[38;5;104mNo user found\033[0m\n";
 	send(user, display.c_str(), display.size(), 0);
 }

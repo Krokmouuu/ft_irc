@@ -2,12 +2,13 @@
 #include "Data.hpp"
 #include "Channel.hpp"
 
+//! Demander mot de passe si personne de la whitelist se connecte
 void start_server(IRC server)  
 {  
     int opt = TRUE;  
     int master_socket, addrlen, new_socket, max_clients, activity, i, valread, sd;
 
-    typeWriter("Welcome in PLE-BLEROY IRC server settings.\nPlease enter maximum user allowed to join the server : ");
+    typeWriter("\033[4m\033[1m\033[38;5;120mWelcome in PLE-BLEROY IRC server settings.\033[0m\nPlease enter maximum user allowed to join the server : ");
     cin >> max_clients;
     vector<Data> data;
     for (int i = 0; i < max_clients; i++)
@@ -26,7 +27,7 @@ void start_server(IRC server)
 
     //set of socket descriptors 
     fd_set readfds;  
-    char message[] = "Welcome in PLE-BLEROY IRC server.\n\r";  
+    char message[] = "\033[38;5;120mWelcome in PLE-BLEROY IRC server.\033[0m\n\r";  
      
     //initialise all client_socket[] to 0 so not checked 
     for (i = 0; i < max_clients; i++)  
@@ -67,7 +68,7 @@ void start_server(IRC server)
          
     //accept the incoming connection 
     addrlen = sizeof(address);  
-    typeWriter("Waiting for connections ...\n");  
+    typeWriter("\033[38;5;226mWaiting for connections ...\033[0m\n");  
     
     while(TRUE)  
     {  
@@ -126,7 +127,7 @@ void start_server(IRC server)
                 continue;
             }
             //inform user of socket number - used in send and receive commands 
-            typeWriter("New connection , socket fd is " + to_string(new_socket) + ", ip is : " + inet_ntoa(address.sin_addr) + ", port : " + to_string(ntohs(address.sin_port)) + "\n"); 
+            typeWriter("\033[38;5;120mNew connection , socket fd is " + to_string(new_socket) + ", ip is : " + inet_ntoa(address.sin_addr) + ", port : " + to_string(ntohs(address.sin_port)) + "\033[0m\n"); 
            
             //send new connection greeting message 
             if(send(new_socket, message, (ssize_t)strlen(message), 0) != (ssize_t)strlen(message) == 0)
@@ -164,7 +165,7 @@ void start_server(IRC server)
                 if ((valread = read(sd, buffer, 1024)) == 0)  
                 {  
                     //Somebody disconnected , get his details and print 
-                    printf("User #%d disconnected , ip %s , port %d \n", sd, inet_ntoa(address.sin_addr), ntohs(address.sin_port));
+                    printf("\033[38;5;208mUser #%d disconnected , ip %s , port %d \033[0m\n", sd, inet_ntoa(address.sin_addr), ntohs(address.sin_port));
                     //Close the socket and mark as 0 in list for reuse
                     server.setcurrent_user(server.getcurrent_user() - 1);
                     if (data.at(sd - 4).getlog() != NEW_CLIENT)

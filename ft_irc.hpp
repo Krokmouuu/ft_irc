@@ -95,7 +95,7 @@ void	        names_command(int user, vector<Data> *data);
 void            join_command(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
 void	        list_command(vector<Channel> *chan, int user);
 void            msg_command(int user, vector<Data> *data, string input);
-void            nick_command(int user, vector<Data> *data, string input);
+void            nick_command(int user, vector<Data> *data, string input, IRC *server);
 void            away_command(int user, vector<Data> *data, string input);
 void            op_command(int user, vector<Data> *data, string input, IRC *server, int op);
 void            kick_command(int user, vector<Data> *data, string input, IRC *server, vector<Channel> *chan);
