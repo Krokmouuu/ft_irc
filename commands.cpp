@@ -180,6 +180,8 @@ void nick_command(int user, vector<Data> *data, string input, IRC *server)
     }
     for (size_t i = 0; i < server->vget_adminusers().size(); i++)
 	{
+		if (data->at(i).getusername() == newnick)
+			break ;
 		if (server->getwhitelist_users(i) == newnick)
 		{
 			tmp = "\033[38;5;104mForbidden name\033[0m\n";
@@ -281,10 +283,19 @@ void op_command(int user, vector<Data> *data, string input, IRC *server, int op)
 		send(user, tmp.c_str(), tmp.size(), 0);
 		return ;
 	}
+
+
 	for (size_t j = 0; j < server->vget_adminusers().size(); j++)
 	{
 		if (server->getwhitelist_users(j) == data->at(user - 4).getusername())
 		{
+			// if (server->getwhitelist_users(j) == newop && op == 0)
+			// {
+			// 	tmp = "\033[38;5;104m" + data->at(j).getusername() + " is not op anymore\033[0m\n";
+			// 	server->remove_admin(j);
+			// 	send(user, tmp.c_str(), tmp.size(), 0);
+			// 	return ;
+			// }
             for (size_t i = 0; i < data->size(); i++)
             {
                 if (data->at(i).getusername() == newop)
@@ -384,7 +395,7 @@ void kick_command(int user, vector<Data> *data, string input, IRC *server, vecto
 						send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
 						user_left(data, chan, data->at(i).getfd(), data->at(i).getchannel());
 						close(data->at(i).getfd());
-						reset_client(&data->at(i));
+						reset_client(&data->at(i), server);
 						server->setcurrent_user(server->getcurrent_user() - 1);
 						return ;
                     }
@@ -442,7 +453,7 @@ void kill_command(int user, vector<Data> *data, string input, vector<Channel> *c
                     send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
                     user_left(data, chan, data->at(i).getfd(), data->at(i).getchannel());
                     close(data->at(i).getfd());
-                    reset_client(&data->at(i));
+					reset_client(&data->at(i), server);
                     server->setcurrent_user(server->getcurrent_user() - 1);
                     return ;
                 }

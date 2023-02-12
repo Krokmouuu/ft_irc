@@ -171,7 +171,7 @@ void start_server(IRC server)
                     if (data.at(sd - 4).getlog() != NEW_CLIENT)
                     {
                         user_left(&data, &channels, sd, data.at(sd - 4).getchannel());
-                        reset_client(&data[sd - 4]);
+                        reset_client(&data[sd - 4], &server);
                     }
                     close( sd );  
                     client_socket[i] = 0;
@@ -195,7 +195,7 @@ void start_server(IRC server)
                         {
                             server.setcurrent_user(server.getcurrent_user() - 1);
                             user_left(&data, &channels, sd, data.at(sd - 4).getchannel());
-                            reset_client(&data[sd - 4]);
+                            reset_client(&data[sd - 4], &server);
                             close(sd);  
                             client_socket[i] = 0;
                         }

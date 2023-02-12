@@ -42,7 +42,7 @@ vector<string>	init_commands()
 	return commands;
 }
 
-void reset_client(Data *data)
+void reset_client(Data *data, IRC *server)
 {
     data->setusername("");
     data->setnickname("");
@@ -53,6 +53,15 @@ void reset_client(Data *data)
 	data->setaway(FALSE);
 	data->setaway_message("");
 	data->setadmin(CLIENT);
+
+	for (size_t i = 0; i < server->vget_adminusers().size(); i++)
+	{
+		if (server->getwhitelist_users(i) == data->getusername())
+		{
+			server->remove_admin(i);
+			return ;
+		}
+	}
 }
 
 //my beautiful function to write message in the terminal letter by letter :]

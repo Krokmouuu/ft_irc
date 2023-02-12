@@ -113,4 +113,4 @@ vector<string>  commands();
 vector<string>	init_commands();
 void	        typeWriter(string str);
 vector<Channel> init_channels();
-void            reset_client(Data *data);
+void            reset_client(Data *data, IRC *server);
