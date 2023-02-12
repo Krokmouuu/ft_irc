@@ -27,7 +27,7 @@ vector<string>	init_commands()
 	vector<string> commands;
 	commands.push_back("/join <channel>: join a channel\n");
 	commands.push_back("/list: display all channels available\n");
-	commands.push_back("/names: display all users in the channel\n");
+	commands.push_back("/names: display all users in the channel\n"); //! not all irc network, have to fix this
 	commands.push_back("/w <user> | /msg <user>: send a private message to a user\n");
 	commands.push_back("/nick <nickname>: change your nickname\n");
 	commands.push_back("/away <message>: set your status to away\n");
@@ -37,8 +37,8 @@ vector<string>	init_commands()
 	commands.push_back("/kill <user>: kick a user from the server\n");
 	commands.push_back("/help | /help <command>: display all commands or a specific command\n");
 	commands.push_back("/quit | /leave: quit the server\n");
-	commands.push_back("/whois \n"); //! Enter what command do
-	commands.push_back("/who: \n"); //! Enter what command do
+	commands.push_back("/whois <user>: get information about a particular user\n");
+	commands.push_back("/who: list everybody on the IRC network\n");
 	return commands;
 }
 

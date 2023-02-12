@@ -466,3 +466,32 @@ void    help_command(int user, string input)
     tmp2 = "Command not found\n";
     send(user, tmp2.c_str(), tmp2.size(), 0);
 }
+
+void	whois_command(int user, vector<Data> *data, string input)
+{
+    stringstream ss(input);
+    string tmp;
+    string display;
+
+    ss >> tmp;
+    string client;
+    ss >> client;
+	for (size_t n = 0; n < data->size(); n++)
+	{
+		if (data->at(n).getnickname().length() > 1)
+		{
+			if (data->at(n).getnickname() == client)
+			{
+				display = "• Nickname: " + data->at(n).getnickname() + "\n";
+				display += "• Username: " +data->at(n).getusername() + "\n";
+				display += "• Current channel: " + data->at(n).getchannel() + "\n";
+				if (data->at(n).getaway() == 1)
+					display += "• Away: " + data->at(n).getaway_message() + "\n";
+				send(user, display.c_str(), display.size(), 0);
+				return ;
+			}
+		}
+	}
+	display = "No user found\n";
+	send(user, display.c_str(), display.size(), 0);
+}

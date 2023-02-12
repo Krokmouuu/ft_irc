@@ -101,6 +101,7 @@ void            op_command(int user, vector<Data> *data, string input, IRC *serv
 void            kick_command(int user, vector<Data> *data, string input, IRC *server, vector<Channel> *chan);
 void            kill_command(int user, vector<Data> *data, string input, vector<Channel> *chan, IRC *server);
 void            help_command(int user, string input);
+void			whois_command(int user, vector<Data> *data, string input);
 
 //! Channels
 void            default_channel(vector<Data> *data, vector<Channel> *chan, int user);
