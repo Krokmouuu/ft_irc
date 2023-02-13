@@ -65,11 +65,13 @@ class Data
     int     getconnected() const { return this->connected; };
     int     getnumber() const { return this->number; };
     bool    getaway() const { return this->away; };
+    int    	getIRSSI() const { return this->isIRSSI; };
     int     getadmin() const { return this->admin; };
     string  getaway_message() const { return this->away_message; };
 
     void    setaway_message(string away_message) { this->away_message = away_message; };
     void    setaway(bool away) { this->away = away; };
+    void    setIRSSI(int nb) { this->isIRSSI = nb; };
     void    setusername(string username) { this->username = username; };
     void    setnickname(string nickname) { this->nickname = nickname; };
     void    setlog(int logged) { this->logged = logged; };
@@ -89,6 +91,7 @@ class Data
     int     connected;
     int     number;
     bool    away;
+    int    	isIRSSI;
     string  away_message;
 
     int     admin;

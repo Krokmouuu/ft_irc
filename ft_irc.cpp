@@ -23,7 +23,7 @@ void start_server(IRC server)
     int max_sd;
     struct sockaddr_in address;  
          
-    char buffer[1025];  //data buffer of 1K 
+    char buffer[1024];  //data buffer of 1K 
 
     //set of socket descriptors 
     fd_set readfds;  
@@ -133,7 +133,7 @@ void start_server(IRC server)
             if(send(new_socket, message, (ssize_t)strlen(message), 0) != (ssize_t)strlen(message) == 0)
             {  
                 typeWriter("Welcome message sent successfully\n");  
-                if (send(new_socket, "Please enter password: ", 24, 0) != 24)
+                if (send(new_socket, "Please enter password:\n", 24, 0) != 24)
                     perror("send");
                 typeWriter("Password asked to user: #" + to_string(new_socket) + "\n");    
             }
@@ -162,7 +162,8 @@ void start_server(IRC server)
             { 
                 //Check if it was for closing , and also read the 
                 //incoming message 
-                if ((valread = read(sd, buffer, 1024)) == 0)  
+                //if ((valread = read(sd, buffer, 1025)) == 0)  
+                if ((valread = recv(sd, buffer, 1024, MSG_TRUNC)) == 0)  
                 {  
                     //Somebody disconnected , get his details and print 
                     printf("\033[38;5;208mUser #%d disconnected , ip %s , port %d \033[0m\n", sd, inet_ntoa(address.sin_addr), ntohs(address.sin_port));
@@ -182,7 +183,19 @@ void start_server(IRC server)
                     //set the string terminating NULL byte on the end of the data 
                     try
                     {
-                        buffer[valread] = '\0';
+
+
+
+						if (strlen(buffer) > 70 && data.at(sd - 4).getlog() == NEW_CLIENT)
+							data.at(sd - 4).setIRSSI(1);
+						else if (strlen(buffer) < 70 && data.at(sd - 4).getlog() == NEW_CLIENT)
+							data.at(sd - 4).setIRSSI(0);
+
+						if (data.at(sd - 4).getIRSSI() == 1)
+                        	buffer[valread - 1] = '\0';
+						else if (data.at(sd - 4).getIRSSI() == 0)
+                        	buffer[valread] = '\0';
+
                         string input(buffer, strlen(buffer) - 1);
                         if (parse_log(input, &server, &data[sd - 4], sd, &data) == 1)
                             continue;
