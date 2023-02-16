@@ -10,6 +10,8 @@ void start_server(IRC server)
 
     typeWriter("\033[4m\033[1m\033[38;5;120mWelcome in PLE-BLEROY IRC server settings.\033[0m\nPlease enter maximum user allowed to join the server : ");
     cin >> max_clients;
+	if (max_clients == 0)
+		max_clients++;
     vector<Data> data;
     for (int i = 0; i < max_clients; i++)
         data.push_back(Data());
