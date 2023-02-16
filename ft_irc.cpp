@@ -162,8 +162,8 @@ void start_server(IRC server)
             { 
                 //Check if it was for closing , and also read the 
                 //incoming message 
-                //if ((valread = read(sd, buffer, 1025)) == 0)  
-                if ((valread = recv(sd, buffer, 1024, MSG_TRUNC)) == 0)  
+                //if ((valread = recv(sd, buffer, 1024, MSG_TRUNC)) == 0)  
+                if ((valread = read(sd, buffer, 1025)) == 0)  
                 {  
                     //Somebody disconnected , get his details and print 
                     printf("\033[38;5;208mUser #%d disconnected , ip %s , port %d \033[0m\n", sd, inet_ntoa(address.sin_addr), ntohs(address.sin_port));
@@ -183,18 +183,10 @@ void start_server(IRC server)
                     //set the string terminating NULL byte on the end of the data 
                     try
                     {
-
-
-
-						if (strlen(buffer) > 70 && data.at(sd - 4).getlog() == NEW_CLIENT)
-							data.at(sd - 4).setIRSSI(1);
-						else if (strlen(buffer) < 70 && data.at(sd - 4).getlog() == NEW_CLIENT)
-							data.at(sd - 4).setIRSSI(0);
-
 						if (data.at(sd - 4).getIRSSI() == 1)
-                        	buffer[valread - 1] = '\0';
-						else if (data.at(sd - 4).getIRSSI() == 0)
-                        	buffer[valread] = '\0';
+							buffer[valread - 1] = '\0';
+						else
+							buffer[valread] = '\0';
 
                         string input(buffer, strlen(buffer) - 1);
                         if (parse_log(input, &server, &data[sd - 4], sd, &data) == 1)
@@ -214,6 +206,7 @@ void start_server(IRC server)
                         }
                         if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && input.size() > 0)
                             parse_input(&data, &channels, sd, input, &server);
+						
                     }
                     catch(const std::exception& e)
                     {
