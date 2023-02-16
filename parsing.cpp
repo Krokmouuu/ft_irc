@@ -121,8 +121,8 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
     if (input == server->getpassword() && data->getlog() == NEW_CLIENT)
     {
         data->setlog(LOGGED);
-        send(user, "Password correct.\n", 18, 0);
-        send(user, "Please enter your username:\n", 29, 0);
+        send(user, "\nPassword correct.\n", 20, 0);
+        send(user, "\nPlease enter your username:\n", 30, 0);
         data->setfd(user);
     }
     else if (data->getlog() == LOGGED)
@@ -131,18 +131,18 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
         {
             if (input[i] > 0 && input[i] < 33)
             {
-                send(user, "Username can't contain a space.\nPlease enter your username:\n", 61, 0);
+                send(user, "\nUsername can't contain a space.\nPlease enter your username:\n", 62, 0);
                 return 1;
             }
         }
         if (input.size() < 2 || input.size() > 26)
         {
-            send(user, "Username must be between 2 and 26 characters.\nPlease enter your username:\n", 75, 0);
+            send(user, "\nUsername must be between 2 and 26 characters.\nPlease enter your username:\n", 76, 0);
             return 1;
         }
         data->setusername(input);
         data->setlog(LOGGED_MAYBE);
-        send(user, "Please enter your nickname:\n", 28, 0);
+        send(user, "\nPlease enter your nickname:\n", 30, 0);
     }
     else if (data->getlog() == LOGGED_MAYBE)
     {
@@ -150,13 +150,13 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
         {
             if (input[i] > 0 && input[i] < 33)
             {
-                send(user, "Nickname can't contain a space.\nPlease enter your username:\n", 61, 0);
+                send(user, "\nNickname can't contain a space.\nPlease enter your username:\n", 62, 0);
                 return 1;
             }
         }
         if (input.size() < 2 || input.size() > 26)
         {
-            send(user, "Nickname must be between 2 and 26 characters.\nPlease enter your nickname:\n", 75, 0);
+            send(user, "\nNickname must be between 2 and 26 characters.\nPlease enter your nickname:\n", 76, 0);
             return 1;
         }
         else
@@ -165,12 +165,12 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
             {
                 if (vdata->at(i).getnickname() == input)
                 {
-                    send(user, "Nickname already taken.\nPlease enter your nickname:\n", 52, 0);
+                    send(user, "\nNickname already taken.\nPlease enter your nickname:\n", 53, 0);
                     return 1;
                 }
             }
             data->setnickname(input);
-            send(user, "Welcome to the server ", 22, 0);
+            send(user, "\nWelcome to the server ", 24, 0);
             send(user, data->getusername().c_str(), data->getusername().length(), 0);
             send(user, " (", 2, 0);
             send(user, data->getnickname().c_str(), data->getnickname().length(), 0);
@@ -188,8 +188,8 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
     }
     else if (input != server->getpassword() && data->getlog() == NEW_CLIENT)
     {
-        send(user, "Password incorrect.\n", 20, 0);
-        send(user, "Please enter password:\n", 24, 0);
+        send(user, "\nPassword incorrect.\n", 22, 0);
+        send(user, "\nPlease enter password:\n", 25, 0);
         return 1;
     }
     return 0;
