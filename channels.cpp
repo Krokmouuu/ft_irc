@@ -93,11 +93,13 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
             join_bot_command(input, bot, user, chan);
         else if (cmd == "!fun")
             fun_bot_command(input, bot, user);
+        return ;
     }
     else if (input[0] == '/')
     {
         stringstream parse(input);
         string cmd;
+        parse >> cmd;
         if (cmd == "/join")
             join_command(data, chan, user, input, server);
         else if (cmd == "/list")

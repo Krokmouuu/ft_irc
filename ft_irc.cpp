@@ -172,11 +172,13 @@ void start_server(IRC server)
                     printf("\033[38;5;208mUser #%d disconnected , ip %s , port %d \033[0m\n", sd, inet_ntoa(address.sin_addr), ntohs(address.sin_port));
                     //Close the socket and mark as 0 in list for reuse
                     server.setcurrent_user(server.getcurrent_user() - 1);
-                    if (data.at(sd - 4).getlog() != NEW_CLIENT)
+                    if (data.at(sd - 4).getlog() == LOG_COMPLETED)
                     {
                         user_left(&data, &channels, sd, data.at(sd - 4).getchannel());
                         reset_client(&data[sd - 4], &server);
                     }
+                    else if (data.at(sd - 4).getlog() == LOGGED || data.at(sd - 4).getlog() == LOGGED_MAYBE)
+                        reset_client(&data[sd - 4], &server); 
                     close( sd );  
                     client_socket[i] = 0;
                 }    

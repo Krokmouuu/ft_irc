@@ -110,9 +110,9 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
             send(user, tmp.c_str(), tmp.size(), 0);
             return ;
         }
-        if (word == "!dofus")
+        else if (word == "!love")
         {
-            tmp = bot->getname() + ": Farmeur de bouftou de pere en fils\n";
+            tmp = "From " + bot->getname() + ": I love you too ! <3\n";
             for (size_t i = 0; i < chan->size(); i++)
             {
                 if (chan->at(i).getname() == bot->getchannel())
@@ -124,15 +124,23 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
             }
             return ;
         }
-        else if (word == "!love")
-        {
-            tmp = "From " + bot->getname() + ": I love you too ! <3\n";
-            send(user, tmp.c_str(), tmp.size(), 0);
-            return ;
-        }
         if (bot->getfun() == 1)
         {
-            if (word == "!joke")
+            if (word == "!dofus")
+            {
+                tmp = bot->getname() + ": Farmeur de bouftou de pere en fils\n";
+                for (size_t i = 0; i < chan->size(); i++)
+                {
+                    if (chan->at(i).getname() == bot->getchannel())
+                    {
+                        for (size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
+                            send(chan->at(i).getuser(j).getfd(), tmp.c_str(), tmp.size(), 0);
+                        break ;
+                    }
+                }
+                return ;
+            }
+            else if (word == "!joke")
             {
                 int rand = std::rand() % 5;
                 switch (rand)
@@ -179,4 +187,15 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
             }
         }
     }
- }
+    if (input[0] == '!')
+    {
+        if (bot->getchannel() != data->at(user - 4).getchannel())
+        {
+            tmp = "Bot is not in this channel.\n";
+            send(user, tmp.c_str(), tmp.size(), 0);
+            return ;
+        }
+        tmp = "Bot command not found.\n";
+        send(user, tmp.c_str(), tmp.size(), 0);
+    }
+}
