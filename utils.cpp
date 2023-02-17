@@ -62,7 +62,6 @@ void reset_client(Data *data, IRC *server)
 			return ;
 		}
 	}
-	system("leaks ircserv");
 }
 
 //my beautiful function to write message in the terminal letter by letter :]
