@@ -10,40 +10,12 @@
 //? /ping / pong X
 // /help Y
 // /help [command] Y
-//? /whois X 
-//? /who X
+// /whois Y 
+// /who Y
 // kick (leave channel) Y
 // kill (leave server) Y
 // /op Y
 // /deop Y
-
-void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> *chan)
-{
-    string tmp;
-    stringstream ss(input);  
-    string word;
-    while (ss >> word)
-    {
-        if (word == "quoi" || word == "QUOI" || word == "Quoi" || word == "quoi?" || word == "QUOI?" || word == "Quoi?" || word == "koi" || word == "Koi")
-        {
-            for (size_t i = 0; i < chan->size(); i++)
-            {
-                tmp = "feurbot: feur @" + data->at(user - 4).getnickname() + " XD\n";
-                for (size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
-                    send(chan->at(i).getuser(j).getfd(), tmp.c_str(), tmp.size(), 0);
-            }
-        }
-        else if (word == "qui" || word == "QUI" || word == "Qui" || word == "qui?" || word == "QUI?" || word == "Qui?" || word == "ki")
-        {
-            for (size_t i = 0; i < chan->size(); i++)
-            {
-                tmp = "quettebot: qui ? quette @" + data->at(user - 4).getnickname() + " XD\n";
-                for (size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
-                    send(chan->at(i).getuser(j).getfd(), tmp.c_str(), tmp.size(), 0);
-            }
-        }
-    }
-}
 
 void    join_command(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server)
 {

@@ -84,7 +84,7 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
                 }
             }
             data->setnickname(foundNICK);
-            send(user, "\nNickname valid\n", 16, 0);
+            send(user, "\nNickname valid.\n", 17, 0);
             send(user, "Welcome to the server ", 22, 0);
             send(user, data->getusername().c_str(), data->getusername().length(), 0);
             send(user, " (", 2, 0);

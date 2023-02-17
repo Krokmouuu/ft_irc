@@ -15,6 +15,7 @@
 #include <sstream> 
 #include "Data.hpp"
 #include "Channel.hpp"
+#include "Bot.hpp"
 
 #define TRUE  1
 #define FALSE 0
@@ -82,13 +83,19 @@ class IRC
 
 //! Server
 void            start_server(char **argv, IRC server);
-void            beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> *chan);
+
+//! Bot
+void            beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> *chan, Bot *bot);
+void            nick_bot_command(string input, Bot *bot, int user);
+void            join_bot_command(string input, Bot *bot, int user, vector<Channel> *chan);
+void            fun_bot_command(string input, Bot *bot, int user);
+void            stop_bot_command(Bot *bot, int user);
 
 //! Parsing
 int             ft_parsing(char **argv);
 int             parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vdata);
 int             parsing_nb_user(string nb, IRC server);
-void            parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
+void            parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server, Bot *bot);
 
 //! Commands
 void	        names_command(int user, vector<Data> *data);

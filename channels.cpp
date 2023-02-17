@@ -75,14 +75,27 @@ void user_left(vector<Data> *data, vector<Channel> *chan, int user, string chann
 }
 
 
-void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server)
+void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server, Bot *bot)
 {
     string tmp;
-    if (input[0] == '/')
+    if (input[0] == '!' && data->at(user - 4).getadmin() == ADMIN && bot->getstop() == 0)
     {
         stringstream parse(input);
         string cmd;
         parse >> cmd;
+        if (cmd == "!nick")
+            nick_bot_command(input, bot, user);
+        else if (cmd == "!join")
+            join_bot_command(input, bot, user, chan);
+        else if (cmd == "!fun")
+            fun_bot_command(input, bot, user);
+        else if (cmd == "!stop")
+            stop_bot_command(bot, user);
+    }
+    else if (input[0] == '/')
+    {
+        stringstream parse(input);
+        string cmd;
         if (cmd == "/join")
             join_command(data, chan, user, input, server);
         else if (cmd == "/list")
@@ -120,7 +133,7 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
         tmp = "You are now back\n";
         send(user, tmp.c_str(), tmp.size(), 0);
     }
-    beep_beep_boop(input, user, data, chan);
+    beep_beep_boop(input, user, data, chan, bot);
     if (data->at(user - 4).getchannel() == "The_accueil")
     {
         for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)

@@ -13,6 +13,7 @@ void start_server(IRC server)
 	if (max_clients == 0)
 		max_clients++;
     vector<Data> data;
+    Bot bot;
     for (int i = 0; i < max_clients; i++)
         data.push_back(Data());
     vector<Channel> channels = init_channels();
@@ -207,7 +208,7 @@ void start_server(IRC server)
                             client_socket[i] = 0;
                         }
                         if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && input.size() > 0)
-                            parse_input(&data, &channels, sd, input, &server);
+                            parse_input(&data, &channels, sd, input, &server, &bot);
 						
                     }
                     catch(const std::exception& e)
