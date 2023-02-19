@@ -1,7 +1,7 @@
 NAME =		ircserv
 
 COMP =		c++
-CFLAGS =	-Wall -Werror -Wextra -std=c++98 -fsanitize=address
+CFLAGS =	-Wall -Werror -Wextra -std=c++98 -fsanitize=address -lcurl
 
 SRCS =		*.cpp
 

@@ -1,5 +1,16 @@
 #include "ft_irc.hpp"
 #include "Data.hpp"
+//! regler les quelques sauts à la ligne en trop
+void sent(Data *data, int user, const char *input)
+{
+	if (data->getIRSSI() == 1)
+	{
+		send(user, "\n", 1, 0);
+		send(user, input, strlen(input), 0);
+	}
+	else
+		send(user, input, strlen(input), 0);
+}
 
 int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> *vdata)
 {
@@ -36,7 +47,8 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
 	if (foundPASS == server->getpassword() && data->getlog() == NEW_CLIENT)
     {
         data->setlog(LOGGED);
-        send(user, "\nPassword correct.\n", 19, 0);
+		cout.flush();
+        send(user, "​Password correct.\n", 19, MSG_DONTROUTE);
         data->setfd(user);
     }
 	if (data->getlog() == LOGGED && foundUSER.length() > 1)
@@ -121,8 +133,10 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
     if (input == server->getpassword() && data->getlog() == NEW_CLIENT)
     {
         data->setlog(LOGGED);
-        send(user, "\nPassword correct.\n", 20, 0);
-        send(user, "\nPlease enter your username:\n", 30, 0);
+		sent(data, user, "Password correct.\n");
+		sent(data, user, "Please enter your username:\n");
+        //send(user, "\nPassword correct.\n", 20, 0);
+        //send(user, "\nPlease enter your username:\n", 30, 0);
         data->setfd(user);
     }
     else if (data->getlog() == LOGGED)
@@ -131,18 +145,18 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
         {
             if (input[i] > 0 && input[i] < 33)
             {
-                send(user, "\nUsername can't contain a space.\nPlease enter your username:\n", 62, 0);
+				sent(data, user, "Username can't contain a space.\nPlease enter your username:\n");
                 return 1;
             }
         }
         if (input.size() < 2 || input.size() > 26)
         {
-            send(user, "\nUsername must be between 2 and 26 characters.\nPlease enter your username:\n", 76, 0);
+			sent(data, user, "Username must be between 2 and 26 characters.\nPlease enter your username:\n");
             return 1;
         }
         data->setusername(input);
         data->setlog(LOGGED_MAYBE);
-        send(user, "\nPlease enter your nickname:\n", 30, 0);
+		sent(data, user, "Please enter your nickname:\n");
     }
     else if (data->getlog() == LOGGED_MAYBE)
     {
@@ -150,13 +164,13 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
         {
             if (input[i] > 0 && input[i] < 33)
             {
-                send(user, "\nNickname can't contain a space.\nPlease enter your username:\n", 62, 0);
+				sent(data, user, "Nickname can't contain a space.\nPlease enter your username:\n");
                 return 1;
             }
         }
         if (input.size() < 2 || input.size() > 26)
         {
-            send(user, "\nNickname must be between 2 and 26 characters.\nPlease enter your nickname:\n", 76, 0);
+			sent(data, user, "Nickname must be between 2 and 26 characters.\nPlease enter your nickname:\n");
             return 1;
         }
         else
@@ -165,12 +179,12 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
             {
                 if (vdata->at(i).getnickname() == input)
                 {
-                    send(user, "\nNickname already taken.\nPlease enter your nickname:\n", 53, 0);
+					sent(data, user, "Nickname already taken.\nPlease enter your nickname:\n");
                     return 1;
                 }
             }
             data->setnickname(input);
-            send(user, "\nWelcome to the server ", 24, 0);
+			sent(data, user, "Welcome to the server ");
             send(user, data->getusername().c_str(), data->getusername().length(), 0);
             send(user, " (", 2, 0);
             send(user, data->getnickname().c_str(), data->getnickname().length(), 0);

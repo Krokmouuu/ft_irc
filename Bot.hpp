@@ -29,21 +29,27 @@ class Bot
     }
     ~Bot() {};
 
-    string getname() const { return this->name; };
-    string getchannel() const { return this->channel; };
-    int    getfun() const { return this->fun; };
-    int    getstop() const { return this->stop; };
+    string 	getname() const { return this->name; };
+    string 	getchannel() const { return this->channel; };
+    string 	getkey() const { return this->key; };
+    int    	getfun() const { return this->fun; };
+	int		getnew_connection() const { return this->new_connection; };
+    int    	getstop() const { return this->stop; };
 
     void   setname(string name) { this->name = name; };
-    void   setchannel(string channel) { this->channel = channel; };
+    void   setkey(string key) { this->key = key; };
+    void   setchannel(string str) { this->channel = str; };
     void   setfun(int fun) { this->fun = fun; };
-    void    setstop(int stop) { this->stop = stop; };
+    void   setnew_connection(int nb) { this->new_connection = nb; };
+    void   setstop(int stop) { this->stop = stop; };
 
     private :
 
-    string name;
-    string channel;
-    int    fun;
+    string	name;
+	string	key;
+    string	channel;
+    int		fun;
+	int		new_connection;
 
     int stop;
 };

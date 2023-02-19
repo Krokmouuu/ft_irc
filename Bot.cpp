@@ -1,4 +1,66 @@
 #include "ft_irc.hpp"
+#include <curl/curl.h>
+
+string extract_text_from_response(string response) {
+	size_t start = response.find("\"text\":\"");
+	if (start == string::npos)
+		return "";
+	start += 8;
+	size_t end = response.find('"', start);
+	if (end == string::npos)
+		return "";
+
+	string result = response.substr(start, end - start);
+	string realresult;
+    for (size_t i = 0; i < result.length(); i++)
+	{
+        if (result[i] != '\\' || (i < result.length() - 1 && result[i + 1] != 'n')) {
+            realresult += result[i];
+        } else {
+            i++;
+        }
+    }
+	return realresult;
+}
+
+size_t write_callback(char *ptr, size_t size, size_t nmemb, string *userdata) {
+	size_t bytes = size * nmemb;
+	userdata->append(ptr, bytes);
+	return bytes;
+}
+
+string gpt(string message) {
+    CURL *curl;
+    CURLcode res;
+    curl = curl_easy_init();
+    if (curl)
+	{
+        curl_easy_setopt(curl, CURLOPT_URL, "https://api.openai.com/v1/engines/text-davinci-001/completions");
+
+		string json_body = "{\"prompt\":\"" + message + "\",\"temperature\":0.6,\"max_tokens\":200,\"top_p\":0.9,\"frequency_penalty\":0.5,\"presence_penalty\":0.3}";
+
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_body.c_str());
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+
+        curl_slist *headers = nullptr;
+        headers = curl_slist_append(headers, "Content-Type: application/json");
+    	headers = curl_slist_append(headers, "Authorization: Bearer YOURKEYHERE");
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+        string response;
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+        res = curl_easy_perform(curl);
+        if (res != CURLE_OK)
+            fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+
+        string generated_text = extract_text_from_response(response);
+        curl_slist_free_all(headers);
+        curl_easy_cleanup(curl);
+		return generated_text;
+    }
+    return (NULL);
+}
 
 void stop_bot_command(Bot *bot, int user)
 {
@@ -89,12 +151,34 @@ void join_bot_command(string input, Bot *bot, int user, vector<Channel> *chan)
     }
     send(user, "Channel does not exist.\n", 25, 0);
 }
-
+//! debloquer les commandes autre que !gpt hihihi
 void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> *chan, Bot *bot)
 {
     string tmp;
-    stringstream ss(input);  
+    stringstream ss(input);
+    stringstream tt(input);
     string word;
+	tt >> word;
+	if (word == "!gpt")
+	{
+		if (input.length() > 1)
+		{
+			string resultgpt = gpt(&input[5]);
+			string result = "\033[38;5;104m" + bot->getname() + "\033[0m: ";
+			result += resultgpt;
+			result += "\n";
+			for (size_t i = 0; i < chan->size(); i++)
+					{
+						if (chan->at(i).getname() == bot->getchannel())
+						{
+							for (size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
+								send(chan->at(i).getuser(j).getfd(), result.c_str(), result.size(), 0);
+							break ;
+						}
+					}
+		}
+	}
+
     if (bot->getfun() == 1)
     {
         while (ss >> word)

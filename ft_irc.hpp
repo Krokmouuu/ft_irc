@@ -12,6 +12,7 @@
 #include <netinet/in.h>
 #include <sys/time.h>
 #include <vector>
+#include <curl/curl.h>
 #include <sstream> 
 #include "Data.hpp"
 #include "Channel.hpp"
