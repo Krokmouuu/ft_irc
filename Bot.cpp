@@ -144,6 +144,8 @@ void join_bot_command(string input, Bot *bot, int user, vector<Channel> *chan)
             {
                 tmp = "\033[38;5;120m" + bot->getname() + " has joined the channel.\033[0m\n";
                 send(chan->at(j).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
+                tmp = bot->getname() + " : Hello everyone ! Commands available : !help !joke and more..\n";
+                send(chan->at(j).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
             }
             bot->setchannel(word);
             return ;
@@ -177,25 +179,68 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
 						}
 					}
 		}
+		return ;
 	}
 
-    if (bot->getfun() == 1)
+    if (bot->getstop() == 1)
     {
-        while (ss >> word)
+        send(user, "Bot is not active.\n", 20, 0);
+        return ;
+    }
+    while (ss >> word)
+    {
+        if (word == "!help")
         {
-            if (word == "!joke")
+            tmp = "From " + bot->getname() + ": La liste des mes commandes : !help, !joke\nJ'ai aussi des commandes et des interactions secretes (^.^)/\n";
+            send(user, tmp.c_str(), tmp.size(), 0);
+            return ;
+        }
+        else if (word == "!love")
+        {
+            tmp = "From " + bot->getname() + ": I love you too ! <3\n";
+            for (size_t i = 0; i < chan->size(); i++)
+            {
+                if (chan->at(i).getname() == bot->getchannel())
+                {
+                    for (size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
+                        send(chan->at(i).getuser(j).getfd(), tmp.c_str(), tmp.size(), 0);
+                    break ;
+                }
+            }
+            return ;
+        }
+        if (bot->getfun() == 1)
+        {
+            if (word == "!dofus")
+            {
+                tmp = bot->getname() + ": Farmeur de bouftou de pere en fils\n";
+                for (size_t i = 0; i < chan->size(); i++)
+                {
+                    if (chan->at(i).getname() == bot->getchannel())
+                    {
+                        for (size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
+                            send(chan->at(i).getuser(j).getfd(), tmp.c_str(), tmp.size(), 0);
+                        break ;
+                    }
+                }
+                return ;
+            }
+            else if (word == "!joke")
             {
                 int rand = std::rand() % 5;
-                if (rand == 0)
-                    tmp = "C'est l'histoire d'un pingouin qui respire par les fesses.\nUn jour il s'asseoit et il meurt.\n";
-                else if (rand == 1)
-                    tmp = "Pourquoi les canards sont toujours à l'heure ?\nParce qu’ils sont dans l’étang.\n";
-                else if (rand == 2)
-                    tmp = "Que fait un crocodile quand il rencontre une superbe femelle ?\nIl Lacoste.\n";
-                else if (rand == 3)
-                    tmp = "C'est l'histoire de 2 patates qui traversent la route.\nL’une d’elles se fait écraser. L’autre dit : « Oh purée ! »\n";
-                else if (rand == 4)
-                    tmp = "C'est l'histoire d'un zoophile qui prend son élan.\n";
+                switch (rand)
+                {
+                    case 1:
+                        tmp = bot->getname() + ": Pourquoi les girafes ont-elles un long cou ?\nParce qu’elles puent du cul.\n";
+                    case 2:
+                        tmp = bot->getname() + ": Pourquoi les canards sont toujours à l'heure ?\nParce qu’ils sont dans l’étang.\n";
+                    case 3:
+                        tmp = bot->getname() + ": Que fait un crocodile quand il rencontre une superbe femelle ?\nIl Lacoste.\n";
+                    case 4:
+                        tmp = bot->getname() + ": C'est l'histoire de 2 patates qui traversent la route.\nL’une d’elles se fait écraser. L’autre dit : « Oh purée ! »\n";
+                    case 5:
+                        tmp = bot->getname() + ": C'est l'histoire d'un zoophile qui prend son élan.\n";
+                }
                 for (size_t i = 0; i < chan->size(); i++)
                 {
                     if (chan->at(i).getname() == bot->getchannel())
@@ -207,7 +252,7 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
                 }
                 return;
             }
-            if (word == "quoi" || word == "QUOI" || word == "Quoi" || word == "quoi?" || word == "QUOI?" || word == "Quoi?" || word == "koi" || word == "Koi")
+            else if (word == "quoi" || word == "QUOI" || word == "Quoi" || word == "quoi?" || word == "QUOI?" || word == "Quoi?" || word == "koi" || word == "Koi")
             {
                 for (size_t i = 0; i < chan->size(); i++)
                 {
@@ -226,5 +271,16 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
                 }
             }
         }
+    }
+    if (input[0] == '!')
+    {
+        if (bot->getchannel() != data->at(user - 4).getchannel())
+        {
+            tmp = "Bot is not in this channel.\n";
+            send(user, tmp.c_str(), tmp.size(), 0);
+            return ;
+        }
+        tmp = "Bot command not found.\n";
+        send(user, tmp.c_str(), tmp.size(), 0);
     }
 }
