@@ -160,6 +160,7 @@ void adding_key_api(string input, int user, Bot *bot)
     string tmp;
     string word;
 	tt >> word;
+	tt >> word;
 	bot->setkey(word);
 	tmp = "From \033[38;5;104m" + bot->getname() + "\033[0m: New key added\n";
 	send(user, tmp.c_str(), tmp.size(), 0);
@@ -184,7 +185,6 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
 		{
 			if (input.length() > 1)
 			{
-				cout << bot->getkey() << endl;
 				string resultgpt = gpt(&input[5], bot->getkey().c_str());
 				string result = "\033[38;5;104m" + bot->getname() + "\033[0m: ";
 				result += resultgpt;

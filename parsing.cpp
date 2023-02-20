@@ -83,7 +83,7 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
                 return 1;
             }
         }
-		sent(data, user, "\nUsername valid.\n");
+		sent(data, user, "Username valid.\n");
         data->setusername(foundNICK);
         data->setlog(LOGGED_MAYBE);
     }
@@ -124,7 +124,7 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
             }
             data->setnickname(foundNICK);
             sent(data, user, "Nickname valid.\n");
-			string toto = "Welcome to the server " + data->getusername() + " (" + data->getnickname() + " )!\n";
+			string toto = "Welcome to the server " + data->getusername() + " (" + data->getnickname() + ")!\n";
 			sent(data, user, toto.c_str());
             data->setlog(LOG_COMPLETED);
             data->setconnected(DEFAULT);
@@ -216,7 +216,7 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
             }
             data->setnickname(input);
           	sent(data, user, "Nickname valid.\n");
-			string toto = "Welcome to the server " + data->getusername() + " (" + data->getnickname() + " )!";
+			string toto = "Welcome to the server " + data->getusername() + " (" + data->getnickname() + ")!";
 			sent(data, user, toto.c_str());
             data->setlog(LOG_COMPLETED);
             data->setconnected(DEFAULT);
