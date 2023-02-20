@@ -41,7 +41,7 @@ class Bot
     int    	getstop() const { return this->stop; };
     int    	getkeyadded() const { return this->keyadded; };
 
-    void    	setkeyadded(int nb) { this->keyadded = nb; };
+    void   setkeyadded(int nb) { this->keyadded = nb; };
     void   setname(string name) { this->name = name; };
     void   setkey(string newkey) {
 	string tmp = "Authorization: Bearer " + newkey;
