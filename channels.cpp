@@ -93,6 +93,8 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
             join_bot_command(input, bot, user, chan);
         else if (cmd == "!fun")
             fun_bot_command(input, bot, user);
+        else if (cmd == "!key")
+            adding_key_api( input, user, bot);
         return ;
     }
     else if (input[0] == '/')

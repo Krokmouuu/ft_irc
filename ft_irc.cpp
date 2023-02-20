@@ -10,7 +10,8 @@ void start_server(IRC server)
 
     typeWriter("\033[4m\033[1m\033[38;5;120mWelcome in PLE-BLEROY IRC server settings.\033[0m\nPlease enter maximum user allowed to join the server : ");
     cin >> max_clients;
-
+    string keepinput;
+    string input;
     vector<Data> data;
     Bot bot;
     for (int i = 0; i < max_clients; i++)
@@ -191,8 +192,26 @@ void start_server(IRC server)
 							buffer[valread - 1] = '\0';
 						else
 							buffer[valread] = '\0';
-                        string input(buffer, strlen(buffer) - 1);
-
+                        char find_n = buffer[strlen(buffer) - 1];
+                        char find_0 = buffer[strlen(buffer)];
+                        if (find_n == '\n' && keepinput.size() == 0)
+                        {
+                            input = buffer;
+                            input = input.substr(0, input.size() - 1);
+                        }
+                        else if (find_0 == '\0')
+                        {
+                            input = buffer;
+                            keepinput += input;
+                            size_t j = keepinput.find("\n");
+                            if (j != string::npos)
+                            {
+                                input = keepinput.substr(0, j);
+                                keepinput = "";
+                            }
+                            else
+                                continue ;
+                        }
                         if (parse_log(input, &server, &data[sd - 4], sd, &data) == 1)
                             continue;
                         if (data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == DEFAULT)

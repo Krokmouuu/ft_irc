@@ -91,6 +91,7 @@ void            nick_bot_command(string input, Bot *bot, int user);
 void            join_bot_command(string input, Bot *bot, int user, vector<Channel> *chan);
 void            fun_bot_command(string input, Bot *bot, int user);
 void            stop_bot_command(Bot *bot, int user);
+void            adding_key_api(string input, int user, Bot *bot);
 
 //! Parsing
 int             ft_parsing(char **argv);

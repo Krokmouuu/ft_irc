@@ -454,8 +454,10 @@ void    help_command(int user, string input)
         for (size_t i = 0; i < 2; i++)
             ss >> tmp2;
         i = tmp2.length() - 1;
-        if (tmp2 != "/w" || tmp2 != "/msg")
-            tmp3.erase(tmp3.begin() + 3);
+        if (tmp2 != "/join")
+            tmp3.erase(tmp3.begin() + 1);
+		if (tmp2 != "/list")
+            tmp3.erase(tmp3.begin() + 1);
         for (size_t i = 0; i < tmp.size(); i++)
         {
             if (tmp3.at(i) == tmp2)
