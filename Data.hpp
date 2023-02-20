@@ -34,6 +34,7 @@ class Data
             this->number = 0;
             this->away = 0;
             this->admin = CLIENT;
+            this->isIRSSI = 0;
         }
         Data(const Data &params)
         {
@@ -52,6 +53,7 @@ class Data
                 this->number = params.number;
                 this->away = params.away;
                 this->admin = params.admin;
+                this->isIRSSI = params.isIRSSI;
             }
             return *this;
         }

@@ -44,7 +44,7 @@ string gpt(string message) {
 
         curl_slist *headers = nullptr;
         headers = curl_slist_append(headers, "Content-Type: application/json");
-    	headers = curl_slist_append(headers, "Authorization: Bearer YOUR_API_KEY");
+    	headers = curl_slist_append(headers, "Authorization: Bearer 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");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
         string response;

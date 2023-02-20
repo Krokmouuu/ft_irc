@@ -188,6 +188,11 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
                 send(chan->at(5).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
             }
     }
+    if (data->at(user - 4).getIRSSI() == 1)
+    {
+        tmp = data->at(user - 4).getnickname() + ": " + input + "\n";
+        send(user, tmp.c_str(), tmp.size(), 0);
+    }
     beep_beep_boop(input, user, data, chan, bot);
 }
 

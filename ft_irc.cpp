@@ -192,8 +192,8 @@ void start_server(IRC server)
 							buffer[valread - 1] = '\0';
 						else
 							buffer[valread] = '\0';
-
                         string input(buffer, strlen(buffer) - 1);
+
                         if (parse_log(input, &server, &data[sd - 4], sd, &data) == 1)
                             continue;
                         if (data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == DEFAULT)

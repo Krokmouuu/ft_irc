@@ -108,7 +108,6 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
             data->setfd(user);
             data->setnumber(user - 4);
 			data->setadmin(CLIENT);
-			data->setIRSSI(0);
             for (size_t i = 0; i < server->vget_adminusers().size(); i++)
                 if (server->getwhitelist_users(i) == data->getusername())
                     data->setadmin(ADMIN);
