@@ -53,7 +53,7 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
     }
     else if (foundPASS != server->getpassword() && data->getlog() == NEW_CLIENT)
     {
-        sent(data, user, "​Password incorrect.\nYou are disconnected.\n");
+        sent(data, user, "\033[38;5;196m​Password incorrect.\nYou are disconnected.\033[0m\n");
         reset_client(data, server);
         close(user);
         return 1;
@@ -64,20 +64,20 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
         {
             if (foundUSER[i] > 0 && foundUSER[i] < 33)
             {
-                sent(data, user, "Username can't contain a space.\nPlease enter your nickname:\n");
+                sent(data, user, "\033[38;5;196mUsername can't contain a space.\033[0m\nPlease enter your nickname:\n");
                 return 1;
             }
         }
         if (foundUSER.length() < 2 || foundUSER.length() > 26)
         {
-            sent(data, user, "Username must be between 2 and 26 characters.\nPlease enter your username:\n");
+            sent(data, user, "\033[38;5;196mUsername must be between 2 and 26 characters.\033[0m\nPlease enter your username:\n");
             return 1;
         }
         for (size_t i = 0; i < vdata->size(); i++)
         {
             if (vdata->at(i).getusername() == foundUSER)
             {
-                sent(data, user, "Username already taken.\nYou are disconnected.\n");
+                sent(data, user, "\033[38;5;196mUsername already taken.\033[0m\nYou are disconnected.\n");
                 reset_client(data, server);
                 close(user);
                 return 1;
@@ -93,13 +93,13 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
         {
             if (foundNICK[i] > 0 && foundNICK[i] < 33)
             {
-                sent(data, user, "Nickname can't contain a space.\nPlease enter your username:\n");
+                sent(data, user, "\033[38;5;196mNickname can't contain a space.\033[0m\nPlease enter your nickname:\n");
                 return 1;
             }
         }
         if (foundNICK.length() < 2 || foundNICK.length() > 26)
         {
-            sent(data, user, "Nickname must be between 2 and 26 characters.\nPlease enter your nickname:\n");
+            sent(data, user, "\033[38;5;196mNickname must be between 2 and 26 characters.\033[0m\nPlease enter your nickname:\n");
             return 1;
         }
         else
@@ -108,7 +108,7 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
             {
                 if (vdata->at(i).getnickname() == foundNICK)
                 {
-                    sent(data, user, "Nickname already taken.\nYou are disconnected.\n");
+                    sent(data, user, "\033[38;5;196mNickname already taken.\nYou are disconnected.\033[0m\n");
                     reset_client(data, server);
                     close(user);
                     return 1;
@@ -118,7 +118,7 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
             {
                 if (vdata->at(i).getnickname() == foundNICK)
                 {
-                    sent(data, user, "Nickname already taken.\nPlease enter your nickname:\n");
+                    sent(data, user, "\033[38;5;196mNickname already taken.\033[0m\nPlease enter your nickname:\n");
                     return 1;
                 }
             }
@@ -165,13 +165,13 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
         {
             if (input[i] > 0 && input[i] < 33)
             {
-				sent(data, user, "Username can't contain a space.\nPlease enter your username:\n");
+				sent(data, user, "\033[38;5;196mUsername can't contain a space.\033[0m\nPlease enter your username:\n");
                 return 1;
             }
         }
         if (input.size() < 2 || input.size() > 26)
         {
-			sent(data, user, "Username must be between 2 and 26 characters.\nPlease enter your username:\n");
+			sent(data, user, "\033[38;5;196mUsername must be between 2 and 26 characters.\033[0m\nPlease enter your username:\n");
             return 1;
         } 
         else
@@ -180,7 +180,7 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
                 {
                     if (vdata->at(i).getnickname() == input)
                     {
-                        sent(data, user, "Username already taken.\nPlease enter your nickname:\n");
+                        sent(data, user, "\033[38;5;196mUsername already taken.\033[0m\nPlease enter your nickname:\n");
                         return 1;
                     }
                 }
@@ -195,13 +195,13 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
         {
             if (input[i] > 0 && input[i] < 33)
             {
-				sent(data, user, "Nickname can't contain a space.\nPlease enter your username:\n");
+				sent(data, user, "\033[38;5;196mNickname can't contain a space.\033[0m\nPlease enter your username:\n");
                 return 1;
             }
         }
         if (input.size() < 2 || input.size() > 26)
         {
-			sent(data, user, "Nickname must be between 2 and 26 characters.\nPlease enter your nickname:\n");
+			sent(data, user, "\033[38;5;196mNickname must be between 2 and 26 characters.\033[0m\nPlease enter your nickname:\n");
             return 1;
         }
         else
@@ -210,7 +210,7 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
             {
                 if (vdata->at(i).getnickname() == input)
                 {
-					sent(data, user, "Nickname already taken.\nPlease enter your nickname:\n");
+					sent(data, user, "\033[38;5;196mNickname already taken.\nPlease enter your nickname:\n");
                     return 1;
                 }
             }
@@ -230,7 +230,7 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
     }
     else if (input != server->getpassword() && data->getlog() == NEW_CLIENT)
     {
-        sent(data, user, "Password incorrect.\nPlease enter password:\n");
+        sent(data, user, "\033[38;5;196mPassword incorrect.\033[0m\nPlease enter password:\n");
         return 1;
     }
     return 0;
