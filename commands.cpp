@@ -67,7 +67,7 @@ void	list_command(vector<Channel> *chan, int user)
 }
 
 //! lister que les users du current channel
-void	names_command(int user, vector<Data> *data)
+void	who_command(int user, vector<Data> *data)
 {
 	string tmp;
 

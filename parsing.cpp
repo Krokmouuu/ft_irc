@@ -144,7 +144,6 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
 {
 	string IRSSIstr = "CAP LS";
 
-	//Check if the client connecting is from IRSSI or not
 	std::size_t found = input.find(IRSSIstr);
   	if (found != std::string::npos && data->getlog() == NEW_CLIENT)
     {

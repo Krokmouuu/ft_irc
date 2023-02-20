@@ -100,7 +100,6 @@ int             parsing_nb_user(string nb, IRC server);
 void            parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server, Bot *bot);
 
 //! Commands
-void	        names_command(int user, vector<Data> *data);
 void            join_command(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server);
 void	        list_command(vector<Channel> *chan, int user);
 void            msg_command(int user, vector<Data> *data, string input);
@@ -110,6 +109,7 @@ void            op_command(int user, vector<Data> *data, string input, IRC *serv
 void            kick_command(int user, vector<Data> *data, string input, IRC *server, vector<Channel> *chan);
 void            kill_command(int user, vector<Data> *data, string input, vector<Channel> *chan, IRC *server);
 void            help_command(int user, string input);
+void	        who_command(int user, vector<Data> *data);
 void			whois_command(int user, vector<Data> *data, string input);
 
 //! Channels

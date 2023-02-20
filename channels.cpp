@@ -103,8 +103,8 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
             join_command(data, chan, user, input, server);
         else if (cmd == "/list")
             list_command(chan, user);
-        else if (cmd == "/names" || cmd == "who")
-            names_command(user, data);
+        else if ( cmd == "/who")
+            who_command(user, data);
         else if (cmd == "/w" || cmd == "/msg")
             msg_command(user, data, input);
         else if (cmd == "/nick")
