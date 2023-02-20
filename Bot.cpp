@@ -29,7 +29,7 @@ size_t write_callback(char *ptr, size_t size, size_t nmemb, string *userdata) {
 	return bytes;
 }
 
-string gpt(string message) {
+string gpt(string message, const char *key) {
     CURL *curl;
     CURLcode res;
     curl = curl_easy_init();
@@ -44,7 +44,7 @@ string gpt(string message) {
 
         curl_slist *headers = nullptr;
         headers = curl_slist_append(headers, "Content-Type: application/json");
-    	headers = curl_slist_append(headers, "Authorization: Bearer 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");
+    	headers = curl_slist_append(headers, key);
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
         string response;
@@ -168,22 +168,40 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
     }
 	if (word == "!gpt")
 	{
-		if (input.length() > 1)
+		if (bot->getkeyadded() == 1 )
 		{
-			string resultgpt = gpt(&input[5]);
-			string result = "\033[38;5;104m" + bot->getname() + "\033[0m: ";
-			result += resultgpt;
-			result += "\n";
-			for (size_t i = 0; i < chan->size(); i++)
-					{
-						if (chan->at(i).getname() == bot->getchannel())
+			if (input.length() > 1)
+			{
+				cout << bot->getkey() << endl;
+				string resultgpt = gpt(&input[5], bot->getkey().c_str());
+				string result = "\033[38;5;104m" + bot->getname() + "\033[0m: ";
+				result += resultgpt;
+				result += "\n";
+				for (size_t i = 0; i < chan->size(); i++)
 						{
-							for (size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
-								send(chan->at(i).getuser(j).getfd(), result.c_str(), result.size(), 0);
-							break ;
+							if (chan->at(i).getname() == bot->getchannel())
+							{
+								for (size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
+									send(chan->at(i).getuser(j).getfd(), result.c_str(), result.size(), 0);
+								break ;
+							}
 						}
-					}
+			}
 		}
+		else
+		{
+            tmp = "From \033[38;5;104m" + bot->getname() + ": Please enter your API key with the command !key [YOURAPIKEY]\033[0m\n";
+            send(user, tmp.c_str(), tmp.size(), 0);
+            return ;
+		}
+		return ;
+	}
+	if (word == "!key")
+	{
+		tt >> word;
+		bot->setkey(word);
+		tmp = "From \033[38;5;104m" + bot->getname() + "\033[0m: New key added\n";
+		send(user, tmp.c_str(), tmp.size(), 0);
 		return ;
 	}
     while (ss >> word)
