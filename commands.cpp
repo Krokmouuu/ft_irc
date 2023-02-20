@@ -83,6 +83,25 @@ void	who_command(int user, vector<Data> *data)
 	}
 }
 
+void	names_command(int user, vector<Channel> *chan, vector<Data> *data)
+{
+	string tmp;
+
+	tmp = "\033[1;36m    Users in your channel: \033[0m\n";
+	send(user, tmp.c_str(), tmp.size(), 0);
+	for(size_t n = 0; n < chan->size(); n++)
+	{
+		if (chan->at(n).getname() == data->at(user - 4).getchannel())
+		{
+			for (size_t i = 0; i < chan->at(n).vgetusers().size(); i++)
+			{
+				tmp = "• " + chan->at(n).getuser(i).getnickname() + "\n";
+				send(user, tmp.c_str(), tmp.size(), 0);
+			}
+		}
+	}
+}
+
 void away_command(int user, vector<Data> *data, string input)
 {
     string tmp;

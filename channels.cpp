@@ -105,6 +105,8 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
             list_command(chan, user);
         else if ( cmd == "/who")
             who_command(user, data);
+        else if ( cmd == "/names")
+            names_command(user, chan, data);
         else if (cmd == "/w" || cmd == "/msg")
             msg_command(user, data, input);
         else if (cmd == "/nick")
