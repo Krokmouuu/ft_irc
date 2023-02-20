@@ -66,6 +66,16 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
             send(user, "Username must be between 2 and 26 characters.\nPlease enter your username:\n", 75, 0);
             return 1;
         }
+        for (size_t i = 0; i < vdata->size(); i++)
+        {
+            if (vdata->at(i).getusername() == foundUSER)
+            {
+                sent(data, user, "Username already taken.\nYou are disconnected.\n");
+                reset_client(data, server);
+                close(user);
+                return 1;
+            }
+        }
 		send(user, "\nUsername valid.\n", 18, 0);
         data->setusername(foundNICK);
         data->setlog(LOGGED_MAYBE);
@@ -89,9 +99,19 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
         {
             for (size_t i = 0; i < vdata->size(); i++)
             {
-                if (vdata->at(i).getnickname() == input)
+                if (vdata->at(i).getnickname() == foundNICK)
                 {
-                    send(user, "Nickname already taken.\nPlease enter your nickname:\n", 52, 0);
+                    sent(data, user, "Nickname already taken.\nYou are disconnected.\n");
+                    reset_client(data, server);
+                    close(user);
+                    return 1;
+                }
+            }
+            for (size_t i = 0; i < vdata->size(); i++)
+            {
+                if (vdata->at(i).getnickname() == foundNICK)
+                {
+                    sent(data, user, "Nickname already taken.\nPlease enter your username:\n");
                     return 1;
                 }
             }
@@ -107,7 +127,7 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
             data->setconnected(DEFAULT);
             data->setfd(user);
             data->setnumber(user - 4);
-			data->setadmin(CLIENT); 
+			data->setadmin(CLIENT);
             for (size_t i = 0; i < server->vget_adminusers().size(); i++)
                 if (server->getwhitelist_users(i) == data->getusername())
                     data->setadmin(ADMIN);
@@ -152,6 +172,17 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
         {
 			sent(data, user, "Username must be between 2 and 26 characters.\nPlease enter your username:\n");
             return 1;
+        } 
+        else
+        {
+            for (size_t i = 0; i < vdata->size(); i++)
+                {
+                    if (vdata->at(i).getnickname() == input)
+                    {
+                        sent(data, user, "Username already taken.\nPlease enter your nickname:\n");
+                        return 1;
+                    }
+                }
         }
         data->setusername(input);
         data->setlog(LOGGED_MAYBE);

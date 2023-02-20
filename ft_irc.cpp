@@ -194,7 +194,7 @@ void start_server(IRC server)
 							buffer[valread] = '\0';
                         char find_n = buffer[strlen(buffer) - 1];
                         char find_0 = buffer[strlen(buffer)];
-                        if (find_n == '\n' && keepinput.size() == 0)
+                        if ((find_n == '\n' && keepinput.size() == 0))
                         {
                             input = buffer;
                             input = input.substr(0, input.size() - 1);
