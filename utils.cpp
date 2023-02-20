@@ -62,6 +62,7 @@ void reset_client(Data *data, IRC *server)
 			return ;
 		}
 	}
+	server->setcurrent_user(server->getcurrent_user() - 1);
 }
 
 //my beautiful function to write message in the terminal letter by letter :]

@@ -194,12 +194,12 @@ void start_server(IRC server)
 							buffer[valread] = '\0';
                         char find_n = buffer[strlen(buffer) - 1];
                         char find_0 = buffer[strlen(buffer)];
-                        if (find_n == '\n' && keepinput.size() == 0)
+                        if (find_n == '\n' && keepinput.size() == 0 && data.at(sd - 4).getIRSSI() == 0)
                         {
                             input = buffer;
                             input = input.substr(0, input.size() - 1);
                         }
-                        else if (find_0 == '\0')
+                        else if (find_0 == '\0' && data.at(sd - 4).getIRSSI() == 0 && data.at(sd - 4).getlog() == LOG_COMPLETED)
                         {
                             input = buffer;
                             keepinput += input;
@@ -211,6 +211,12 @@ void start_server(IRC server)
                             }
                             else
                                 continue ;
+                        }
+                        else
+                        {
+                            input = buffer;
+                            input = input.substr(0, input.size() - 1);
+                            keepinput = "";
                         }
                         if (parse_log(input, &server, &data[sd - 4], sd, &data) == 1)
                             continue;
@@ -229,7 +235,6 @@ void start_server(IRC server)
                         }
                         if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && input.size() > 0)
                             parse_input(&data, &channels, sd, input, &server, &bot);
-						
                     }
                     catch(const std::exception& e)
                     {
