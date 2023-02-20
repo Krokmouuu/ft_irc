@@ -51,6 +51,13 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
         sent(data, user, "​Password correct.\n");
         data->setfd(user);
     }
+    else if (foundPASS != server->getpassword() && data->getlog() == NEW_CLIENT)
+    {
+        sent(data, user, "​Password incorrect.\nYou are disconnected.\n");
+        reset_client(data, server);
+        close(user);
+        return 1;
+    }
 	if (data->getlog() == LOGGED && foundUSER.length() > 1)
     {
         for (size_t i = 0; i < foundUSER.length(); i++)
@@ -66,7 +73,6 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
             sent(data, user, "Username must be between 2 and 26 characters.\nPlease enter your username:\n");
             return 1;
         }
-<<<<<<< HEAD
         for (size_t i = 0; i < vdata->size(); i++)
         {
             if (vdata->at(i).getusername() == foundUSER)
@@ -77,10 +83,7 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
                 return 1;
             }
         }
-		send(user, "\nUsername valid.\n", 18, 0);
-=======
 		sent(data, user, "\nUsername valid.\n");
->>>>>>> 88db85e33ac93c0781b66265f18d5c1cc5a3a263
         data->setusername(foundNICK);
         data->setlog(LOGGED_MAYBE);
     }
@@ -115,11 +118,7 @@ int irssi_parsing(string input, Data *data, IRC *server, int user, vector<Data> 
             {
                 if (vdata->at(i).getnickname() == foundNICK)
                 {
-<<<<<<< HEAD
-                    sent(data, user, "Nickname already taken.\nPlease enter your username:\n");
-=======
                     sent(data, user, "Nickname already taken.\nPlease enter your nickname:\n");
->>>>>>> 88db85e33ac93c0781b66265f18d5c1cc5a3a263
                     return 1;
                 }
             }
