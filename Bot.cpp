@@ -44,7 +44,7 @@ string gpt(string message) {
 
         curl_slist *headers = nullptr;
         headers = curl_slist_append(headers, "Content-Type: application/json");
-    	headers = curl_slist_append(headers, "Authorization: Bearer YOURKEYHERE");
+    	headers = curl_slist_append(headers, "Authorization: Bearer YOUR_API_KEY");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
         string response;
@@ -153,7 +153,7 @@ void join_bot_command(string input, Bot *bot, int user, vector<Channel> *chan)
     }
     send(user, "Channel does not exist.\n", 25, 0);
 }
-//! debloquer les commandes autre que !gpt hihihi
+
 void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> *chan, Bot *bot)
 {
     string tmp;
@@ -161,6 +161,11 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
     stringstream tt(input);
     string word;
 	tt >> word;
+    if (bot->getstop() == 1)
+    {
+        send(user, "Bot is not active.\n", 20, 0);
+        return ;
+    }
 	if (word == "!gpt")
 	{
 		if (input.length() > 1)
@@ -181,17 +186,11 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
 		}
 		return ;
 	}
-
-    if (bot->getstop() == 1)
-    {
-        send(user, "Bot is not active.\n", 20, 0);
-        return ;
-    }
     while (ss >> word)
     {
         if (word == "!help")
         {
-            tmp = "From " + bot->getname() + ": La liste des mes commandes : !help, !joke\nJ'ai aussi des commandes et des interactions secretes (^.^)/\n";
+            tmp = "From " + bot->getname() + ": La liste des mes commandes : !help, !joke, !gpt\nJ'ai aussi des commandes et des interactions secretes (^.^)/\n";
             send(user, tmp.c_str(), tmp.size(), 0);
             return ;
         }

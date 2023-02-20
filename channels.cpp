@@ -78,11 +78,11 @@ void user_left(vector<Data> *data, vector<Channel> *chan, int user, string chann
 void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server, Bot *bot)
 {
     string tmp;
-    if (input[0] == '!' && data->at(user - 4).getadmin() == ADMIN && input != "!joke" && input != "!help" && input != "!love" && input != "dofus")
+    stringstream parse(input);
+    string cmd;
+    parse >> cmd;
+    if (input[0] == '!' && data->at(user - 4).getadmin() == ADMIN && input != "!joke" && input != "!help" && input != "!love" && input != "dofus" && cmd != "!gpt")
     {
-        stringstream parse(input);
-        string cmd;
-        parse >> cmd;
         if (cmd == "!stop")
             stop_bot_command(bot, user);
         if (bot->getstop() == 1)
@@ -97,9 +97,6 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
     }
     else if (input[0] == '/')
     {
-        stringstream parse(input);
-        string cmd;
-        parse >> cmd;
         if (cmd == "/join")
             join_command(data, chan, user, input, server);
         else if (cmd == "/list")
