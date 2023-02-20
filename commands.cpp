@@ -1,22 +1,5 @@
 #include "ft_irc.hpp"
 
-// /join Y
-// /quit / leave Y
-// /w /msg Y
-// /nick Y
-// /away Y 
-// /names Y
-// /list Y
-//? /ping / pong X
-// /help Y
-// /help [command] Y
-// /whois Y 
-// /who Y
-// kick (leave channel) Y
-// kill (leave server) Y
-// /op Y
-// /deop Y
-
 void    join_command(vector<Data> *data, vector<Channel> *chan, int user, string input, IRC *server)
 {
     (void)server;
