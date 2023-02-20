@@ -53,6 +53,7 @@ void reset_client(Data *data, IRC *server)
 	data->setaway(FALSE);
 	data->setaway_message("");
 	data->setadmin(CLIENT);
+	data->setIRSSI(0);
 
 	for (size_t i = 0; i < server->vget_adminusers().size(); i++)
 	{

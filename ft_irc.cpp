@@ -232,6 +232,7 @@ void start_server(IRC server)
                             reset_client(&data[sd - 4], &server);
                             close(sd);  
                             client_socket[i] = 0;
+                            cout << "ww" << endl;
                         }
                         if(data.at(sd - 4).getlog() == LOG_COMPLETED && data.at(sd - 4).getconnected() == INSIDE_CHANNEL && input.size() > 0)
                             parse_input(&data, &channels, sd, input, &server, &bot);
