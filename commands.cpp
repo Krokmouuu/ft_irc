@@ -357,6 +357,7 @@ void kick_command(int user, vector<Data> *data, string input, IRC *server, vecto
 						send(user, tmp.c_str(), tmp.size(), 0);
 						tmp = "\033[38;5;104mYou have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\033[0m\n";
 						send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
+						cout << "\033[38;5;196mUser " << data->at(i).getusername() << " has been killed by " << data->at(user - 4).getusername() << "\033[0m" << endl;
 						user_left(data, chan, data->at(i).getfd(), data->at(i).getchannel());
 						close(data->at(i).getfd());
 						reset_client(&data->at(i), server);
@@ -368,6 +369,7 @@ void kick_command(int user, vector<Data> *data, string input, IRC *server, vecto
                     tmp = "\033[38;5;104mYou have been kicked by " + data->at(user - 4).getnickname() + " for: " + reason + "\033[0m\n";
 					send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
                     user_join_left(data, chan,  data->at(i).getfd(), "The_accueil", data->at(i).getchannel());
+					cout << "\033[38;5;196mUser " << data->at(i).getusername() << " has been kicked by " << data->at(user - 4).getusername() << "\033[0m" << endl;
 					return ;
                 }
             }
@@ -415,6 +417,7 @@ void kill_command(int user, vector<Data> *data, string input, vector<Channel> *c
                     send(user, tmp.c_str(), tmp.size(), 0);
                     tmp = "\033[38;5;104mYou have been killed by " + data->at(user - 4).getnickname() + " for: " + reason + "\033[0m\n";
                     send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
+					cout << "\033[38;5;196mUser " << data->at(i).getusername() << " has been killed by " << data->at(user - 4).getusername() << "\033[0m" << endl;
                     user_left(data, chan, data->at(i).getfd(), data->at(i).getchannel());
                     close(data->at(i).getfd());
 					reset_client(&data->at(i), server);
@@ -490,4 +493,48 @@ void	whois_command(int user, vector<Data> *data, string input)
 	}
 	display = "\033[38;5;104mNo user found\033[0m\n";
 	send(user, display.c_str(), display.size(), 0);
+}
+
+void notice_command(int user, vector<Data> *data, string input, vector<Channel> *chan)
+{
+	stringstream ss(input);
+	string tmp;
+
+	ss >> tmp;
+	if (input[tmp.length() + 1] == ' ')
+	{
+		tmp = "\033[38;5;104mBad input\033[0m\n";
+		send(user, tmp.c_str(), tmp.size(), 0);
+		return ;
+	}
+	ss >> tmp;
+	string client = tmp;
+	for (size_t i = 0; i < data->size(); i++)
+	{
+		if (data->at(i).getnickname() == client)
+		{
+			size_t it = input.find(client) + client.size() + 1;
+			tmp = "\033[38;5;104m" + data->at(user - 4).getnickname() + " send you a notice: " + &input[it] + "\033[0m\n";
+			send(data->at(i).getfd(), tmp.c_str(), tmp.size(), 0);
+			return ;
+		}
+	}
+	for (size_t i = 0; i < chan->size(); i++)
+	{
+		if (chan->at(i).getname() == tmp)
+		{
+			for (size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
+			{
+				if (chan->at(i).getuser(j).getfd() != user)
+				{
+					size_t it = input.find(tmp) + tmp.size() + 1;
+					tmp = "\033[38;5;196m" + data->at(user - 4).getnickname() + ": " + &input[it] + "\033[0m" +"\n";
+					send(chan->at(i).getuser(j).getfd(), tmp.c_str(), tmp.size(), 0);
+					return ;
+				}
+			}
+		}
+	}
+	tmp = "\033[38;5;104mNo user or channel found\n\033[0m";
+	send(user, tmp.c_str(), tmp.size(), 0);
 }

@@ -107,7 +107,7 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
             who_command(user, data);
         else if ( cmd == "/names")
             names_command(user, chan, data);
-        else if (cmd == "/w" || cmd == "/msg")
+        else if (cmd == "/w" || cmd == "/PRIVMSG")
             msg_command(user, data, input);
         else if (cmd == "/nick")
             nick_command(user, data, input, server);
@@ -125,6 +125,8 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
             help_command(user, input);
         else if (cmd == "/whois") 
             whois_command(user, data, input);
+        else if (cmd == "/notice" && data->at(user - 4).getadmin() == ADMIN)
+            notice_command(user, data, input, chan);
         else
         {
             tmp = "\033[38;5;208mCommand not found\033[0m\n";

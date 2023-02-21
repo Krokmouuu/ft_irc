@@ -112,6 +112,7 @@ void            help_command(int user, string input);
 void	        who_command(int user, vector<Data> *data);
 void	        names_command(int user, vector<Channel> *chan, vector<Data> *data);
 void			whois_command(int user, vector<Data> *data, string input);
+void            notice_command(int user, vector<Data> *data, string input, vector<Channel> *chan);
 
 //! Channels
 void            default_channel(vector<Data> *data, vector<Channel> *chan, int user);
