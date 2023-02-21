@@ -49,7 +49,6 @@ void	list_command(vector<Channel> *chan, int user)
 	}
 }
 
-//! lister que les users du current channel
 void	who_command(int user, vector<Data> *data)
 {
 	string tmp;
@@ -119,7 +118,6 @@ void away_command(int user, vector<Data> *data, string input)
     send(user, tmp.c_str(), tmp.size(), 0);
 }
 
-//! laisser que chiffres et lettres pour rename
 void nick_command(int user, vector<Data> *data, string input, IRC *server)
 {
     string tmp;
@@ -168,7 +166,6 @@ void nick_command(int user, vector<Data> *data, string input, IRC *server)
     send(user, tmp.c_str(), tmp.size(), 0);
 }
 
-//! If you whispser yourself, displays you instead of nickname
 void msg_command(int user, vector<Data> *data, string input)
 {
     string tmp;
@@ -263,13 +260,6 @@ void op_command(int user, vector<Data> *data, string input, IRC *server, int op)
 	{
 		if (server->getwhitelist_users(j) == data->at(user - 4).getusername())
 		{
-			// if (server->getwhitelist_users(j) == newop && op == 0)
-			// {
-			// 	tmp = "\033[38;5;104m" + data->at(j).getusername() + " is not op anymore\033[0m\n";
-			// 	server->remove_admin(j);
-			// 	send(user, tmp.c_str(), tmp.size(), 0);
-			// 	return ;
-			// }
             for (size_t i = 0; i < data->size(); i++)
             {
                 if (data->at(i).getusername() == newop)

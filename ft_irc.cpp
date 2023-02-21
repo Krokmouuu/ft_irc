@@ -2,7 +2,6 @@
 #include "Data.hpp"
 #include "Channel.hpp"
 
-//! Demander mot de passe si personne de la whitelist se connecte
 void start_server(IRC server)  
 {  
     int opt = TRUE;  
@@ -165,7 +164,6 @@ void start_server(IRC server)
             { 
                 //Check if it was for closing , and also read the 
                 //incoming message 
-                //if ((valread = recv(sd, buffer, 1024, MSG_TRUNC)) == 0)  
                 if ((valread = read(sd, buffer, 1025)) == 0)  
                 {  
                     //Somebody disconnected , get his details and print 

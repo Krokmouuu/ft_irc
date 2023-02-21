@@ -248,17 +248,21 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
             }
             else if (word == "!joke")
             {
-                int rand = std::rand() % 5;
+                int rand = (std::rand() % 5) + 1;
                 switch (rand)
                 {
                     case 1:
                         tmp = bot->getname() + ": Pourquoi les girafes ont-elles un long cou ?\nParce qu’elles puent du cul.\n";
+                        break;
                     case 2:
                         tmp = bot->getname() + ": Pourquoi les canards sont toujours à l'heure ?\nParce qu’ils sont dans l’étang.\n";
+                        break;
                     case 3:
                         tmp = bot->getname() + ": Que fait un crocodile quand il rencontre une superbe femelle ?\nIl Lacoste.\n";
+                        break;
                     case 4:
                         tmp = bot->getname() + ": C'est l'histoire de 2 patates qui traversent la route.\nL’une d’elles se fait écraser. L’autre dit : « Oh purée ! »\n";
+                        break;
                     case 5:
                         tmp = bot->getname() + ": C'est l'histoire d'un zoophile qui prend son élan.\n";
                 }

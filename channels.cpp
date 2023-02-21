@@ -138,59 +138,20 @@ void    parse_input(vector<Data> *data, vector<Channel> *chan, int user, string 
         tmp = "You are now back\n";
         send(user, tmp.c_str(), tmp.size(), 0);
     }
-    if (data->at(user - 4).getchannel() == "The_accueil")
+    for (size_t i = 0; i < chan->size(); i++)
     {
-        for (size_t i = 0; i < chan->at(0).vgetusers().size(); i++)
-            if (chan->at(0).getuser(i).getfd() != user)
+        if (chan->at(i).getname() == data->at(user - 4).getchannel())
+        {
+            for (size_t j = 0; j < chan->at(i).vgetusers().size(); j++)
             {
-                tmp = data->at(user - 4).getnickname() + ": " + input + "\n";
-                send(chan->at(0).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
+                if (chan->at(i).getuser(j).getfd() != user)
+                {
+                    tmp = data->at(user - 4).getnickname() + ": " + input + "\n";
+                    send(chan->at(i).getuser(j).getfd(), tmp.c_str(), tmp.size(), 0);
+                }
             }
-    }
-    else if (data->at(user - 4).getchannel() == "La_taniere")
-    {
-        for (size_t i = 0; i < chan->at(1).vgetusers().size(); i++)
-            if (chan->at(1).getuser(i).getfd() != user)
-            {
-                tmp = data->at(user - 4).getnickname() + ": " + input + "\n";
-                send(chan->at(1).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
-            }
-    }
-    else if (data->at(user - 4).getchannel() == "Juraquantic_Park")
-    {
-        for (size_t i = 0; i < chan->at(2).vgetusers().size(); i++)
-            if (chan->at(2).getuser(i).getfd() != user)
-            {
-                tmp = data->at(user - 4).getnickname() + ": " + input + "\n";
-                send(chan->at(2).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
-            }
-    }
-    else if (data->at(user - 4).getchannel() == "Le_Spa")
-    {
-        for (size_t i = 0; i < chan->at(3).vgetusers().size(); i++)
-            if (chan->at(3).getuser(i).getfd() != user)
-            {
-                tmp = data->at(user - 4).getnickname() + ": " + input + "\n";
-                send(chan->at(3).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
-            }
-    }
-    else if (data->at(user - 4).getchannel() == "chiez_le")
-    {
-        for (size_t i = 0; i < chan->at(4).vgetusers().size(); i++)
-            if (chan->at(4).getuser(i).getfd() != user)
-            {
-                tmp = data->at(user - 4).getnickname() + ": " + input + "\n";
-                send(chan->at(4).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
-            }
-    }
-    else if (data->at(user - 4).getchannel() == "Sonic_Enjoyers")
-    {
-        for (size_t i = 0; i < chan->at(5).vgetusers().size(); i++)
-            if (chan->at(5).getuser(i).getfd() != user)
-            {
-                tmp = data->at(user - 4).getnickname() + ": " + input + "\n";
-                send(chan->at(5).getuser(i).getfd(), tmp.c_str(), tmp.size(), 0);
-            }
+            break;
+        }
     }
     if (data->at(user - 4).getIRSSI() == 1)
     {

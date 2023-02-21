@@ -1,6 +1,6 @@
 #include "ft_irc.hpp"
 #include "Data.hpp"
-//! regler les quelques sauts à la ligne en trop
+
 void sent(Data *data, int user, const char *input)
 {
 	if (data->getIRSSI() == 1)
