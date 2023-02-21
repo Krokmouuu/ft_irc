@@ -527,6 +527,7 @@ void notice_command(int user, vector<Data> *data, string input, vector<Channel> 
 					return ;
 				}
 			}
+			return ;
 		}
 	}
 	tmp = "\033[38;5;104mNo user or channel found\n\033[0m";

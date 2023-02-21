@@ -19,7 +19,7 @@ void start_server(IRC server)
     typeWriter("Maximum user allowed to join the server : " + to_string(max_clients) + "\n");
 
     server.setadminpassword("admin");
-    server.setwhitelist_users("pleber");
+    server.setwhitelist_users("pleberr");
     server.setwhitelist_users("bleroy");
     int client_socket[max_clients];
     int max_sd;
