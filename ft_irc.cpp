@@ -141,7 +141,7 @@ void start_server(IRC server)
             }
                 else
                     perror("send");
-                 
+                
             //add new socket to array of sockets
             for (i = 0; i < max_clients; i++)  
             {  
@@ -153,7 +153,7 @@ void start_server(IRC server)
                     server.setcurrent_user(server.getcurrent_user() + 1);
                     break;  
                 }
-            }  
+            } 
         }  
          
         //else its some IO operation on some other socket
@@ -181,7 +181,7 @@ void start_server(IRC server)
                     client_socket[i] = 0;
                 }    
                 //Parse the incoming input
-                else
+                else if (valread > 0)
                 {
                     //set the string terminating NULL byte on the end of the data 
                     try
@@ -189,7 +189,7 @@ void start_server(IRC server)
 						if (data.at(sd - 4).getIRSSI() == 1)
 							buffer[valread - 1] = '\0';
 						else
-							buffer[valread] = '\0';
+                            buffer[valread] = '\0';
                         char find_n = buffer[strlen(buffer) - 1];
                         char find_0 = buffer[strlen(buffer)];
                         if (find_n == '\n' && keepinput.size() == 0 && data.at(sd - 4).getIRSSI() == 0)

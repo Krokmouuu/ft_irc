@@ -238,6 +238,11 @@ int parse_log(string input, IRC *server, Data *data, int user, vector<Data> *vda
 int ft_parsing(char **argv)
 {
     int i = -1;
+    if (argv[1][0] == '0')
+    {
+        cout << "Port too low" << endl;
+        return 1;
+    }
     while (argv[1][++i] != '\0')
     {
         if (argv[1][i] < '0' || argv[1][i] > '9')
