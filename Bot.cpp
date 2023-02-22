@@ -174,6 +174,15 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
     stringstream tt(input);
     string word;
 	tt >> word;
+    if (input[0] == '!')
+    {
+        if (bot->getchannel() != data->at(user - 4).getchannel())
+        {
+            tmp = "Bot is not in this channel.\n";
+            send(user, tmp.c_str(), tmp.size(), 0);
+            return ;
+        }
+    }
     if (bot->getstop() == 1)
     {
         send(user, "Bot is not active.\n", 20, 0);
@@ -299,12 +308,6 @@ void beep_beep_boop(string input, int user, vector<Data> *data, vector<Channel> 
     }
     if (input[0] == '!')
     {
-        if (bot->getchannel() != data->at(user - 4).getchannel())
-        {
-            tmp = "Bot is not in this channel.\n";
-            send(user, tmp.c_str(), tmp.size(), 0);
-            return ;
-        }
         tmp = "Bot command not found.\n";
         send(user, tmp.c_str(), tmp.size(), 0);
     }
