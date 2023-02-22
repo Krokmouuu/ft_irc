@@ -320,7 +320,7 @@ int parsing_nb_user(string nb, IRC server)
                 ;
             }
             server.setmaxuser(stoi(nb.substr(i , nb.size() - 1)));
-            typeWriter("Maximun user set to : "), printf("%d\n\n", server.getmaxuser());
+            typeWriter("Maximun user set to : " + to_string(server.getmaxuser()));
             return 0;
         }
     }
@@ -330,6 +330,6 @@ int parsing_nb_user(string nb, IRC server)
         return 1;
     }
     server.setmaxuser(stoi(nb));
-    typeWriter("Maximun user set to : "), printf("%d\n\n", server.getmaxuser());
+    typeWriter("Maximun user set to : " + to_string(server.getmaxuser()));
     return 0;
 }
